@@ -1,4 +1,4 @@
-package github.paroj.dsub2000.util.compat;
+package com.proggerx.dcross2000.util.compat;
 
 import android.content.Context;
 import androidx.mediarouter.media.MediaRouter;
@@ -12,10 +12,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import static com.google.android.gms.cast.CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID;
 
-import github.paroj.dsub2000.service.ChromeCastController;
-import github.paroj.dsub2000.service.DownloadService;
-import github.paroj.dsub2000.service.RemoteController;
-import github.paroj.dsub2000.util.EnvironmentVariables;
+import com.proggerx.dcross2000.service.ChromeCastController;
+import com.proggerx.dcross2000.service.DownloadService;
+import com.proggerx.dcross2000.service.RemoteController;
+import com.proggerx.dcross2000.util.EnvironmentVariables;
 
 public final class GoogleCompat {
 

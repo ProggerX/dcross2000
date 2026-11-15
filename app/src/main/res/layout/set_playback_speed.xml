@@ -18,7 +18,7 @@
 
 		<Button
 			android:id="@+id/playback_speed_normal"
-			style="@style/Widget.DSub2000.Button.Compact"
+			style="@style/Widget.DCross2000.Button.Compact"
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
@@ -28,7 +28,7 @@
 			android:tag="1.0"/>
 		<Button
 			android:id="@+id/playback_speed_one_half"
-			style="@style/Widget.DSub2000.Button.Compact"
+			style="@style/Widget.DCross2000.Button.Compact"
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
@@ -39,7 +39,7 @@
 
 		<Button
 			android:id="@+id/playback_speed_double"
-			style="@style/Widget.DSub2000.Button.Compact"
+			style="@style/Widget.DCross2000.Button.Compact"
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
@@ -51,7 +51,7 @@
 
 		<Button
 			android:id="@+id/playback_speed_triple"
-			style="@style/Widget.DSub2000.Button.Compact"
+			style="@style/Widget.DCross2000.Button.Compact"
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"

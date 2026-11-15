@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <github.paroj.dsub2000.view.RecyclingImageView
+        <com.proggerx.dcross2000.view.RecyclingImageView
             android:id="@+id/download_album_art_image"
             android:src="@drawable/unknown_album_large"
             android:layout_width="match_parent"

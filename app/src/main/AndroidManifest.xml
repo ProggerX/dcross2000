@@ -11,7 +11,7 @@
 		android:label="@string/attribution_audio_playback" />
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-		android:targetPackage="github.paroj.dsub2000"
+		android:targetPackage="com.proggerx.dcross2000"
 		android:label="Tests" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -44,15 +44,15 @@
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
     <application android:label="@string/common.appname"
-    	android:backupAgent="github.paroj.dsub2000.util.SettingsBackupAgent"
+    	android:backupAgent="com.proggerx.dcross2000.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
-    	android:theme="@style/Theme.DSub2000.Light"
+    	android:theme="@style/Theme.DCross2000.Light"
 		android:largeHeap="true"
 		android:usesCleartextTraffic="true">
 
         <uses-library android:name="android.test.runner" />
 
-		<activity android:name="github.paroj.dsub2000.activity.SubsonicFragmentActivity"
+		<activity android:name="com.proggerx.dcross2000.activity.SubsonicFragmentActivity"
 				  android:configChanges="keyboardHidden"
 				  android:exported="true"
 				  android:launchMode="singleTask">
@@ -69,11 +69,11 @@
             </intent-filter>
 		</activity>
 
-        <activity android:name="github.paroj.dsub2000.activity.SettingsActivity"
+        <activity android:name="com.proggerx.dcross2000.activity.SettingsActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.paroj.dsub2000.activity.VoiceQueryReceiverActivity"
+        <activity android:name="com.proggerx.dcross2000.activity.VoiceQueryReceiverActivity"
 				  android:exported="true"
                   android:launchMode="singleTask">
             <intent-filter>
@@ -88,7 +88,7 @@
 			</intent-filter>
         </activity>
 
-        <activity android:name="github.paroj.dsub2000.activity.QueryReceiverActivity"
+        <activity android:name="com.proggerx.dcross2000.activity.QueryReceiverActivity"
 				  android:exported="true"
                   android:launchMode="singleTask">
             <intent-filter>
@@ -98,7 +98,7 @@
         </activity>
 
 		<activity
-			android:name="github.paroj.dsub2000.activity.EditPlayActionActivity"
+			android:name="com.proggerx.dcross2000.activity.EditPlayActionActivity"
 			android:label="@string/tasker.start_playing"
 			android:exported="true"
 			android:icon="@drawable/launch">
@@ -108,8 +108,8 @@
 			</intent-filter>
 		</activity>
 
-        <service android:name="github.paroj.dsub2000.service.DownloadService"
-                 android:label="DSub Playback Service"
+        <service android:name="com.proggerx.dcross2000.service.DownloadService"
+                 android:label="DCross2000 Playback Service"
                  android:foregroundServiceType="mediaPlayback"
                  android:exported="true">
 			<intent-filter>
@@ -119,10 +119,10 @@
 			</intent-filter>
 		</service>
 
-		<service android:name="github.paroj.dsub2000.service.DSubUpnpService"
+		<service android:name="com.proggerx.dcross2000.service.DSubUpnpService"
 			     android:foregroundServiceType="mediaPlayback|dataSync"/>
 		<service
-			android:name="github.paroj.dsub2000.service.sync.AuthenticatorService"
+			android:name="com.proggerx.dcross2000.service.sync.AuthenticatorService"
 			android:foregroundServiceType="mediaPlayback|dataSync"
 			android:exported="true">
 
@@ -133,7 +133,7 @@
 			<meta-data android:name="android.accounts.AccountAuthenticator"
 				android:resource="@xml/authenticator" />
 		</service>
-		<service android:name="github.paroj.dsub2000.service.sync.PlaylistSyncService"
+		<service android:name="com.proggerx.dcross2000.service.sync.PlaylistSyncService"
 			android:foregroundServiceType="mediaPlayback|dataSync"
 			android:exported="true"
 			android:process=":sync">
@@ -144,7 +144,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 				android:resource="@xml/playlists_syncadapter" />
 		</service>
-		<service android:name="github.paroj.dsub2000.service.sync.PodcastSyncService"
+		<service android:name="com.proggerx.dcross2000.service.sync.PodcastSyncService"
 			     android:foregroundServiceType="mediaPlayback|dataSync"
 				 android:exported="true"
 				 android:process=":sync">
@@ -155,7 +155,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/podcasts_syncadapter" />
 		</service>
-		<service android:name="github.paroj.dsub2000.service.sync.StarredSyncService"
+		<service android:name="com.proggerx.dcross2000.service.sync.StarredSyncService"
 			     android:foregroundServiceType="dataSync|mediaPlayback"
 				 android:exported="true"
 				 android:process=":sync">
@@ -166,7 +166,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/starred_syncadapter" />
 		</service>
-		<service android:name="github.paroj.dsub2000.service.sync.MostRecentSyncService"
+		<service android:name="com.proggerx.dcross2000.service.sync.MostRecentSyncService"
 			     android:foregroundServiceType="dataSync|mediaPlayback"
 				 android:exported="true"
 				 android:process=":sync">
@@ -177,7 +177,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/mostrecent_syncadapter" />
 		</service>
-		<service android:name="github.paroj.dsub2000.service.sync.LibrarySyncService"
+		<service android:name="com.proggerx.dcross2000.service.sync.LibrarySyncService"
 			     android:foregroundServiceType="dataSync|mediaPlayback"
 				 android:exported="true"
 				 android:process=":sync">
@@ -190,14 +190,14 @@
 		</service>
 
 
-        <receiver android:name="github.paroj.dsub2000.receiver.MediaButtonIntentReceiver"
+        <receiver android:name="com.proggerx.dcross2000.receiver.MediaButtonIntentReceiver"
 			android:exported="true">
         	<intent-filter>
 				<action android:name="android.intent.action.MEDIA_BUTTON" />
 			</intent-filter>
         </receiver>
 
-		<receiver android:name="github.paroj.dsub2000.receiver.A2dpIntentReceiver"
+		<receiver android:name="com.proggerx.dcross2000.receiver.A2dpIntentReceiver"
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>
@@ -205,7 +205,7 @@
 		</receiver>
 
         <receiver
-			android:name="github.paroj.dsub2000.provider.DSubWidget4x1"
+			android:name="com.proggerx.dcross2000.provider.DSubWidget4x1"
 			android:exported="true"
 			android:label="@string/widget.4x1">
             <intent-filter>
@@ -214,7 +214,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
         </receiver>
 		<receiver
-			android:name="github.paroj.dsub2000.provider.DSubWidget4x2"
+			android:name="com.proggerx.dcross2000.provider.DSubWidget4x2"
 			android:exported="true"
 			android:label="@string/widget.4x2">
             <intent-filter>
@@ -223,7 +223,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
         </receiver>
 		<receiver
-			android:name="github.paroj.dsub2000.provider.DSubWidget4x3"
+			android:name="com.proggerx.dcross2000.provider.DSubWidget4x3"
 			android:exported="true"
 			android:label="@string/widget.4x3">
             <intent-filter>
@@ -232,7 +232,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
         </receiver>
 		<receiver
-			android:name="github.paroj.dsub2000.provider.DSubWidget4x4"
+			android:name="com.proggerx.dcross2000.provider.DSubWidget4x4"
 			android:exported="true"
 			android:label="@string/widget.4x4">
             <intent-filter>
@@ -242,7 +242,7 @@
         </receiver>
 
 		<receiver
-			android:name="github.paroj.dsub2000.receiver.PlayActionReceiver"
+			android:name="com.proggerx.dcross2000.receiver.PlayActionReceiver"
 			android:exported="true">
 
 			<intent-filter>
@@ -250,7 +250,7 @@
 			</intent-filter>
 		</receiver>
 
-        <provider android:name="github.paroj.dsub2000.provider.DSubSearchProvider"
+        <provider android:name="com.proggerx.dcross2000.provider.DSubSearchProvider"
                   android:authorities="@string/provider.search"/>
 
 		<provider
@@ -262,34 +262,34 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/file_paths" />
 		</provider>
-		<provider android:name="github.paroj.dsub2000.provider.PlaylistStubProvider"
+		<provider android:name="com.proggerx.dcross2000.provider.PlaylistStubProvider"
 			android:authorities="@string/provider.playlist"
 			android:label="@string/button_bar.playlists"
 			android:exported="false"
 			android:syncable="true"/>
-		<provider android:name="github.paroj.dsub2000.provider.PodcastStubProvider"
+		<provider android:name="com.proggerx.dcross2000.provider.PodcastStubProvider"
 			android:authorities="@string/provider.podcast"
 			android:label="@string/button_bar.podcasts"
 			android:exported="false"
 			android:syncable="true"/>
-		<provider android:name="github.paroj.dsub2000.provider.StarredStubProvider"
+		<provider android:name="com.proggerx.dcross2000.provider.StarredStubProvider"
 				  android:authorities="@string/provider.starred"
 				  android:label="@string/main.albums_starred"
 				  android:exported="false"
 				  android:syncable="true"/>
-		<provider android:name="github.paroj.dsub2000.provider.MostRecentStubProvider"
+		<provider android:name="com.proggerx.dcross2000.provider.MostRecentStubProvider"
 				  android:authorities="@string/provider.recently_added"
 				  android:label="@string/main.albums_newest"
 				  android:exported="false"
 				  android:syncable="true"/>
-		<provider android:name="github.paroj.dsub2000.provider.LibraryStubProvider"
+		<provider android:name="com.proggerx.dcross2000.provider.LibraryStubProvider"
 				  android:authorities="@string/provider.library"
 				  android:label="@string/settings.sync_library"
 				  android:exported="false"
 				  android:syncable="true"/>
 
         <meta-data android:name="android.app.default_searchable"
-                   android:value="github.paroj.dsub2000.activity.QueryReceiverActivity"/>
+                   android:value="com.proggerx.dcross2000.activity.QueryReceiverActivity"/>
 
 		<meta-data
 			android:name="com.google.android.gms.car.application"

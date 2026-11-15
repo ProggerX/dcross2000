@@ -1,0 +1,90 @@
+/*
+  This file is part of Subsonic.
+	Subsonic is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	Subsonic is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+	Copyright 2014 (C) Scott Jackson
+*/
+
+package com.proggerx.dcross2000.adapter;
+
+import android.content.Context;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.ViewGroup;
+
+import java.util.List;
+
+import com.proggerx.dcross2000.R;
+import com.proggerx.dcross2000.domain.MusicDirectory;
+import com.proggerx.dcross2000.service.DownloadFile;
+import com.proggerx.dcross2000.util.Util;
+import com.proggerx.dcross2000.view.FastScroller;
+import com.proggerx.dcross2000.view.SongView;
+import com.proggerx.dcross2000.view.UpdateView;
+
+public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
+	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
+
+	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
+		super(context, entries);
+		this.onItemClickedListener = onItemClickedListener;
+		this.checkable = true;
+	}
+
+	@Override
+	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+		return new UpdateView.UpdateViewHolder(new SongView(context));
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, DownloadFile item, int viewType) {
+		SongView songView = (SongView) holder.getUpdateView();
+		songView.setObject(item.getSong(), Util.isBatchMode(context));
+		songView.setDownloadFile(item);
+		songView.setTransitionNext(nextSong(item));
+	}
+
+	private MusicDirectory.Entry nextSong(DownloadFile item) {
+		if(sections.size() != 1) return null;
+		List<DownloadFile> songs = sections.get(0);
+		int index = songs.indexOf(item);
+		if(index < 0 || index + 1 >= songs.size()) return null;
+		return songs.get(index + 1).getSong();
+	}
+
+	@Override
+	public int getItemViewType(DownloadFile item) {
+		return VIEW_TYPE_DOWNLOAD_FILE;
+	}
+
+	@Override
+	public String getTextToShowInBubble(int position) {
+		return null;
+	}
+
+	@Override
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.multiselect_nowplaying_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.multiselect_nowplaying, menu);
+		}
+
+		if(!selected.isEmpty()) {
+			MenuItem starItem = menu.findItem(R.id.menu_star);
+			if(starItem != null) {
+				boolean isStarred = selected.get(0).getSong().isStarred();
+				starItem.setTitle(isStarred ? R.string.common_unstar : R.string.common_star);
+			}
+		}
+	}
+}

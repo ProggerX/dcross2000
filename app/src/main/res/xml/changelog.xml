@@ -83,7 +83,7 @@
 		<change>Allow Android Auto with the FLOSS build</change>
 	</release>
 	<release version="5.6.0" versioncode="209" releasedate="28/06/2024">
-		<change>Rebrand app to DSub2000 to indicate the fork</change>
+		<change>Rebrand app to DCross2000 to indicate the fork</change>
 		<change>Change setting defaults to improve compatibility and UI clarity</change>
 		<change>Added a random option to the songs part of the mainview</change>
 		<change>Add option to show a single rating button</change>
@@ -404,7 +404,7 @@
 		<change>Bug fixes for Ampache users</change>
 	</release>
 	<release version="4.9.5" versioncode="149" releasedate="3/25/2015">
-		<change>Handoff: move to another DSub2000 client and pickup where you left off (Subsonic 5.2+)</change>
+		<change>Handoff: move to another DCross2000 client and pickup where you left off (Subsonic 5.2+)</change>
 		<change>DLNA: gapless playback on supported renders</change>
 		<change>Option to warning on back press</change>
 		<change>Better handle date for Subsonic 5.1+</change>
@@ -603,6 +603,6 @@
 		<change>Fix for delay between headset disconnect and pause</change>
 		<change>Fix background bluetooth disconnects causing playback to stop</change>
 		<change>Fix app trying to upsample songs in mp3 -> mp3 transcode</change>
-		<change>Fix for DSub2000 preempting bluetooth events</change>
+		<change>Fix for DCross2000 preempting bluetooth events</change>
 	</release>
 </changelog>

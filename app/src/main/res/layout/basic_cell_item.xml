@@ -10,7 +10,7 @@
 		android:layout_height="match_parent"
 		android:background="?attr/selectableItemBackground">
 
-		<github.paroj.dsub2000.view.SquareImageView
+		<com.proggerx.dcross2000.view.SquareImageView
 			android:id="@+id/item_art"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>

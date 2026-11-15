@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="common.appname">DSub2000</string>
+	<string name="common.appname">DCross2000</string>
 	<string name="attribution_audio_playback">Hanglejátszás</string>
 	<string name="common.ok">OK</string>
 	<string name="common.save">Mentés</string>
@@ -46,9 +46,9 @@
 	<string name="button_bar.offline">Offline</string>
 
 	<string name="main.welcome_title">Üdvözlet!</string>
-	<string name="main.welcome_text">Üdvözli a DSub2000! Az alkalmazás jelenleg egy Subsonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját 
+	<string name="main.welcome_text">Üdvözli a DCross2000! Az alkalmazás jelenleg egy Subsonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját 
 	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
-	<string name="main.about_title">DSub2000 információk</string>
+	<string name="main.about_title">DCross2000 információk</string>
 	<string name="main.faq_title">GYIK</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -304,7 +304,7 @@
 	<string name="settings.cache_size">Gyorsítótár mérete (MB)</string>
 	<string name="settings.cache_location">Gyorsítótár helye</string>
 	<string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
-	<string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A DSub2000 már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
+	<string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A DCross2000 már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
 	<string name="settings.cache_location_internal">Belső</string>
 	<string name="settings.cache_location_external">Külső</string>
 	<string name="settings.cache_clear">Gyorsítótár törlése</string>
@@ -475,7 +475,7 @@
 	<string name="settings.disable_exit_prompt">Kilépés megerősítésének tiltása</string>
 	<string name="settings.disable_exit_prompt_summary">Főoldalon a vissza gomb megnyomásakor azonnali kilépés az alkalmazásból.</string>
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
-	<string name="settings.override_system_language_summary">A DSub2000 megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
+	<string name="settings.override_system_language_summary">A DCross2000 megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
 	<string name="settings.song_press_action">Viselkedés dal megérintésekor</string>
 	<string name="settings.song_press_play_single">Dal lejátszása</string>
@@ -500,7 +500,7 @@
 	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>
 	<string name="settings.rename_duplicates_summary">Duplikált dalok átnevezése az eredeti fájlnévre, így megkülönböztethetővé válnak.</string>
 	<string name="settings.start_on_headphones">Elindítás fülhallgatóval</string>
-	<string name="settings.start_on_headphones_summary">Lejátszó elindítása fülhallgató csatlakoztatásakor. Ez a funkció olyan szolgáltatás használatát igényli, ami a DSub2000 elindítása nélkül tudja kontrollálni a fülhallgató csatlakoztatási eseményeket.</string>
+	<string name="settings.start_on_headphones_summary">Lejátszó elindítása fülhallgató csatlakoztatásakor. Ez a funkció olyan szolgáltatás használatát igényli, ami a DCross2000 elindítása nélkül tudja kontrollálni a fülhallgató csatlakoztatási eseményeket.</string>
 	<string name="settings.color_action_bar">Színes műveletsávok</string>
 	<string name="settings.color_action_bar.summary">Színes művelet- és értesítési sáv használata.</string>
 	<string name="settings.general_action_bar_color">Az általános műveletsáv színe</string>
@@ -519,7 +519,7 @@
 	<string name="settings.casting.dlna_casting_enabled">DLNA engedélyezve</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">Ha akkumulátor-merülési probléma lépne fel Android 7.0 alatt, kapcsolja ki a funkciót!</string>
 	<string name="settings.casting.chromecast_available">Chromecast támogatás</string>
-	<string name="settings.casting.chromecast_available_summary">Hogy a Chromecast-támogatás engedélyezve van-e ebben a DSub2000-es verzióban.</string>
+	<string name="settings.casting.chromecast_available_summary">Hogy a Chromecast-támogatás engedélyezve van-e ebben a DCross2000-es verzióban.</string>
 	<string name="settings.rewind_interval">Visszatekerés időintervalluma</string>
 	<string name="settings.fastforward_interval">Gyors előretekerés időintervalluma</string>
 	<string name="settings.media_style_notification">Natív Android médiaértesítés (5.0+)</string>
@@ -594,7 +594,7 @@
 
 	<string name="service.connecting">Kapcsolódás a kiszolgálóhoz, kérem várjon...</string>
 
-	<string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub2000 Android alkalmazást!</string>
+	<string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DCross2000 Android alkalmazást!</string>
 	<string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
 	<string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
 	<string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Subsonic kiszolgálón!</string>
@@ -613,10 +613,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d ezrelék</string>
 
-	<string name="widget.4x1">DSub2000 (4x1)</string>
-	<string name="widget.4x2">DSub2000 (4x2)</string>
-	<string name="widget.4x3">DSub2000 (4x3)</string>
-	<string name="widget.4x4">DSub2000 (4x4)</string>
+	<string name="widget.4x1">DCross2000 (4x1)</string>
+	<string name="widget.4x2">DCross2000 (4x2)</string>
+	<string name="widget.4x3">DCross2000 (4x3)</string>
+	<string name="widget.4x4">DCross2000 (4x4)</string>
 	<string name="widget.initial_text">Érintse meg a zene kiválasztásához!</string>
 	<string name="widget.sdcard_busy">Az SD kártya nem elérhető!</string>
 	<string name="widget.sdcard_missing">Nincs SD kártya!</string>
@@ -637,7 +637,7 @@
 
 	<string name="tasker.start_playing">Lejátszás indítása</string>
 	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
-	<string name="tasker.start_playing_title">Tasker -> DSub2000 indítása</string>
+	<string name="tasker.start_playing_title">Tasker -> DCross2000 indítása</string>
 	<string name="tasker.edit_shuffle_mode">Indítás kevert sorrendben: </string>
 	<string name="tasker.edit_shuffle_start_year">Kevert sorrend kezdő év:</string>
 	<string name="tasker.edit_shuffle_end_year">Kevert sorrend utolsó év:</string>
@@ -694,7 +694,7 @@
 	<string name="details.stream_url">Stream URL</string>
 	<string name="details.home_page">Honlap</string>
 
-	<string name="permission.external_storage.failed">A DSub2000 nem tud működni tárhely-írási engedély nélkül!</string>
+	<string name="permission.external_storage.failed">A DCross2000 nem tud működni tárhely-írási engedély nélkül!</string>
 	<string name="permission.location.failed">Az alkalmazás helyadatokat használ a Wi-Fi SSID lekéréséhez, hogy összevesse azt a helyi hálózati beállításokkal. Az üzenet eltüntetéséhez állítsa üresre a helyi hálózati SSID-t.</string>
 
 	<plurals name="select_album_n_songs">

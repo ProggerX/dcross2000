@@ -1,4 +1,4 @@
-package github.paroj.dsub2000.service;
+package com.proggerx.dcross2000.service;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -31,10 +31,10 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import github.paroj.dsub2000.domain.MusicDirectory.Entry;
-import github.paroj.dsub2000.domain.PlayerState;
-import github.paroj.dsub2000.domain.RemoteControlState;
-import github.paroj.dsub2000.util.FileUtil;
+import com.proggerx.dcross2000.domain.MusicDirectory.Entry;
+import com.proggerx.dcross2000.domain.PlayerState;
+import com.proggerx.dcross2000.domain.RemoteControlState;
+import com.proggerx.dcross2000.util.FileUtil;
 import github.paroj.serverproxy.WebProxy;
 
 /** Cast framework owns the connection; CastPlayer owns receiver playback. */

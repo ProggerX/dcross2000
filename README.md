@@ -1,52 +1,53 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O514FGIG)
+# 🚨 DCross2000 — VIBECODED, UNSTABLE, USE AT YOUR OWN RISK 🚨
 
-# DSub2000
+> ## THIS PROJECT WAS WRITTEN BY AN AI ("VIBECODED").
+>
+> **It is not production software. It is an experiment.**
+>
+> - 💥 **Expect crashes, freezes, broken playback and lost data.**
+> - 🔊 **Expect audio glitches, clipping, skipped tracks and wrong timing.**
+> - 🗑️ **Transitions are stored in app-private preferences. There is no export yet. Updating or uninstalling can lose them.**
+> - 🔥 **Do not use this as your only music player. Do not install it on a device you depend on.**
+> - 🧪 **The transition engine uses two decoders at once. It is heavy on battery and may misbehave on low-end devices.**
+> - 🚫 **No support. No warranty. No promise that anything here is correct.**
+> - 🧬 **Not affiliated with Subsonic, DSub, DSub2000, or their authors.**
+>
+> This is a **fork of [DSub2000](https://github.com/paroj/DSub2000)** (GPLv3), renamed and modified. The upstream project is stable software; this fork is not. If you want a reliable Subsonic client, **use the upstream app instead**.
 
-Connect to your Subsonic server and listen to your music wherever you go. Songs
-are cached for playback to save on your mobile bandwidth and to make them
-available when you have no connection at all.
+---
 
-Subsonic is a cross-platform FOSS media server that's capable of indexing very
-large media collections. The server can transcode if necessary so that the app
-can play files that your device may not normally support.
+DCross2000 is an Android client for [Subsonic](https://www.subsonic.org/) servers with an added **per-song transition editor**: you draw the volume and tempo curves for a specific pair of tracks and the player applies them when those two songs play back to back.
 
-[<img src="https://f-droid.org/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/github.paroj.dsub2000)
+## The transition editor
 
-## Screenshots
+- Transitions are keyed by **song pair**, not by playlist position. Reordering a queue keeps them attached to the right two tracks.
+- Timing is split into three sections:
+  - **Lead** — only the outgoing song is automated (e.g. dip the volume or slow it down before the next track appears).
+  - **Overlap** — both songs sound; both curves apply.
+  - **Tail** — only the incoming song is automated before normal playback resumes.
+- Each side has a **volume curve** (0–2×, so quiet tracks can be boosted to normalize them) and a **tempo curve** (0.5×–1.5×, pitch-preserving).
+- One zoomed view shows both waveforms and all four curves. Pick **A/B** and **Volume/Tempo** and draw with the pencil; Preview plays the actual overlap with a running playhead.
+- Transitions require both songs to be cached; streaming tracks and cast/DLNA outputs ignore them.
+- Default behavior without a drawn transition is plain **gapless** playback, exactly like upstream.
 
-| Albums | Sidebar | Current Song |
-| ------ | ------- | ------------ |
-| ![](fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg) | ![](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png) | ![](fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg) |
+Where to find it:
 
-| Playlists | Now Playing | Details |
-| --------- | ----------- | ------- |
-| ![](fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg) | ![](fastlane/metadata/android/en-US/images/phoneScreenshots/5.png) | ![](fastlane/metadata/android/en-US/images/phoneScreenshots/6.png) |
-| You can make playlists available offline by selecting "cached" here. | This shows the play queue. You drag and drop songs to rearrange. Note that you can press the "cached" icon for a context menu. | You can check whether the file was transcoded here. |
+- Playlist → **⋮ → Transitions**, or
+- Now Playing → **⋮ → Transitions** (current song → next song).
 
-## Features
+## Build
 
-* Drag and drop songs to rearrange your playlist on the Now Playing tab
-* Pause playback when other apps request audio focus (navigation, etc)
-* Lockscreen controls
-* Gapless Playback
-* Highly customizable UI
-* User defined Cache Size, Network Timeout, and Buffer Length
-
-## Permissions
-
-This is why we need the permissions we do:
-
-* Foreground Service - For downloading your playlists to cache
-* Read & Write External Storage - Store the music cache on a sdcard
-* Access Fine Location - Automatic day/ night mode and different server URL in local WiFi
-* Read Phone State - Auto-pause playback when a call is received
-
-## Updating Icons
-Media Icons are double standard size.  On https://romannurik.github.io/AndroidAssetStudio/icons-actionbar.html you can manually change this via the following js commands:
+```bash
+export ANDROID_HOME=/path/to/android-sdk
+./gradlew :app:assembleFlossDebug
 ```
-PARAM_RESOURCES.iconSize = {w: 64, h: 64}
-PARAM_RESOURCES['targetRect-clipart'] = { x: 12, y: 12, w: 40, h: 40 }
-form.fields_[0].params_.maxFinalSize = {w: 512, h: 512}
-```
+
+The debug APK is at `app/build/outputs/apk/floss/debug/`.
+
+The application id is `com.proggerx.dcross2000`, so this installs **alongside** the original DSub2000 and starts with empty settings.
+
+## License and attribution
+
+DCross2000 is a fork of DSub2000 by [paroj](https://github.com/paroj/DSub2000), which is itself based on DSub by Sindre Mehus and Scott Jackson. It is licensed under the **GNU GPLv3** — see [LICENSE.txt](LICENSE.txt). The upstream commit history is preserved in this fork.
+
+The original project has no relationship with this fork and does not endorse it.

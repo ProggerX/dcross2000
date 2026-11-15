@@ -4,12 +4,12 @@ android {
 	compileSdkVersion 36
 
 	defaultConfig {
-		applicationId "github.paroj.dsub2000"
+		applicationId "com.proggerx.dcross2000"
 		minSdkVersion 24
 		targetSdkVersion 36
-		versionCode 221
-		versionName '5.8.0'
-		setProperty("archivesBaseName", "DSub2000_$versionName")
+		versionCode 1
+		versionName '0.1.0-dcross'
+		setProperty("archivesBaseName", "DCross2000_$versionName")
         resourceConfigurations += ['de', 'es', 'fr', 'hu', 'nl', 'pt-rPT', 'ru', 'sv', 'zh']
 		resValue 'string', 'account_type.subsonic', applicationId + ".subsonic"
 		resValue 'string', 'provider.search', applicationId + ".provider.DSubSearchProvider"
@@ -50,7 +50,7 @@ android {
 		}
 	}
 
-	namespace 'github.paroj.dsub2000'
+	namespace 'com.proggerx.dcross2000'
 	lint {
 		checkReleaseBuilds false
 	}

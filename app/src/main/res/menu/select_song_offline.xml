@@ -18,6 +18,10 @@
 		android:title="@string/menu.delete_cache"/>
 
 	<item
+		android:id="@+id/menu_mix"
+		android:title="@string/mix.label"/>
+
+	<item
 		android:id="@+id/menu_play_next"
 		android:title="@string/common.play_next"/>
 

@@ -36,7 +36,7 @@
 						android:layout_height="wrap_content"
                         android:layout_gravity="center">
 
-						<github.paroj.dsub2000.view.RecyclingImageView
+						<com.proggerx.dcross2000.view.RecyclingImageView
 							android:id="@+id/download_album_art_image"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"

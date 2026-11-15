@@ -45,6 +45,18 @@
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?android:textColorPrimary" />
 
+			<TextView
+				android:id="@+id/song_transition"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_marginEnd="6dp"
+				android:text="@string/mix.badge"
+				android:textColor="#FFFFC107"
+				android:textSize="10sp"
+				android:textStyle="bold"
+				android:visibility="gone" />
+
 			<ImageButton
 				android:id="@+id/song_bookmark"
 				android:layout_width="@dimen/SongStatusIcon"

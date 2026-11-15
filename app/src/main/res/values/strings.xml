@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub2000</string>
+    <string name="common.appname">DCross2000</string>
 	<string name="attribution_audio_playback">Audio playback</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Save</string>
@@ -46,14 +46,16 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
-    <string name="main.welcome_text">Welcome to DSub2000! The app is currently configured to use the Subsonic demo server. After you\'ve
+    <string name="main.welcome_text">Welcome to DCross2000! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
-	<string name="main.about_title">About DSub2000</string>
+	<string name="main.about_title">About DCross2000</string>
+	<string name="main.about_warning_title">WARNING</string>
+	<string name="main.about_warning">DCross2000 is a vibecoded, unstable fork. Expect bugs, crashes, audio glitches and data loss. Do not use it as your only player. Not affiliated with Subsonic or DSub2000.</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
-		<br/>When songs are downloaded by DSub2000, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
+		<br/>When songs are downloaded by DCross2000, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
 		<p/><font color="red">ChromeCast fails</font>:
 		<br/>Try setting the option Settings -> Playback -> Use device proxy.  It is a work around for Chromecast not accepting self-signed certificates.
 		<p/><font color="red">First level in Library are actually groups of artists</font>:
@@ -304,7 +306,7 @@
     <string name="settings.cache_size">Cache size</string>
     <string name="settings.cache_location">Cache location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
-    <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DSub2000 uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
+    <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DCross2000 uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_location_internal">Internal</string>
 	<string name="settings.cache_location_external">External</string>
 	<string name="settings.cache_clear">Clear Cache</string>
@@ -471,7 +473,7 @@
 	<string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
 	<string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
 	<string name="settings.override_system_language">Override System Language</string>
-	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub2000 has a translation for.  May need to clear the app from memory for changes to take affect.</string>
+	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DCross2000 has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.song_press_action">Song Press Action</string>
 	<string name="settings.song_press_play_single">Play only that song</string>
@@ -511,7 +513,7 @@
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
 	<string name="settings.casting.chromecast_available">Chromecast Support</string>
-	<string name="settings.casting.chromecast_available_summary">Whether Chromecast Support is enabled in this DSub2000 release.</string>
+	<string name="settings.casting.chromecast_available_summary">Whether Chromecast Support is enabled in this DCross2000 release.</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
 
@@ -584,7 +586,7 @@
 
     <string name="service.connecting">Contacting server, please wait.</string>
 
-    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DSub2000.</string>
+    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DCross2000.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
@@ -596,6 +598,33 @@
     <string name="select_artist.all_folders">All folders</string>
 
     <string name="equalizer.label">Equalizer</string>
+	<string name="mix.label">Transitions</string>
+	<string name="mix.badge">MIX</string>
+	<string name="mix.edit_title">Edit transition</string>
+	<string name="mix.pick_title">Pick a transition</string>
+	<string name="mix.side_outgoing">A</string>
+	<string name="mix.side_incoming">B</string>
+	<string name="mix.parameter_volume">Volume</string>
+	<string name="mix.parameter_tempo">Tempo</string>
+	<string name="mix.outgoing_volume">Outgoing volume</string>
+	<string name="mix.incoming_volume">Incoming volume</string>
+	<string name="mix.outgoing_tempo">Outgoing tempo (0.5x – 1.5x)</string>
+	<string name="mix.incoming_tempo">Incoming tempo (0.5x – 1.5x)</string>
+	<string name="mix.lead_label">A automation lead %1$s</string>
+	<string name="mix.overlap_label">Overlap %1$s</string>
+	<string name="mix.tail_label">B tail %1$s</string>
+	<string name="mix.bstart_label">B starts at %1$s</string>
+	<string name="mix.preview">Preview</string>
+	<string name="mix.reset">Reset</string>
+	<string name="mix.delete">Delete</string>
+	<string name="mix.save">Save</string>
+	<string name="mix.saved">Transition saved</string>
+	<string name="mix.deleted">Transition removed</string>
+	<string name="mix.requires_cache">Cache both songs to see waveforms and preview the transition.</string>
+	<string name="mix.unknown_duration">This song has no known duration, preview is unavailable.</string>
+	<string name="mix.invalid_pair">Unable to open this transition.</string>
+	<string name="mix.no_next">There is no next song to transition into.</string>
+	<string name="mix.custom_marker">• custom</string>
     <string name="equalizer.enabled">Enabled</string>
     <string name="equalizer.preset">Select preset</string>
 	<string name="equalizer.bass_booster">Bass Booster</string>
@@ -603,10 +632,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub2000 (4x1)</string>
-	<string name="widget.4x2">DSub2000 (4x2)</string>
-	<string name="widget.4x3">DSub2000 (4x3)</string>
-	<string name="widget.4x4">DSub2000 (4x4)</string>
+	<string name="widget.4x1">DCross2000 (4x1)</string>
+	<string name="widget.4x2">DCross2000 (4x2)</string>
+	<string name="widget.4x3">DCross2000 (4x3)</string>
+	<string name="widget.4x4">DCross2000 (4x4)</string>
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>
@@ -627,7 +656,7 @@
 
 	<string name="tasker.start_playing">Start playing</string>
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
-	<string name="tasker.start_playing_title">Tasker -> Start DSub2000</string>
+	<string name="tasker.start_playing_title">Tasker -> Start DCross2000</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
 	<string name="tasker.edit_shuffle_start_year">Shuffle start year:</string>
 	<string name="tasker.edit_shuffle_end_year">Shuffle end year:</string>
@@ -684,7 +713,7 @@
 	<string name="details.stream_url">Stream URL</string>
 	<string name="details.home_page">Home Page</string>
 
-	<string name="permission.external_storage.failed">DSub2000 cannot function without the ability to write to storage</string>
+	<string name="permission.external_storage.failed">DCross2000 cannot function without the ability to write to storage</string>
 	<string name="permission.location.failed">This app uses location data to get the WIFI SSID to match against your local network settings. To get rid of this message, change the local network SSID to blank.</string>
 
     <plurals name="select_album_n_songs">

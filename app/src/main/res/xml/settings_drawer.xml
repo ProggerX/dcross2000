@@ -6,37 +6,37 @@
 	<PreferenceCategory
 		android:title="@string/settings.drawer_items_title">
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.podcasts_enabled"
 			android:summary="@string/settings.podcasts_enabled_summary"
 			android:key="podcastsEnabled"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.bookmarks_enabled"
 			android:summary="@string/settings.bookmarks_enabled_summary"
 			android:key="bookmarksEnabled"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.internet_radio_enabled"
 			android:summary="@string/settings.internet_radio_enabled_summary"
 			android:key="internetRadioEnabled"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.shares_enabled"
 			android:summary="@string/settings.shares_enabled_summary"
 			android:key="sharedEnabled"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.chat_enabled"
 			android:summary="@string/settings.chat_enabled_summary"
 			android:key="chatEnabled"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.admin_enabled"
 			android:summary="@string/settings.admin_enabled_summary"
 			android:key="adminEnabled"
@@ -54,7 +54,7 @@
 			android:entries="@array/defaultDrawerItems"
 			android:defaultValue="Home"/>
 
-		<github.paroj.dsub2000.view.SeekBarPreference
+		<com.proggerx.dcross2000.view.SeekBarPreference
 			android:title="@string/settings.chat_refresh"
 			android:key="chatRefreshRate"
 			android:defaultValue="30"

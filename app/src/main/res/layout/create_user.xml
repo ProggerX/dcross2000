@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	style="@style/DSub2000.DialogContent"
+	style="@style/DCross2000.DialogContent"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<github.paroj.dsub2000.view.FormTextInputLayout
-		style="@style/Widget.DSub2000.TextField"
+	<com.proggerx.dcross2000.view.FormTextInputLayout
+		style="@style/Widget.DCross2000.TextField"
 		android:hint="@string/admin.add_user_username">
 
 		<com.google.android.material.textfield.TextInputEditText
@@ -15,10 +15,10 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="text"/>
-	</github.paroj.dsub2000.view.FormTextInputLayout>
+	</com.proggerx.dcross2000.view.FormTextInputLayout>
 
-	<github.paroj.dsub2000.view.FormTextInputLayout
-		style="@style/Widget.DSub2000.TextField"
+	<com.proggerx.dcross2000.view.FormTextInputLayout
+		style="@style/Widget.DCross2000.TextField"
 		android:hint="@string/admin.add_user_email">
 
 		<com.google.android.material.textfield.TextInputEditText
@@ -26,10 +26,10 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="textEmailAddress"/>
-	</github.paroj.dsub2000.view.FormTextInputLayout>
+	</com.proggerx.dcross2000.view.FormTextInputLayout>
 
-	<github.paroj.dsub2000.view.FormTextInputLayout
-		style="@style/Widget.DSub2000.TextField"
+	<com.proggerx.dcross2000.view.FormTextInputLayout
+		style="@style/Widget.DCross2000.TextField"
 		android:hint="@string/admin.add_user_password"
 		app:endIconMode="password_toggle">
 
@@ -38,7 +38,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="textPassword"/>
-	</github.paroj.dsub2000.view.FormTextInputLayout>
+	</com.proggerx.dcross2000.view.FormTextInputLayout>
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/settings_list"

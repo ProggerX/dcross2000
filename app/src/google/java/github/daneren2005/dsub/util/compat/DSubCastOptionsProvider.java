@@ -1,4 +1,4 @@
-package github.paroj.dsub2000.util.compat;
+package com.proggerx.dcross2000.util.compat;
 
 import android.content.Context;
 

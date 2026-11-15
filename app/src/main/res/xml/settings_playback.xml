@@ -6,7 +6,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.playback_title">
 
-		<github.paroj.dsub2000.view.SeekBarPreference
+		<com.proggerx.dcross2000.view.SeekBarPreference
 			android:title="@string/settings.playlist_random_size_title"
 			android:key="randomSize"
 			android:defaultValue="20"
@@ -36,7 +36,7 @@
 			android:entryValues="@array/disconnectPauseValues"
 			android:entries="@array/disconnectPauseNames"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.persistent_title"
 			android:summary="@string/settings.persistent_summary"
 			android:key="persistentNotification"
@@ -49,33 +49,33 @@
 			android:entryValues="@array/songPressActionValues"
 			android:entries="@array/songPressActionNames"/>
 
-        <github.paroj.dsub2000.view.SeekBarPreference
+        <com.proggerx.dcross2000.view.SeekBarPreference
             android:title="@string/settings.rewind_interval"
             android:key="rewindInterval"
             android:defaultValue="10"
             android:dialogLayout="@layout/seekbar_preference"
             myns:max="60"/>
 
-        <github.paroj.dsub2000.view.SeekBarPreference
+        <com.proggerx.dcross2000.view.SeekBarPreference
             android:title="@string/settings.fastforward_interval"
             android:key="fastforwardInterval"
             android:defaultValue="30"
             android:dialogLayout="@layout/seekbar_preference"
             myns:max="60"/>
 
-        <github.paroj.dsub2000.view.MaterialSwitchPreference
+        <com.proggerx.dcross2000.view.MaterialSwitchPreference
             android:title="@string/settings.tap_cover_for_playlist"
             android:summary="@string/settings.tap_cover_for_playlist_summary"
             android:key="tapCoverForPlaylist"
             android:defaultValue="false"/>
 
-        <github.paroj.dsub2000.view.MaterialSwitchPreference
+        <com.proggerx.dcross2000.view.MaterialSwitchPreference
             android:title="@string/settings.combine_thumbs_up_down"
             android:summary="@string/settings.combine_thumbs_up_down_summary"
             android:key="combineThumbsUpDown"
             android:defaultValue="false"/>
 
-        <github.paroj.dsub2000.view.MaterialSwitchPreference
+        <com.proggerx.dcross2000.view.MaterialSwitchPreference
             android:title="@string/settings.lyrics_follow_queue"
             android:summary="@string/settings.lyrics_follow_queue_summary"
             android:key="lyricsFollowQueue"
@@ -97,7 +97,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.replay_gain">
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.replay_gain"
 			android:summary="@string/settings.replay_gain_summary"
 			android:key="replayGain"
@@ -110,7 +110,7 @@
 			android:entryValues="@array/replayGainTypeValues"
 			android:entries="@array/replayGainTypeNames"/>
 
-		<github.paroj.dsub2000.view.SeekBarPreference
+		<com.proggerx.dcross2000.view.SeekBarPreference
 			android:key="replayGainBump2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_bump"
@@ -120,7 +120,7 @@
 			myns:stepSize="10"
 			myns:display="%+.1f dB"/>
 
-		<github.paroj.dsub2000.view.SeekBarPreference
+		<com.proggerx.dcross2000.view.SeekBarPreference
 			android:key="replayGainUntagged2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_untagged"
@@ -135,20 +135,20 @@
 		android:title="@string/settings.other_title"
 		android:key="otherSettings">
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.shuffle_by_album"
 			android:key="shuffleByAlbum"
 			android:defaultValue="true"
 			android:summaryOn="@string/settings.shuffle_by_album.true"
 			android:summaryOff="@string/settings.shuffle_by_album.false"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.scrobble_title"
 			android:summary="@string/settings.scrobble_summary"
 			android:key="scrobble"
 			android:defaultValue="true"/>
 
-		<github.paroj.dsub2000.view.MaterialSwitchPreference
+		<com.proggerx.dcross2000.view.MaterialSwitchPreference
 			android:title="@string/settings.gapless_playback"
 			android:summary="@string/settings.gapless_playback_summary"
 			android:key="gaplessPlayback"

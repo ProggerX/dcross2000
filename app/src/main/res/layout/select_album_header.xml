@@ -112,7 +112,7 @@
 				android:layout_gravity="center_vertical"/>
 		</LinearLayout>
 
-		<github.paroj.dsub2000.view.RecyclingImageView
+		<com.proggerx.dcross2000.view.RecyclingImageView
 			android:id="@+id/select_album_art"
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"

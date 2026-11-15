@@ -28,6 +28,10 @@
         compat:showAsAction="ifRoom|withText"/>
 
 	<item
+		android:id="@+id/menu_mix"
+		android:title="@string/mix.label"/>
+
+	<item
 		android:id="@+id/menu_equalizer"
 		android:title="@string/equalizer.label"
 		android:checkable="true"/>
