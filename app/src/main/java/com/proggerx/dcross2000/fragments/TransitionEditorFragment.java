@@ -155,7 +155,11 @@ public class TransitionEditorFragment extends SubsonicFragment {
             curveView.setMode(side(), parameter());
         });
 
-        previewButton.setOnClickListener(view -> togglePreview());
+        previewButton.setOnClickListener(view -> startPreview());
+        previewButton.setOnLongClickListener(view -> {
+            if(preview != null) preview.stop();
+            return true;
+        });
         rootView.findViewById(R.id.transition_reset).setOnClickListener(view -> {
             curveView.setCurves(TransitionSpec.defaultOutVolume().copyValues(),
                     TransitionSpec.defaultInVolume().copyValues(),
@@ -367,11 +371,11 @@ public class TransitionEditorFragment extends SubsonicFragment {
         return end;
     }
 
-    private void togglePreview() {
-        if(preview != null && preview.isRunning()) {
-            preview.stop();
-            return;
-        }
+    /**
+     * Always restarts from the current curve and wheel values. There is no
+     * separate stop step: a second press simply re-arms the preview.
+     */
+    private void startPreview() {
         TransitionSpec spec = currentSpec();
         if(!fromFile.isCompleteFileAvailable() || !toFile.isCompleteFileAvailable()) {
             Util.toast(context, R.string.mix_requires_cache);
@@ -386,6 +390,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
         if(preview == null) {
             preview = new TransitionPreviewPlayer(context);
             preview.setListener(fraction -> curveView.setPlayhead(fraction));
+            preview.setSpecProvider(this::currentSpec);
         }
         preview.play(fromFile.getCompleteFile(), fromDurationMs, toFile.getCompleteFile(), spec);
     }

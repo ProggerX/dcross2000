@@ -35,6 +35,11 @@ public final class TransitionPreviewPlayer {
         void onProgress(float fraction);
     }
 
+    /** Supplies the editor's current spec so every iteration uses fresh values. */
+    public interface SpecProvider {
+        TransitionSpec getSpec();
+    }
+
     private final Context context;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExoPlayer outgoing;
@@ -44,6 +49,7 @@ public final class TransitionPreviewPlayer {
     private final PlayheadClock playhead = new PlayheadClock();
 
     private Listener listener;
+    private SpecProvider specProvider;
 
     private TransitionSpec spec;
     private File outgoingFile;
@@ -73,6 +79,10 @@ public final class TransitionPreviewPlayer {
 
     public void setListener(Listener listener) {
         this.listener = listener;
+    }
+
+    public void setSpecProvider(SpecProvider provider) {
+        this.specProvider = provider;
     }
 
     public boolean isRunning() {
@@ -167,6 +177,10 @@ public final class TransitionPreviewPlayer {
             int elapsedMs = (int) Math.max(0L, Math.min(Integer.MAX_VALUE,
                     position - windowStartPosition));
 
+            // Curves follow live edits; timing still belongs to this iteration.
+            TransitionSpec live = specProvider != null ? specProvider.getSpec() : null;
+            if(live == null) live = spec;
+
             float progress = Math.max(0f, Math.min(1f, elapsedMs / (float) spec.windowMs()));
             float outProgress = Math.max(0f, Math.min(1f,
                     elapsedMs / (float) Math.max(1, spec.outgoingWindowMs())));
@@ -186,12 +200,12 @@ public final class TransitionPreviewPlayer {
             }
 
             if(!outgoingStopped) {
-                outgoingGain.setGain(TransitionSpec.gainAt(spec.out, outProgress));
-                outgoing.setPlaybackSpeed(TransitionSpec.tempoAt(spec.outTempo, outProgress));
+                outgoingGain.setGain(TransitionSpec.gainAt(live.out, outProgress));
+                outgoing.setPlaybackSpeed(TransitionSpec.tempoAt(live.outTempo, outProgress));
             }
             if(incomingStarted) {
-                incomingGain.setGain(TransitionSpec.gainAt(spec.in, inProgress));
-                incoming.setPlaybackSpeed(TransitionSpec.tempoAt(spec.inTempo, inProgress));
+                incomingGain.setGain(TransitionSpec.gainAt(live.in, inProgress));
+                incoming.setPlaybackSpeed(TransitionSpec.tempoAt(live.inTempo, inProgress));
             }
 
             if(progress >= 1f) {
@@ -208,8 +222,13 @@ public final class TransitionPreviewPlayer {
     private final Runnable loop = new Runnable() {
         @Override
         public void run() {
-            if(spec == null || outgoingFile == null || incomingFile == null) return;
-            play(outgoingFile, outgoingDurationMs, incomingFile, spec);
+            if(outgoingFile == null || incomingFile == null) return;
+            // Re-arm from the editor's latest state, not the spec this
+            // iteration started with.
+            TransitionSpec latest = specProvider != null ? specProvider.getSpec() : spec;
+            if(latest == null) latest = spec;
+            if(latest == null) return;
+            play(outgoingFile, outgoingDurationMs, incomingFile, latest);
         }
     };
 }

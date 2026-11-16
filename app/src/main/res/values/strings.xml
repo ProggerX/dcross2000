@@ -628,6 +628,7 @@
 	<string name="mix.tail_label">B tail %1$s</string>
 	<string name="mix.bstart_label">B starts at %1$s</string>
 	<string name="mix.preview">Preview</string>
+	<string name="mix.preview_play">Play preview (long press to stop)</string>
 	<string name="mix.reset">Reset</string>
 	<string name="mix.delete">Delete</string>
 	<string name="mix.save">Save</string>
