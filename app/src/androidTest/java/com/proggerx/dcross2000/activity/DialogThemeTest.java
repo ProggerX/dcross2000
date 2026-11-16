@@ -1,6 +1,11 @@
 package com.proggerx.dcross2000.activity;
 
+import android.view.View;
+
 import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.proggerx.dcross2000.R;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -12,6 +17,15 @@ public class DialogThemeTest {
     @Rule
     public ActivityTestRule<SubsonicFragmentActivity> activity =
             new ActivityTestRule<>(SubsonicFragmentActivity.class);
+
+    @Test
+    public void materialLoadingDialogInflatesWithACustomView() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            View view = activity.getActivity().getLayoutInflater().inflate(R.layout.dialog_loading, null);
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity.getActivity());
+            builder.setView(view).setCancelable(true).show().dismiss();
+        });
+    }
 
     @Test
     public void appCompatAlertDialogInflatesWithTheActivityTheme() {

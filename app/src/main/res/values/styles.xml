@@ -80,8 +80,13 @@
 	<style name="TextAppearance.DCross2000.DialogTitle" parent="TextAppearance.Material3.HeadlineSmall">
 		<item name="android:fontFamily">NType82-Headline</item>
 	</style>
-	<style name="ThemeOverlay.DCross2000.MaterialAlertDialog" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
-		<item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.DCross2000.DialogTitle</item>
+	<style name="ThemeOverlay.DCross2000.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+		<item name="materialAlertDialogTitlePanelStyle">@style/MaterialAlertDialog.Material3.Title.Panel</item>
+		<item name="materialAlertDialogTitleIconStyle">@style/MaterialAlertDialog.Material3.Title.Icon</item>
+		<item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Material3.Title.Text</item>
+		<item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.Material3.Body.Text</item>
+		<item name="alertDialogStyle">@style/MaterialAlertDialog.Material3</item>
+		<item name="android:windowAnimationStyle">@style/MaterialAlertDialog.Material3.Animation</item>
 	</style>
 
 	<style name="TextAppearance.DCross2000.BarTitle" parent="TextAppearance.DCross2000.Brand">

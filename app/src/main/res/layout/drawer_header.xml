@@ -18,7 +18,7 @@
 		android:singleLine="true"
 		android:text="@string/common.appname"
 		android:textAppearance="@style/TextAppearance.DCross2000.DrawerBrand"
-		android:textColor="?attr/colorOnPrimaryContainer" />
+		android:textColor="?attr/colorOnSurface" />
 
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/header_user_avatar"
@@ -29,7 +29,7 @@
 		android:layout_marginTop="22dp"
 		android:layout_marginEnd="20dp"
 		app:civ_border_width="2dp"
-		app:civ_border_color="?attr/colorOnPrimaryContainer" />
+		app:civ_border_color="?attr/colorOutlineVariant" />
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -66,6 +66,6 @@
 			android:layout_height="wrap_content"
 			android:padding="8dp"
 			android:src="@drawable/main_select_server"
-			android:tint="?attr/colorOnPrimaryContainer"/>
+			android:tint="?attr/colorOnSurfaceVariant"/>
 	</LinearLayout>
 </RelativeLayout>
