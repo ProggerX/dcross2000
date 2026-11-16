@@ -64,4 +64,5 @@
 	<color name="m3_dark_outlineVariant">#44474F</color>
 
     <color name="splash_background">#0F0F12</color>
+    <color name="launcher_background">#0F0F12</color>
 </resources>

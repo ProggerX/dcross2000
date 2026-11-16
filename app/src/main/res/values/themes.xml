@@ -216,7 +216,7 @@
 	<style name="Theme.DCross2000.Splash" parent="Theme.DCross2000.Light.No_Actionbar">
 		<item name="android:windowBackground">@color/splash_background</item>
 		<item name="android:windowSplashScreenBackground">@color/splash_background</item>
-		<item name="android:windowSplashScreenAnimatedIcon">@drawable/launch</item>
+		<item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
 		<item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
 	</style>
 	<style name="Theme.DCross2000.Light" parent="Theme.DCross2000.Light.Base">

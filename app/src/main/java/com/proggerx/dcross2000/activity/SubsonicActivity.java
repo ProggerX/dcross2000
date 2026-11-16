@@ -595,7 +595,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			// Gesture navigation can report a zero bottom inset while still drawing a
 			// translucent bar over the content. Keep a minimum strip so the floating
 			// player and the navigation bar never overlap or change colour.
-			int navigationBottom = Math.max(bars.bottom, Math.round(48 * density));
+			int navigationBottom = Math.max(bars.bottom, Math.round(24 * density));
 
 			// The toolbars grow by the status bar inset so that their background paints it, while the
 			// padding keeps the title and the icons clear of the bars and of the display cutout.
@@ -628,7 +628,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 					View miniCard = findViewById(R.id.mini_player_card);
 					if(miniCard != null) {
 						ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) miniCard.getLayoutParams();
-						params.bottomMargin = bottom + Math.round(12 * density);
+						params.bottomMargin = bottom + Math.round(8 * density);
 						miniCard.setLayoutParams(params);
 					}
 					// Keep room for the taller expanded toolbar in both states so the content below
