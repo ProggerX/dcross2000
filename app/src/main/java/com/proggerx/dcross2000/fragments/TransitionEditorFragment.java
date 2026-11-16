@@ -7,12 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButtonToggleGroup;
-
-import java.util.Locale;
 
 import com.proggerx.dcross2000.R;
 import com.proggerx.dcross2000.domain.MusicDirectory;
@@ -25,6 +22,7 @@ import com.proggerx.dcross2000.service.DownloadFile;
 import com.proggerx.dcross2000.service.DownloadService;
 import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
+import com.proggerx.dcross2000.view.MixWheelView;
 import com.proggerx.dcross2000.view.TransitionCurveView;
 
 /**
@@ -36,8 +34,8 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private static final String ARG_FROM = "mix.from";
     private static final String ARG_TO = "mix.to";
 
-    private static final int BAR_STEP_MS = 100;
-    private static final int MAX_BAR_MS = 60000;
+    private static final int WHEEL_STEP_MS = 100;
+    private static final int WHEEL_MAX_MS = 60000;
 
     private MusicDirectory.Entry fromEntry;
     private MusicDirectory.Entry toEntry;
@@ -47,10 +45,10 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private int toDurationMs;
 
     private TransitionCurveView curveView;
-    private SeekBar leadBar;
-    private SeekBar overlapBar;
-    private SeekBar bStartBar;
-    private SeekBar tailBar;
+    private MixWheelView leadWheel;
+    private MixWheelView overlapWheel;
+    private MixWheelView bStartWheel;
+    private MixWheelView tailWheel;
     private TextView leadLabel;
     private TextView overlapLabel;
     private TextView bStartLabel;
@@ -71,7 +69,6 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private int fromWaveEnd = -1;
     private int toWaveStart = -1;
     private int toWaveEnd = -1;
-    private boolean binding;
     private TransitionPreviewPlayer preview;
 
     public static Bundle args(MusicDirectory.Entry from, MusicDirectory.Entry to) {
@@ -100,10 +97,10 @@ public class TransitionEditorFragment extends SubsonicFragment {
         toFile = new DownloadFile(context, toEntry, false);
 
         curveView = rootView.findViewById(R.id.transition_curve);
-        leadBar = rootView.findViewById(R.id.transition_lead);
-        overlapBar = rootView.findViewById(R.id.transition_overlap);
-        bStartBar = rootView.findViewById(R.id.transition_bstart);
-        tailBar = rootView.findViewById(R.id.transition_tail);
+        leadWheel = rootView.findViewById(R.id.transition_lead);
+        overlapWheel = rootView.findViewById(R.id.transition_overlap);
+        bStartWheel = rootView.findViewById(R.id.transition_bstart);
+        tailWheel = rootView.findViewById(R.id.transition_tail);
         leadLabel = rootView.findViewById(R.id.transition_lead_label);
         overlapLabel = rootView.findViewById(R.id.transition_overlap_label);
         bStartLabel = rootView.findViewById(R.id.transition_bstart_label);
@@ -121,24 +118,21 @@ public class TransitionEditorFragment extends SubsonicFragment {
         Typefaces.apply(fromTitle);
         Typefaces.apply(toTitle);
 
-        leadBar.setMax(MAX_BAR_MS / BAR_STEP_MS);
-        overlapBar.setMax(MAX_BAR_MS / BAR_STEP_MS);
-        bStartBar.setMax(MAX_BAR_MS / BAR_STEP_MS);
-        tailBar.setMax(MAX_BAR_MS / BAR_STEP_MS);
+        leadLabel.setText(R.string.mix_lead_title);
+        overlapLabel.setText(R.string.mix_overlap_title);
+        tailLabel.setText(R.string.mix_tail_title);
+        bStartLabel.setText(R.string.mix_bstart_title);
 
-        SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(!binding) updateLabels();
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        };
-        leadBar.setOnSeekBarChangeListener(seekListener);
-        overlapBar.setOnSeekBarChangeListener(seekListener);
-        bStartBar.setOnSeekBarChangeListener(seekListener);
-        tailBar.setOnSeekBarChangeListener(seekListener);
+        leadWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
+        overlapWheel.setRange(TransitionSpec.MIN_FADE_MS, WHEEL_MAX_MS, WHEEL_STEP_MS);
+        bStartWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
+        tailWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
+
+        MixWheelView.OnValueChangedListener timingListener = value -> updateLabels();
+        leadWheel.setOnValueChangedListener(timingListener);
+        overlapWheel.setOnValueChangedListener(timingListener);
+        bStartWheel.setOnValueChangedListener(timingListener);
+        tailWheel.setOnValueChangedListener(timingListener);
 
         sideGroup.check(R.id.transition_side_outgoing);
         parameterGroup.check(R.id.transition_parameter_volume);
@@ -203,23 +197,20 @@ public class TransitionEditorFragment extends SubsonicFragment {
     }
 
     private void bind(TransitionSpec spec) {
-        binding = true;
-        leadBar.setProgress(Math.max(0, Math.min(MAX_BAR_MS / BAR_STEP_MS, spec.leadMs / BAR_STEP_MS)));
-        overlapBar.setProgress(Math.max(TransitionSpec.MIN_FADE_MS / BAR_STEP_MS,
-                Math.min(MAX_BAR_MS / BAR_STEP_MS, spec.fadeMs / BAR_STEP_MS)));
-        bStartBar.setProgress(Math.max(0, Math.min(MAX_BAR_MS / BAR_STEP_MS, spec.bStartMs / BAR_STEP_MS)));
-        tailBar.setProgress(Math.max(0, Math.min(MAX_BAR_MS / BAR_STEP_MS, spec.tailMs / BAR_STEP_MS)));
+        leadWheel.setValue(spec.leadMs);
+        overlapWheel.setValue(spec.fadeMs);
+        bStartWheel.setValue(spec.bStartMs);
+        tailWheel.setValue(spec.tailMs);
         curveView.setCurves(spec.out.copyValues(), spec.in.copyValues(),
                 spec.outTempo.copyValues(), spec.inTempo.copyValues());
-        binding = false;
         updateLabels();
     }
 
     private TransitionSpec currentSpec() {
-        int lead = leadBar.getProgress() * BAR_STEP_MS;
-        int overlap = Math.max(TransitionSpec.MIN_FADE_MS, overlapBar.getProgress() * BAR_STEP_MS);
-        int bStart = bStartBar.getProgress() * BAR_STEP_MS;
-        int tail = tailBar.getProgress() * BAR_STEP_MS;
+        int lead = leadWheel.getValue();
+        int overlap = Math.max(TransitionSpec.MIN_FADE_MS, overlapWheel.getValue());
+        int bStart = bStartWheel.getValue();
+        int tail = tailWheel.getValue();
         return new TransitionSpec(fromEntry.getId(), toEntry.getId(), lead, overlap, tail, bStart,
                 Curve.of(curveView.getOutVolume()), Curve.of(curveView.getInVolume()),
                 Curve.of(curveView.getOutTempo()), Curve.of(curveView.getInTempo()));
@@ -263,12 +254,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
     }
 
     private void updateLabels() {
-        TransitionSpec spec = currentSpec();
-        leadLabel.setText(getString(R.string.mix_lead_label, seconds(spec.leadMs)));
-        overlapLabel.setText(getString(R.string.mix_overlap_label, seconds(spec.fadeMs)));
-        bStartLabel.setText(getString(R.string.mix_bstart_label, seconds(spec.bStartMs)));
-        tailLabel.setText(getString(R.string.mix_tail_label, seconds(spec.tailMs)));
-        updateWaveforms(spec);
+        updateWaveforms(currentSpec());
     }
 
     private void updateWaveforms(TransitionSpec spec) {
@@ -391,7 +377,4 @@ public class TransitionEditorFragment extends SubsonicFragment {
         if(service != null) service.rearmTransition();
     }
 
-    private static String seconds(int millis) {
-        return String.format(Locale.US, "%.1f s", millis / 1000f);
-    }
 }

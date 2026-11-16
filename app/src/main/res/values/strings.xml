@@ -618,6 +618,10 @@
 	<string name="mix.incoming_volume">Incoming volume</string>
 	<string name="mix.outgoing_tempo">Outgoing tempo (0.5x – 1.5x)</string>
 	<string name="mix.incoming_tempo">Incoming tempo (0.5x – 1.5x)</string>
+	<string name="mix_lead_title">A automation lead</string>
+	<string name="mix_overlap_title">Overlap</string>
+	<string name="mix_tail_title">B tail</string>
+	<string name="mix_bstart_title">B starts at</string>
 	<string name="mix.lead_label">A automation lead %1$s</string>
 	<string name="mix.overlap_label">Overlap %1$s</string>
 	<string name="mix.tail_label">B tail %1$s</string>

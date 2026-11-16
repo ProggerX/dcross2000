@@ -108,40 +108,47 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"/>
 
-            <SeekBar
+            <com.proggerx.dcross2000.view.MixWheelView
                 android:id="@+id/transition_lead"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="68dp"
+                android:layout_marginTop="2dp"/>
 
             <TextView
                 android:id="@+id/transition_overlap_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
 
-            <SeekBar
+            <com.proggerx.dcross2000.view.MixWheelView
                 android:id="@+id/transition_overlap"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="68dp"
+                android:layout_marginTop="2dp"/>
 
             <TextView
                 android:id="@+id/transition_tail_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
 
-            <SeekBar
+            <com.proggerx.dcross2000.view.MixWheelView
                 android:id="@+id/transition_tail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="68dp"
+                android:layout_marginTop="2dp"/>
 
             <TextView
                 android:id="@+id/transition_bstart_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
 
-            <SeekBar
+            <com.proggerx.dcross2000.view.MixWheelView
                 android:id="@+id/transition_bstart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="68dp"
+                android:layout_marginTop="2dp"/>
 
             <TextView
                 android:id="@+id/transition_warning"
