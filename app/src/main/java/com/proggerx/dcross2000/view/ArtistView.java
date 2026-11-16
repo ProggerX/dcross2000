@@ -21,10 +21,14 @@ package com.proggerx.dcross2000.view;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.proggerx.dcross2000.R;
 import com.proggerx.dcross2000.activity.SubsonicActivity;
@@ -48,6 +52,10 @@ public class ArtistView extends UpdateView<Artist> {
     private TextView titleView;
     private RecyclingImageView artView;
     private String loadedArtId;
+    private Runnable pendingArtLoad;
+    private static final Handler artHandler = new Handler(Looper.getMainLooper());
+    private static final android.graphics.drawable.GradientDrawable[] PLACEHOLDERS = new android.graphics.drawable.GradientDrawable[5];
+    private static final int[] PLACEHOLDER_COLORS = {0xFF5B8DEF, 0xFF8B7BD8, 0xFF4FA88B, 0xFFD08A5A, 0xFFC06C84};
 
     public ArtistView(Context context) {
         super(context);
@@ -75,8 +83,23 @@ public class ArtistView extends UpdateView<Artist> {
     private void updateArtistArt(Artist artist) {
         if (artView == null || artist == null || artist.getId() == null) return;
         if (artist.getId().equals(loadedArtId)) return;
-        loadedArtId = artist.getId();
 
+        // Show the placeholder immediately and do not start any image work while
+        // the list is dragging or settling. A short delay then loads the rows
+        // that are actually still visible once scrolling stops.
+        showPlaceholder(artist);
+        RecyclerView list = findList();
+        if(list != null && list.getScrollState() != RecyclerView.SCROLL_STATE_IDLE) {
+            if(pendingArtLoad != null) artHandler.removeCallbacks(pendingArtLoad);
+            pendingArtLoad = () -> {
+                pendingArtLoad = null;
+                if(item != null && artist.getId().equals(item.getId())) updateArtistArt(artist);
+            };
+            artHandler.postDelayed(pendingArtLoad, 320);
+            return;
+        }
+
+        loadedArtId = artist.getId();
         MusicDirectory.Entry entry = new MusicDirectory.Entry(artist.getId());
         entry.setDirectory(true);
         entry.setTitle(artist.getName());
@@ -84,6 +107,34 @@ public class ArtistView extends UpdateView<Artist> {
 
         ImageLoader loader = findImageLoader();
         if (loader != null) loader.loadImage(artView, entry, false, false);
+    }
+
+    private void showPlaceholder(Artist artist) {
+        if(artView == null) return;
+        if(artView.getDrawable() != null) {
+            artView.setImageDrawable(null);
+        }
+        // Placeholders are shared per colour so a fling does not allocate a new
+        // GradientDrawable for every bound row.
+        int index = Math.abs(artist.getId().hashCode()) % PLACEHOLDER_COLORS.length;
+        android.graphics.drawable.GradientDrawable placeholder = PLACEHOLDERS[index];
+        if(placeholder == null) {
+            placeholder = new android.graphics.drawable.GradientDrawable();
+            placeholder.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            placeholder.setColor(PLACEHOLDER_COLORS[index]);
+            PLACEHOLDERS[index] = placeholder;
+        }
+        artView.setBackground(placeholder);
+    }
+
+    private RecyclerView findList() {
+        View current = this;
+        while(current != null) {
+            android.view.ViewParent parent = current.getParent();
+            if(parent instanceof RecyclerView) return (RecyclerView) parent;
+            current = parent instanceof View ? (View) parent : null;
+        }
+        return null;
     }
 
     private ImageLoader findImageLoader() {

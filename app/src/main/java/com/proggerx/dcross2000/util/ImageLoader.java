@@ -62,6 +62,8 @@ public class ImageLoader {
 
 	private Context context;
 	private LruCache<String, Bitmap> cache;
+	private final java.util.Map<String, String> artistImageUrls = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.Set<String> artistImagesLoading = java.util.concurrent.ConcurrentHashMap.newKeySet();
 	private Handler handler;
 	private Bitmap nowPlaying;
 	private Bitmap avatar;
@@ -225,7 +227,27 @@ public class ImageLoader {
 		// If we know this a artist, try to load artist info instead
 		// Folder IDs are not necessarily artist IDs, so only trust them when browsing by tags
 		else if(entry != null && Util.isTagBrowsing(context) && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
+			String artistId = entry.getId();
+			String knownUrl = artistId == null ? null : artistImageUrls.get(artistId);
+			if(knownUrl != null) {
+				if(knownUrl.isEmpty()) {
+					Bitmap unknown = getUnknownImage(entry, size);
+					setImage(view, Util.createDrawableFromBitmap(context, unknown), crossfade);
+					return null;
+				}
+				Bitmap cached = cache.get(getKey(knownUrl, size));
+				if(cached != null && !cached.isRecycled()) {
+					setImage(view, Util.createDrawableFromBitmap(context, cached), crossfade);
+					return null;
+				}
+			}
+			// Only one inflight lookup per artist; otherwise a fast fling starts
+			// dozens of identical server requests for the same rows.
+			if(artistId != null && !artistImagesLoading.add(artistId)) {
+				return null;
+			}
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
+			if(artistId == null) artistImagesLoading.add("");
 			task.execute();
 			return task;
 		} else if(entry != null && entry.getCoverArt() == null && entry.isDirectory() && !Util.isOffline(context)) {
@@ -528,9 +550,13 @@ public class ImageLoader {
 		@Override
 		protected Void doInBackground() throws Throwable {
 			try {
-				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-				ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
-				String url = artistInfo.getImageUrl();
+				String url = artistImageUrls.get(mEntry.getId());
+				if(url == null) {
+					MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+					ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
+					url = artistInfo.getImageUrl() == null ? "" : artistInfo.getImageUrl();
+					artistImageUrls.put(mEntry.getId(), url);
+				}
 
 				// Figure out whether we are going to get a artist image or the standard image
 				if (url != null && !"".equals(url.trim())) {
@@ -575,11 +601,18 @@ public class ImageLoader {
 
 		@Override
 		public void done(Void result) {
+			artistImagesLoading.remove(mEntry.getId());
 			if(subTask != null) {
 				subTask.done(result);
 			} else if(mDrawable != null) {
 				setImage(mView, mDrawable, mCrossfade);
 			}
+		}
+
+		@Override
+		protected void error(Throwable error) {
+			artistImagesLoading.remove(mEntry.getId());
+			super.error(error);
 		}
 	}
 
@@ -601,6 +634,11 @@ public class ImageLoader {
 		@Override
 		protected Void doInBackground() throws Throwable {
 			try {
+				Bitmap cached = cache.get(getKey(mUrl, mSize));
+				if(cached != null && !cached.isRecycled()) {
+					mDrawable = Util.createDrawableFromBitmap(mContext, cached);
+					return null;
+				}
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getBitmap(mUrl, mSize, mContext, null, this);
 				if(bitmap != null) {

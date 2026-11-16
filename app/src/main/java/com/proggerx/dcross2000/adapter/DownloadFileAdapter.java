@@ -34,6 +34,16 @@ import com.proggerx.dcross2000.view.UpdateView;
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
+	public interface OnTransitionClickListener {
+		void onTransitionClicked(MusicDirectory.Entry from, MusicDirectory.Entry to);
+	}
+
+	private OnTransitionClickListener transitionClickListener;
+
+	public void setOnTransitionClickListener(OnTransitionClickListener listener) {
+		transitionClickListener = listener;
+	}
+
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
 		super(context, entries);
 		this.onItemClickedListener = onItemClickedListener;
@@ -50,7 +60,11 @@ public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements
 		SongView songView = (SongView) holder.getUpdateView();
 		songView.setObject(item.getSong(), Util.isBatchMode(context));
 		songView.setDownloadFile(item);
-		songView.setTransitionNext(nextSong(item));
+		MusicDirectory.Entry next = nextSong(item);
+		songView.setTransitionNext(next);
+		songView.setOnTransitionClickListener((from, to) -> {
+			if(transitionClickListener != null) transitionClickListener.onTransitionClicked(from, to);
+		});
 	}
 
 	private MusicDirectory.Entry nextSong(DownloadFile item) {

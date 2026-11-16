@@ -150,6 +150,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private ScheduledFuture<?> hideControlsFuture;
 	private List<DownloadFile> songList;
 	private DownloadFileAdapter songListAdapter;
+	private TextView queueMetaTextView;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
 	private boolean scrollWhenLoaded = false;
@@ -229,6 +230,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		emptyTextView = (TextView)rootView.findViewById(R.id.download_empty);
 		songTitleTextView = (TextView)rootView.findViewById(R.id.download_song_title);
 		Typefaces.apply(songTitleTextView);
+		TextView queueTitle = rootView.findViewById(R.id.download_queue_title);
+		Typefaces.apply(queueTitle);
+		queueMetaTextView = rootView.findViewById(R.id.download_queue_meta);
 		positionTextView = (TextView)rootView.findViewById(R.id.download_position);
 		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
 		statusTextView = (TextView)rootView.findViewById(R.id.download_status);
@@ -1407,7 +1411,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(songListAdapter == null) {
 			songList = new ArrayList<>();
 			songList.addAll(songs);
-			playlistView.setAdapter(songListAdapter = new DownloadFileAdapter(context, songList, NowPlayingFragment.this));
+			songListAdapter = new DownloadFileAdapter(context, songList, NowPlayingFragment.this);
+			songListAdapter.setOnTransitionClickListener((from, to) -> {
+				TransitionEditorFragment fragment = new TransitionEditorFragment();
+				fragment.setArguments(TransitionEditorFragment.args(from, to));
+				replaceFragment(fragment);
+				setControlsVisible(true);
+			});
+			playlistView.setAdapter(songListAdapter);
 		} else {
 			songList.clear();
 			songList.addAll(songs);
@@ -1415,6 +1426,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		emptyTextView.setVisibility(songs.isEmpty() ? View.VISIBLE : View.GONE);
+		updateQueueMeta(songs);
 
 		if(scrollWhenLoaded) {
 			scrollToCurrent();
@@ -1437,6 +1449,26 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			repeatButton.setVisibility(View.VISIBLE);
 		}
         setPlaybackSpeed();
+	}
+
+	private void updateQueueMeta(List<DownloadFile> songs) {
+		if(queueMetaTextView == null) return;
+		long totalSeconds = 0;
+		for(DownloadFile file : songs) {
+			Integer duration = file.getSong() == null ? null : file.getSong().getDuration();
+			if(duration != null) totalSeconds += duration;
+		}
+		String total;
+		if(totalSeconds >= 3600) {
+			total = context.getString(R.string.download_queue_time_hours, totalSeconds / 3600, (totalSeconds % 3600) / 60);
+		} else {
+			total = context.getString(R.string.download_queue_time_minutes, Math.max(1, totalSeconds / 60));
+		}
+		if(songs.size() == 1) {
+			queueMetaTextView.setText(context.getString(R.string.download_queue_meta_one, total));
+		} else {
+			queueMetaTextView.setText(context.getString(R.string.download_queue_meta, songs.size(), total));
+		}
 	}
 
 	@Override

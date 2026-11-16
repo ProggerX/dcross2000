@@ -3,169 +3,163 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@id/drag_handle"
 	android:layout_width="match_parent"
-	android:layout_height="72dp"
-	android:background="?attr/selectableItemBackground"
-	android:orientation="horizontal"
-	android:paddingStart="20dp"
-	android:paddingEnd="20dp">
-
-	<com.proggerx.dcross2000.view.RecyclingImageView
-		android:id="@+id/song_art"
-		android:layout_width="48dp"
-		android:layout_height="48dp"
-		android:layout_gravity="center_vertical"
-		android:layout_marginEnd="14dp"
-		android:scaleType="centerCrop"
-		android:contentDescription="@null"
-		app:imageCornerRadius="10dp" />
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
 	<LinearLayout
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical"
-		android:layout_weight="1"
-		android:orientation="vertical">
+		android:id="@+id/song_row"
+		android:layout_width="match_parent"
+		android:layout_height="72dp"
+		android:background="?attr/selectableItemBackground"
+		android:orientation="horizontal"
+		android:paddingStart="20dp"
+		android:paddingEnd="20dp">
+
+		<com.proggerx.dcross2000.view.RecyclingImageView
+			android:id="@+id/song_art"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:layout_gravity="center_vertical"
+			android:layout_marginEnd="14dp"
+			android:scaleType="centerCrop"
+			android:contentDescription="@null"
+			app:imageCornerRadius="10dp" />
 
 		<LinearLayout
-			android:layout_width="match_parent"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:orientation="horizontal">
+			android:layout_weight="1"
+			android:orientation="vertical">
 
-			<TextView
-				android:id="@+id/song_track"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="top|start"
-				android:drawablePadding="6dip"
-				android:gravity="start"
-				android:paddingRight="6dp"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?android:textColorPrimary" />
-
-			<TextView
-				android:id="@+id/song_title"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_gravity="left|top"
-				android:layout_weight="1"
-				android:drawablePadding="6dip"
-				android:ellipsize="marquee"
-				android:paddingRight="6dp"
-				android:singleLine="true"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?android:textColorPrimary" />
-
-			<TextView
-				android:id="@+id/song_transition"
-				android:layout_width="wrap_content"
+			<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:layout_marginEnd="6dp"
-				android:text="@string/mix.badge"
-				android:textColor="#FFFFC107"
-				android:textSize="10sp"
-				android:textStyle="bold"
-				android:visibility="gone" />
+				android:orientation="horizontal">
 
-			<ImageButton
-				android:id="@+id/song_bookmark"
-				android:layout_width="@dimen/SongStatusIcon"
-				android:layout_height="@dimen/SongStatusIcon"
-				android:layout_gravity="top|end"
-				android:background="@null"
-				android:focusable="false"
-				android:scaleType="fitCenter"
-				android:visibility="gone" />
+				<TextView
+					android:id="@+id/song_track"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="top|start"
+					android:drawablePadding="6dip"
+					android:gravity="start"
+					android:paddingRight="6dp"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:textColor="?android:textColorPrimary" />
 
-			<ImageButton
-				android:id="@+id/song_star"
-				android:layout_width="@dimen/Star.Small"
-				android:layout_height="@dimen/Star.Small"
-				android:layout_gravity="top|end"
-				android:background="@null"
-				android:focusable="false"
-				android:scaleType="fitCenter"
-				android:visibility="gone" />
+				<TextView
+					android:id="@+id/song_title"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="left|top"
+					android:layout_weight="1"
+					android:drawablePadding="6dip"
+					android:ellipsize="marquee"
+					android:paddingRight="6dp"
+					android:singleLine="true"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:textColor="?android:textColorPrimary" />
 
-			<ImageButton
-				android:id="@+id/song_played"
-				android:layout_width="@dimen/SongStatusIcon"
-				android:layout_height="@dimen/SongStatusIcon"
-				android:layout_gravity="top|end"
-				android:background="@null"
-				android:focusable="false"
-				android:scaleType="fitCenter"
-				android:visibility="gone" />
+				<ImageButton
+					android:id="@+id/song_bookmark"
+					android:layout_width="@dimen/SongStatusIcon"
+					android:layout_height="@dimen/SongStatusIcon"
+					android:layout_gravity="top|end"
+					android:background="@null"
+					android:focusable="false"
+					android:scaleType="fitCenter"
+					android:visibility="gone" />
 
-			<TextView
-				android:id="@+id/song_status"
-				android:layout_width="wrap_content"
+				<ImageButton
+					android:id="@+id/song_star"
+					android:layout_width="@dimen/Star.Small"
+					android:layout_height="@dimen/Star.Small"
+					android:layout_gravity="top|end"
+					android:background="@null"
+					android:focusable="false"
+					android:scaleType="fitCenter"
+					android:visibility="gone" />
+
+				<ImageButton
+					android:id="@+id/song_played"
+					android:layout_width="@dimen/SongStatusIcon"
+					android:layout_height="@dimen/SongStatusIcon"
+					android:layout_gravity="top|end"
+					android:background="@null"
+					android:focusable="false"
+					android:scaleType="fitCenter"
+					android:visibility="gone" />
+
+				<TextView
+					android:id="@+id/song_status"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right|top"
+					android:drawablePadding="1dip"
+					android:paddingRight="2dip" />
+
+				<ImageView
+					android:id="@+id/song_status_icon"
+					android:layout_width="@dimen/SongStatusIcon"
+					android:layout_height="@dimen/SongStatusIcon"
+					android:layout_gravity="top|end"
+					android:src="?attr/downloading"
+					android:visibility="gone"/>
+
+				<TextView
+					android:id="@+id/song_suffix"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right|center_vertical"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:singleLine="true"
+					android:paddingLeft="3dip"
+					android:paddingRight="4dip"
+					android:textColor="?android:textColorSecondary"/>
+	        </LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/song_bottom"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right|top"
-				android:drawablePadding="1dip"
-				android:paddingRight="2dip" />
+				android:layout_gravity="center_vertical"
+				android:orientation="horizontal">
 
-			<ImageView
-				android:id="@+id/song_status_icon"
-				android:layout_width="@dimen/SongStatusIcon"
-				android:layout_height="@dimen/SongStatusIcon"
-				android:layout_gravity="top|end"
-				android:src="?attr/downloading"
-				android:visibility="gone"/>
+				<TextView
+					android:id="@+id/song_artist"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical|start|end"
+					android:layout_weight="1"
+					android:ellipsize="middle"
+					android:singleLine="true"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="?android:textColorSecondary" />
 
-			<TextView
-				android:id="@+id/song_suffix"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:singleLine="true"
-				android:paddingLeft="3dip"
-				android:paddingRight="4dip"
-				android:textColor="?android:textColorSecondary"/>
-        </LinearLayout>
+				<RatingBar
+					android:id="@+id/song_rating"
+					style="@android:style/Widget.Holo.RatingBar.Small"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:isIndicator="true"
+					android:numStars="5"
+					android:visibility="gone" />
 
-		<LinearLayout
-			android:id="@+id/song_bottom"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:orientation="horizontal">
+				<TextView
+					android:id="@+id/song_duration"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical|end"
+					android:paddingLeft="3dip"
+					android:paddingRight="4dip"
+					android:singleLine="true"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="?android:textColorSecondary" />
 
-			<TextView
-				android:id="@+id/song_artist"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_vertical|start|end"
-				android:layout_weight="1"
-				android:ellipsize="middle"
-				android:singleLine="true"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textColor="?android:textColorSecondary" />
-
-			<RatingBar
-				android:id="@+id/song_rating"
-				style="@android:style/Widget.Holo.RatingBar.Small"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerHorizontal="true"
-				android:isIndicator="true"
-				android:numStars="5"
-				android:visibility="gone" />
-
-			<TextView
-				android:id="@+id/song_duration"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_vertical|end"
-				android:paddingLeft="3dip"
-				android:paddingRight="4dip"
-				android:singleLine="true"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textColor="?android:textColorSecondary" />
-
-		</LinearLayout>
+			</LinearLayout>
 	</LinearLayout>
 
 	<ImageView
@@ -176,4 +170,46 @@
 		android:layout_gravity="center_vertical|end"
 		android:src="?attr/download_none" />
 
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/song_transition_panel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginTop="2dp"
+		android:layout_marginBottom="10dp"
+		android:background="@drawable/transition_panel_bg"
+		android:clickable="true"
+		android:focusable="true"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingStart="12dp"
+		android:paddingEnd="10dp"
+		android:paddingTop="9dp"
+		android:paddingBottom="9dp"
+		android:visibility="gone">
+
+		<ImageView
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:src="@drawable/ic_ms_transition"
+			android:contentDescription="@null" />
+
+		<TextView
+			android:id="@+id/song_transition_label"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"
+			android:layout_weight="1"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textColor="?attr/colorPrimary" />
+
+		<ImageView
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:src="@drawable/ic_chevron_right"
+			android:contentDescription="@null" />
+	</LinearLayout>
 </LinearLayout>

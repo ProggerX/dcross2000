@@ -601,6 +601,13 @@
     <string name="equalizer.label">Equalizer</string>
 	<string name="mix.label">Transitions</string>
 	<string name="mix.badge">MIX</string>
+	<string name="mix.transition_strip">Custom transition · %1$s</string>
+	<string name="download.queue_title">Up next</string>
+	<string name="download.queue_subtitle">Drag to reorder</string>
+	<string name="download_queue_meta">%1$d tracks · %2$s</string>
+	<string name="download_queue_meta_one">1 track · %1$s</string>
+	<string name="download_queue_time_minutes">%1$d min</string>
+	<string name="download_queue_time_hours">%1$d hr %2$d min</string>
 	<string name="mix.edit_title">Edit transition</string>
 	<string name="mix.pick_title">Pick a transition</string>
 	<string name="mix.side_outgoing">A</string>

@@ -30,6 +30,7 @@ import com.proggerx.dcross2000.domain.MusicDirectory;
 import com.proggerx.dcross2000.domain.PodcastEpisode;
 import com.proggerx.dcross2000.service.DownloadService;
 import com.proggerx.dcross2000.mix.MixStore;
+import com.proggerx.dcross2000.mix.TransitionSpec;
 import com.proggerx.dcross2000.service.DownloadFile;
 import com.proggerx.dcross2000.util.DrawableTint;
 import com.proggerx.dcross2000.util.ImageLoader;
@@ -38,6 +39,7 @@ import com.proggerx.dcross2000.util.ThemeUtil;
 import com.proggerx.dcross2000.util.Util;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Used to display songs in a {@code ListView}.
@@ -60,7 +62,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private TextView suffixTextView;
 	private RecyclingImageView songArtView;
 	private String loadedArtKey;
-	private TextView transitionTextView;
+	private View rowView;
+	private View transitionPanel;
+	private TextView transitionLabel;
+	private OnTransitionClickListener transitionListener;
 
 	private DownloadService downloadService;
 	private long revision = -1;
@@ -82,7 +87,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean isPlayedShown = false;
 	private boolean showAlbum = false;
 	private MusicDirectory.Entry transitionNext;
-	private boolean transitionShown = false;
+
+	public interface OnTransitionClickListener {
+		void onTransitionClicked(MusicDirectory.Entry from, MusicDirectory.Entry to);
+	}
 
 	public SongView(Context context) {
 		super(context);
@@ -104,7 +112,16 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		bottomRowView = findViewById(R.id.song_bottom);
 		suffixTextView = (TextView) findViewById(R.id.song_suffix);
 		songArtView = (RecyclingImageView) findViewById(R.id.song_art);
-		transitionTextView = (TextView) findViewById(R.id.song_transition);
+		rowView = findViewById(R.id.song_row);
+		transitionPanel = findViewById(R.id.song_transition_panel);
+		transitionLabel = (TextView) findViewById(R.id.song_transition_label);
+		if(transitionPanel != null) {
+			transitionPanel.setOnClickListener(v -> {
+				if(transitionListener != null && item != null && transitionNext != null) {
+					transitionListener.onTransitionClicked(item, transitionNext);
+				}
+			});
+		}
 	}
 
 	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
@@ -214,13 +231,32 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		loaded = false;
 		dontChangeDownloadFile = false;
 		transitionNext = null;
-		updateTransitionBadge();
+		updateTransitionPanel();
 	}
 
 	/** Marks this row when a drawn transition leads into {@code next}. */
 	public void setTransitionNext(MusicDirectory.Entry next) {
 		transitionNext = next;
-		updateTransitionBadge();
+		updateTransitionPanel();
+	}
+
+	public void setOnTransitionClickListener(OnTransitionClickListener listener) {
+		transitionListener = listener;
+	}
+
+	private void updateTransitionPanel() {
+		if(transitionPanel == null) return;
+		TransitionSpec spec = null;
+		if(transitionNext != null && item != null && item.getId() != null && transitionNext.getId() != null) {
+			spec = MixStore.get(context).get(item.getId(), transitionNext.getId());
+		}
+		if(spec == null) {
+			transitionPanel.setVisibility(View.GONE);
+			return;
+		}
+		transitionLabel.setText(context.getString(R.string.mix_transition_strip,
+				String.format(Locale.US, "%.1f s", spec.fadeMs / 1000f)));
+		transitionPanel.setVisibility(View.VISIBLE);
 	}
 
 	private void updateSongArt() {
@@ -249,16 +285,6 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			current = ((ContextWrapper) current).getBaseContext();
 		}
 		return null;
-	}
-
-	private void updateTransitionBadge() {
-		boolean show = transitionNext != null && item != null && item.getId() != null
-				&& transitionNext.getId() != null
-				&& MixStore.get(context).has(item.getId(), transitionNext.getId());
-		if(show != transitionShown) {
-			transitionShown = show;
-			transitionTextView.setVisibility(show ? View.VISIBLE : View.GONE);
-		}
 	}
 
 	public void setDownloadFile(DownloadFile downloadFile) {
@@ -306,7 +332,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	@Override
 	protected void update() {
-		updateTransitionBadge();
+		updateTransitionPanel();
 		updateSongArt();
 		if(loaded) {
 			setObjectImpl(item, item2);
@@ -356,6 +382,16 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
+		if(rowView != null) {
+			if(playing) {
+				rowView.setBackgroundResource(R.drawable.song_row_playing_bg);
+			} else {
+				android.util.TypedValue selectable = new android.util.TypedValue();
+				if(getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, selectable, true)) {
+					rowView.setBackgroundResource(selectable.resourceId);
+				}
+			}
+		}
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
