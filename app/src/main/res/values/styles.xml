@@ -160,10 +160,11 @@
 	</style>
 
 	<style name="PlaybackControl.Primary" parent="@style/PlaybackControl.Large">
-		<item name="android:layout_width">76dp</item>
-		<item name="android:layout_height">76dp</item>
-		<item name="android:padding">20dp</item>
-		<item name="android:background">@drawable/playback_button_circle</item>
+		<item name="android:layout_width">88dp</item>
+		<item name="android:layout_height">88dp</item>
+		<item name="android:padding">26dp</item>
+		<item name="android:elevation">6dp</item>
+		<item name="android:background">@drawable/player_play_button</item>
 	</style>
 
 	<style name="PlaybackControl.Large" parent="@style/PlaybackControl">

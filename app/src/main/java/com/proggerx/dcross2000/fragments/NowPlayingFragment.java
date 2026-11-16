@@ -133,6 +133,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private View stopButton;
 	private View startButton;
 	private ImageButton repeatButton;
+	private ImageButton shuffleButton;
 	private View toggleListButton;
 	private ImageButton starButton;
     private ImageButton addToPlaylist;
@@ -246,6 +247,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateCombinedButton = (ImageButton) rootView.findViewById(R.id.download_rating_combined);
 		playbackSpeedButton = (ImageButton) rootView.findViewById(R.id.download_playback_speed);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
+		shuffleButton = rootView.findViewById(R.id.download_shuffle);
 
 		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
 		FastScroller fastScroller = (FastScroller) rootView.findViewById(R.id.download_fast_scroller);
@@ -463,6 +465,25 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 
 		setPlaybackSpeed();
+
+		shuffleButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().shuffle();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						Util.toast(context, R.string.download_menu_shuffle_notification);
+					}
+				}.execute();
+				setControlsVisible(true);
+			}
+		});
 
 		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -941,9 +962,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		try {
-			long duration = 1700L;
-			FadeOutAnimation.createAndStart(rootView.findViewById(R.id.download_overlay_buttons), !visible, duration);
-
+			// The action row lives in the control panel now and is always visible.
 			if (visible) {
 				scheduleHideControls();
 			}
