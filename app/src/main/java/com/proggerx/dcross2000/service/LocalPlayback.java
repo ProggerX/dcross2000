@@ -383,12 +383,13 @@ final class LocalPlayback {
         long duration = player.getDuration();
         if (duration == C.TIME_UNSET || duration <= 0) return;
         long remaining = duration - player.getCurrentPosition();
-        int window = nextSpec.windowMs();
-        if (remaining > window) return;
+        int lookahead = nextSpec.aEndMs + nextSpec.outgoingWindowMs();
+        if (remaining > lookahead) return;
         ExoPlayer incoming = players[nextSlot];
         if (incoming == null || incoming.getPlaybackState() != Player.STATE_READY) return;
 
-        int windowStart = (int) Math.max(0L, duration - nextSpec.outgoingWindowMs());
+        int windowStart = (int) Math.max(0L,
+                duration - nextSpec.aEndMs - nextSpec.outgoingWindowMs());
         startFade(windowStart);
     }
 

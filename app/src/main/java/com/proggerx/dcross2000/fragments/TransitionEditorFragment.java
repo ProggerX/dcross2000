@@ -49,10 +49,12 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private MixWheelView overlapWheel;
     private MixWheelView bStartWheel;
     private MixWheelView tailWheel;
+    private MixWheelView aEndWheel;
     private TextView leadLabel;
     private TextView overlapLabel;
     private TextView bStartLabel;
     private TextView tailLabel;
+    private TextView aEndLabel;
     private TextView warning;
     private Button previewButton;
     private Button deleteButton;
@@ -101,10 +103,12 @@ public class TransitionEditorFragment extends SubsonicFragment {
         overlapWheel = rootView.findViewById(R.id.transition_overlap);
         bStartWheel = rootView.findViewById(R.id.transition_bstart);
         tailWheel = rootView.findViewById(R.id.transition_tail);
+        aEndWheel = rootView.findViewById(R.id.transition_aend);
         leadLabel = rootView.findViewById(R.id.transition_lead_label);
         overlapLabel = rootView.findViewById(R.id.transition_overlap_label);
         bStartLabel = rootView.findViewById(R.id.transition_bstart_label);
         tailLabel = rootView.findViewById(R.id.transition_tail_label);
+        aEndLabel = rootView.findViewById(R.id.transition_aend_label);
         warning = rootView.findViewById(R.id.transition_warning);
         previewButton = rootView.findViewById(R.id.transition_preview);
         deleteButton = rootView.findViewById(R.id.transition_delete);
@@ -121,18 +125,22 @@ public class TransitionEditorFragment extends SubsonicFragment {
         leadLabel.setText(R.string.mix_lead_title);
         overlapLabel.setText(R.string.mix_overlap_title);
         tailLabel.setText(R.string.mix_tail_title);
+        aEndLabel.setText(R.string.mix_aend_title);
         bStartLabel.setText(R.string.mix_bstart_title);
 
         leadWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
         overlapWheel.setRange(TransitionSpec.MIN_FADE_MS, WHEEL_MAX_MS, WHEEL_STEP_MS);
         bStartWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
         tailWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
+        aEndWheel.setRange(0, WHEEL_MAX_MS, WHEEL_STEP_MS);
+        aEndWheel.setNegativeDisplay(true);
 
         MixWheelView.OnValueChangedListener timingListener = value -> updateLabels();
         leadWheel.setOnValueChangedListener(timingListener);
         overlapWheel.setOnValueChangedListener(timingListener);
         bStartWheel.setOnValueChangedListener(timingListener);
         tailWheel.setOnValueChangedListener(timingListener);
+        aEndWheel.setOnValueChangedListener(timingListener);
 
         sideGroup.check(R.id.transition_side_outgoing);
         parameterGroup.check(R.id.transition_parameter_volume);
@@ -217,6 +225,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
         overlapWheel.setValue(spec.fadeMs);
         bStartWheel.setValue(spec.bStartMs);
         tailWheel.setValue(spec.tailMs);
+        aEndWheel.setValue(spec.aEndMs);
         curveView.setCurves(spec.out.copyValues(), spec.in.copyValues(),
                 spec.outTempo.copyValues(), spec.inTempo.copyValues());
         updateLabels();
@@ -227,7 +236,8 @@ public class TransitionEditorFragment extends SubsonicFragment {
         int overlap = Math.max(TransitionSpec.MIN_FADE_MS, overlapWheel.getValue());
         int bStart = bStartWheel.getValue();
         int tail = tailWheel.getValue();
-        return new TransitionSpec(fromEntry.getId(), toEntry.getId(), lead, overlap, tail, bStart,
+        int aEnd = aEndWheel.getValue();
+        return new TransitionSpec(fromEntry.getId(), toEntry.getId(), lead, overlap, tail, bStart, aEnd,
                 Curve.of(curveView.getOutVolume()), Curve.of(curveView.getInVolume()),
                 Curve.of(curveView.getOutTempo()), Curve.of(curveView.getInTempo()));
     }
@@ -338,11 +348,11 @@ public class TransitionEditorFragment extends SubsonicFragment {
 
     private int windowFromStart(TransitionSpec spec) {
         if(fromDurationMs <= 0) return 0;
-        return Math.max(0, fromDurationMs - Math.max(1, spec.outgoingWindowMs()));
+        return Math.max(0, fromDurationMs - spec.aEndMs - Math.max(1, spec.outgoingWindowMs()));
     }
 
     private int windowFromEnd(TransitionSpec spec) {
-        return Math.max(0, fromDurationMs);
+        return Math.max(0, fromDurationMs - spec.aEndMs);
     }
 
     private int windowToStart(TransitionSpec spec) {
@@ -367,7 +377,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
             Util.toast(context, R.string.mix_requires_cache);
             return;
         }
-        if(fromDurationMs <= spec.outgoingWindowMs()) {
+        if(fromDurationMs <= spec.aEndMs + spec.outgoingWindowMs()) {
             Util.toast(context, R.string.mix_unknown_duration);
             return;
         }

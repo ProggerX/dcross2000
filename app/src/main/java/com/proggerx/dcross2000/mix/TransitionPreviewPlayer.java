@@ -86,13 +86,14 @@ public final class TransitionPreviewPlayer {
     public void play(File outgoingFile, int outgoingDurationMs, File incomingFile, TransitionSpec spec) {
         stop();
         if(outgoingFile == null || incomingFile == null || spec == null) return;
-        if(outgoingDurationMs <= spec.outgoingWindowMs()) return;
+        if(outgoingDurationMs <= spec.outgoingWindowMs() + spec.aEndMs) return;
 
         this.spec = spec;
         this.outgoingFile = outgoingFile;
         this.incomingFile = incomingFile;
         this.outgoingDurationMs = outgoingDurationMs;
-        windowStartPosition = outgoingDurationMs - spec.outgoingWindowMs();
+        windowStartPosition = Math.max(0,
+                outgoingDurationMs - spec.aEndMs - spec.outgoingWindowMs());
         outgoingStartPosition = Math.max(0, windowStartPosition - PREROLL_MS);
         incomingStarted = false;
         outgoingStopped = false;
@@ -148,8 +149,10 @@ public final class TransitionPreviewPlayer {
         public void run() {
             if(!running) return;
             long actualDuration = outgoing.getDuration();
-            if(actualDuration != C.TIME_UNSET && actualDuration > spec.outgoingWindowMs()) {
-                windowStartPosition = (int) (actualDuration - spec.outgoingWindowMs());
+            if(actualDuration != C.TIME_UNSET
+                    && actualDuration > spec.outgoingWindowMs() + spec.aEndMs) {
+                windowStartPosition = (int) Math.max(0L,
+                        actualDuration - spec.aEndMs - spec.outgoingWindowMs());
             }
             long position = playhead.update(outgoing.getCurrentPosition(),
                     outgoing.getPlaybackParameters().speed, outgoing.isPlaying());

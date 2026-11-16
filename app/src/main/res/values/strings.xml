@@ -621,6 +621,7 @@
 	<string name="mix_lead_title">A automation lead</string>
 	<string name="mix_overlap_title">Overlap</string>
 	<string name="mix_tail_title">B tail</string>
+	<string name="mix_aend_title">A ends at</string>
 	<string name="mix_bstart_title">B starts at</string>
 	<string name="mix.lead_label">A automation lead %1$s</string>
 	<string name="mix.overlap_label">Overlap %1$s</string>

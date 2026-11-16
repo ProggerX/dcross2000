@@ -25,8 +25,10 @@ DCross2000 is an Android client for [Subsonic](https://www.subsonic.org/) server
   - **Lead** — only the outgoing song is automated (e.g. dip the volume or slow it down before the next track appears).
   - **Overlap** — both songs sound; both curves apply.
   - **Tail** — only the incoming song is automated before normal playback resumes.
+- Extra placement controls: **A ends at −…** stops the outgoing track before its natural end (annoying outros, silence) and **B starts at …** picks the entry point in the incoming track.
 - Each side has a **volume curve** (0–2×, so quiet tracks can be boosted to normalize them) and a **tempo curve** (0.5×–1.5×, pitch-preserving).
-- One zoomed view shows both waveforms and all four curves. Pick **A/B** and **Volume/Tempo** and draw with the pencil; Preview plays the actual overlap with a running playhead.
+- One zoomed view shows **two waveforms per track** — a low band for kicks/bass and an onset-emphasised high band for snares/hats — plus all four curves. Pick **A/B** and **Volume/Tempo** and draw with the pencil; Preview plays the actual overlap with a smooth, audio-locked playhead.
+- Timing is changed with **snapping wheels**: drag horizontally for fast moves, vertically for 10 ms precision.
 - Transitions require both songs to be cached; streaming tracks and cast/DLNA outputs ignore them.
 - Default behavior without a drawn transition is plain **gapless** playback, exactly like upstream.
 
@@ -34,6 +36,18 @@ Where to find it:
 
 - Playlist → **⋮ → Transitions**, or
 - Now Playing → **⋮ → Transitions** (current song → next song).
+
+## UI redesign
+
+The fork rebuilds the interface around Material 3 Expressive instead of the upstream Holo-era look:
+
+- **Serif headings** everywhere (NType82 from the system fonts when present, serif fallback). Geist/Inter remains the body sans.
+- **Now Playing** uses a blurred artwork backdrop with a surface scrim, a square rounded cover, a tight title block and a rounded control panel. The play button is a large ringed tonal circle; the queue toggle is a prominent primary-container button.
+- **Persistent action pill** — the small actions (shuffle, rating, star, add, speed, bookmark) sit in a floating segmented pill below the top bar and never fade away.
+- **Queue as a first-class surface** — serif “Up next” headline with track count and duration, a tonal highlight on the playing row, and Spotify-style transition strips between mixed tracks that open the editor.
+- **Floating mini player** — an artwork-tinted card that hovers above the navigation bar instead of merging with it.
+- **Artist library** — circular artwork served by Navidrome/Subsonic, with per-artist caching, placeholders and scroll-aware loading.
+- **Transition editor** — real low/high-band waveforms at 10 ms resolution, snapping wheels for timing, and a playhead that stays locked to the audio.
 
 ## Build
 

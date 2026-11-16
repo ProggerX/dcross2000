@@ -27,6 +27,8 @@ public final class TransitionSpec implements Serializable {
     public static final int MAX_LEAD_MS = 60000;
     public static final int MAX_TAIL_MS = 60000;
     public static final int MAX_B_START_MS = 900000;
+    /** How far before the end of A the outgoing audio may stop. */
+    public static final int MAX_A_END_MS = 60000;
     public static final int DEFAULT_OVERLAP_MS = 6000;
 
     public static final float MIN_TEMPO = 0.5f;
@@ -47,6 +49,8 @@ public final class TransitionSpec implements Serializable {
     public final int fadeMs;
     public final int tailMs;
     public final int bStartMs;
+    /** Distance from the end of the outgoing file where A stops; 0 = the end. */
+    public final int aEndMs;
     public final Curve out;
     public final Curve in;
     public final Curve outTempo;
@@ -54,12 +58,18 @@ public final class TransitionSpec implements Serializable {
 
     public TransitionSpec(String fromId, String toId, int leadMs, int fadeMs, int tailMs, int bStartMs,
                           Curve out, Curve in, Curve outTempo, Curve inTempo) {
+        this(fromId, toId, leadMs, fadeMs, tailMs, bStartMs, 0, out, in, outTempo, inTempo);
+    }
+
+    public TransitionSpec(String fromId, String toId, int leadMs, int fadeMs, int tailMs, int bStartMs,
+                          int aEndMs, Curve out, Curve in, Curve outTempo, Curve inTempo) {
         this.fromId = fromId;
         this.toId = toId;
         this.fadeMs = clamp(fadeMs, MIN_FADE_MS, MAX_FADE_MS);
         this.leadMs = clamp(leadMs, 0, MAX_LEAD_MS);
         this.tailMs = clamp(tailMs, 0, MAX_TAIL_MS);
         this.bStartMs = clamp(bStartMs, 0, MAX_B_START_MS);
+        this.aEndMs = clamp(aEndMs, 0, MAX_A_END_MS);
         this.out = out == null ? defaultOutVolume() : out;
         this.in = in == null ? defaultInVolume() : in;
         this.outTempo = outTempo == null ? defaultTempoCurve() : outTempo;
@@ -83,7 +93,7 @@ public final class TransitionSpec implements Serializable {
                 defaultOutVolume(), defaultInVolume(), null, null);
     }
 
-    /** Total automation window at the end of the outgoing song. */
+    /** Total automation window, ending {@link #aEndMs} before the outgoing file ends. */
     public int windowMs() {
         return leadMs + fadeMs + tailMs;
     }
@@ -99,17 +109,22 @@ public final class TransitionSpec implements Serializable {
     }
 
     public TransitionSpec withTiming(int leadMs, int fadeMs, int tailMs, int bStartMs) {
-        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs,
+        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs, aEndMs,
+                out, in, outTempo, inTempo);
+    }
+
+    public TransitionSpec withAEnd(int aEndMs) {
+        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs, aEndMs,
                 out, in, outTempo, inTempo);
     }
 
     public TransitionSpec withCurves(Curve out, Curve in) {
-        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs,
+        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs, aEndMs,
                 out, in, outTempo, inTempo);
     }
 
     public TransitionSpec withTempos(Curve outTempo, Curve inTempo) {
-        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs,
+        return new TransitionSpec(fromId, toId, leadMs, fadeMs, tailMs, bStartMs, aEndMs,
                 out, in, outTempo, inTempo);
     }
 
@@ -179,6 +194,7 @@ public final class TransitionSpec implements Serializable {
             json.put("fade", fadeMs);
             json.put("tail", tailMs);
             json.put("bstart", bStartMs);
+            json.put("aend", aEndMs);
             json.put("out", out.encode());
             json.put("in", in.encode());
             json.put("ot", outTempo.encode());
@@ -227,7 +243,8 @@ public final class TransitionSpec implements Serializable {
                 }
             }
             return new TransitionSpec(from, to, lead, fade, json.optInt("tail", 0),
-                    json.optInt("bstart", 0), migratedOut, migratedIn, outTempo, inTempo);
+                    json.optInt("bstart", 0), json.optInt("aend", 0),
+                    migratedOut, migratedIn, outTempo, inTempo);
         } catch(JSONException e) {
             return null;
         }

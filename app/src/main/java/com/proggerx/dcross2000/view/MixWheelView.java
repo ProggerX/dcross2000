@@ -43,6 +43,7 @@ public final class MixWheelView extends View {
 	private final float fineStepPx;
 	private int onSurfaceColor;
 	private long lastHapticAt;
+	private boolean negativeDisplay;
 
 	private int minValue;
 	private int maxValue = 60000;
@@ -103,6 +104,12 @@ public final class MixWheelView extends View {
 
 	public void setOnValueChangedListener(OnValueChangedListener listener) {
 		this.listener = listener;
+	}
+
+	/** Shows the value as a negative offset (e.g. "-2.00"). */
+	public void setNegativeDisplay(boolean negativeDisplay) {
+		this.negativeDisplay = negativeDisplay;
+		invalidate();
 	}
 
 	/** Sets the value without notifying the listener. */
@@ -177,13 +184,13 @@ public final class MixWheelView extends View {
 					: Math.abs(stepsFromCenter) == 2 ? 0x70 : 0x44;
 			valuePaint.setColor(alpha(onSurfaceColor, alpha));
 			valuePaint.setTextSize(12f * scaledDensity);
-			drawText(canvas, seconds(itemValue), x, centerY);
+			drawText(canvas, display(itemValue), x, centerY);
 		}
 
 		valuePaint.setColor(onSurfaceColor);
 		valuePaint.setTextSize(19f * scaledDensity);
 		valuePaint.setFakeBoldText(true);
-		drawText(canvas, seconds(value), centerX, centerY);
+		drawText(canvas, display(value), centerX, centerY);
 		valuePaint.setFakeBoldText(false);
 	}
 
@@ -193,8 +200,9 @@ public final class MixWheelView extends View {
 		canvas.drawText(text, x, baseline, valuePaint);
 	}
 
-	private static String seconds(int millis) {
-		return String.format(Locale.US, "%.2f", millis / 1000f);
+	private String display(int millis) {
+		String text = String.format(Locale.US, "%.2f", millis / 1000f);
+		return negativeDisplay && millis > 0 ? "-" + text : text;
 	}
 
 	@Override
