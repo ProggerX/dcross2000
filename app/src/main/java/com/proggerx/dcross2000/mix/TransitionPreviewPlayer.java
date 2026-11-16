@@ -41,6 +41,7 @@ public final class TransitionPreviewPlayer {
     private final ExoPlayer incoming;
     private final GainAudioProcessor outgoingGain;
     private final GainAudioProcessor incomingGain;
+    private final PlayheadClock playhead = new PlayheadClock();
 
     private Listener listener;
 
@@ -95,6 +96,7 @@ public final class TransitionPreviewPlayer {
         outgoingStartPosition = Math.max(0, windowStartPosition - PREROLL_MS);
         incomingStarted = false;
         outgoingStopped = false;
+        playhead.reset();
         running = true;
         arm();
         handler.post(ticker);
@@ -149,7 +151,8 @@ public final class TransitionPreviewPlayer {
             if(actualDuration != C.TIME_UNSET && actualDuration > spec.outgoingWindowMs()) {
                 windowStartPosition = (int) (actualDuration - spec.outgoingWindowMs());
             }
-            long position = outgoing.getCurrentPosition();
+            long position = playhead.update(outgoing.getCurrentPosition(),
+                    outgoing.getPlaybackParameters().speed, outgoing.isPlaying());
             if(position < windowStartPosition) {
                 // The pre-roll is not part of the drawn transition.
                 outgoingGain.setGain(1f);

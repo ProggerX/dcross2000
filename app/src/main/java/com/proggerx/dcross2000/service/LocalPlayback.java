@@ -23,6 +23,7 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 
 import com.proggerx.dcross2000.audiofx.GainAudioProcessor;
 import com.proggerx.dcross2000.audiofx.GainRenderersFactory;
+import com.proggerx.dcross2000.mix.PlayheadClock;
 import com.proggerx.dcross2000.mix.TransitionSpec;
 
 /**
@@ -435,11 +436,13 @@ final class LocalPlayback {
         ExoPlayer outgoing = players[current.outgoing];
         boolean outgoingEnded = outgoing != null && outgoing.getPlaybackState() == Player.STATE_ENDED;
         if (!current.outgoingStopped && (current.outgoingDue() || outgoingEnded)) {
-            // Remember the audio clock where the outgoing side stops so the
-            // tail continues from the incoming playhead without jumping.
+            // Remember the smoothed audio clock where the outgoing side stops
+            // so the tail continues from the incoming playhead without jumping.
             ExoPlayer tail = players[current.incoming];
             current.tailElapsedBase = current.elapsedMs;
-            current.tailPositionBase = tail != null ? tail.getCurrentPosition() : 0L;
+            current.tailPositionBase = tail != null
+                    ? current.inClock.update(tail.getCurrentPosition(),
+                    tail.getPlaybackParameters().speed, tail.isPlaying()) : 0L;
             clearSlot(current.outgoing);
             current.outgoingStopped = true;
         }
@@ -663,12 +666,14 @@ final class LocalPlayback {
     private int fadeProgressMs(Fade current) {
         ExoPlayer outgoing = players[current.outgoing];
         if (outgoing != null && !current.outgoingStopped) {
-            long position = outgoing.getCurrentPosition();
+            long position = current.outClock.update(outgoing.getCurrentPosition(),
+                    outgoing.getPlaybackParameters().speed, outgoing.isPlaying());
             return (int) Math.max(0L, Math.min(Integer.MAX_VALUE, position - current.windowStartMs));
         }
         ExoPlayer incoming = players[current.incoming];
         if (incoming != null && current.incomingStarted && current.tailElapsedBase >= 0) {
-            long position = incoming.getCurrentPosition();
+            long position = current.inClock.update(incoming.getCurrentPosition(),
+                    incoming.getPlaybackParameters().speed, incoming.isPlaying());
             long value = current.tailElapsedBase + (position - current.tailPositionBase);
             return (int) Math.max(0L, Math.min(Integer.MAX_VALUE, value));
         }
@@ -681,6 +686,8 @@ final class LocalPlayback {
         final int incoming;
         final long windowStartMs;
         int elapsedMs;
+        final PlayheadClock outClock = new PlayheadClock();
+        final PlayheadClock inClock = new PlayheadClock();
         int tailElapsedBase = -1;
         long tailPositionBase;
         boolean incomingStarted;
