@@ -20,11 +20,15 @@ DCross2000 is an Android client for [Subsonic](https://www.subsonic.org/) server
 
 ## Screenshots
 
-| Library | Now Playing |
+| Home | Now Playing |
 |:---:|:---:|
-| <img src="docs/screenshots/library.png" width="300"> | <img src="docs/screenshots/now-playing.png" width="300"> |
-| **Queue with a per-pair transition** | **Transition editor** |
-| <img src="docs/screenshots/queue.png" width="300"> | <img src="docs/screenshots/editor.png" width="300"> |
+| <img src="docs/screenshots/home.png" width="300"> | <img src="docs/screenshots/now-playing.png" width="300"> |
+| **Library** | **Queue with a per-pair transition** |
+| <img src="docs/screenshots/library.png" width="300"> | <img src="docs/screenshots/queue.png" width="300"> |
+
+**Transition editor**
+
+<img src="docs/screenshots/editor.png" width="620">
 
 ## The transition editor
 
