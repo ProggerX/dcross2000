@@ -4,57 +4,76 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/download_layout_container"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="?attr/colorSurface">
+
+	<ImageView
+		android:id="@+id/player_background"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:alpha="0.38"
+		android:contentDescription="@null"
+		android:scaleType="centerCrop" />
+
+	<View
+		android:id="@+id/player_background_scrim"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@drawable/player_bg_scrim" />
 
 	<LinearLayout
 		android:id="@+id/download_layout"
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
 		<ViewFlipper
 			android:id="@+id/download_playlist_flipper"
-			android:layout_width="fill_parent"
-			android:layout_height="0dip"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
 			android:layout_weight="1">
 
 			<LinearLayout
 				android:id="@+id/download_album_art_layout"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
 				android:orientation="vertical"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:background="@android:color/transparent">
+				android:paddingStart="24dp"
+				android:paddingEnd="24dp"
+				android:paddingTop="10dp"
+				android:paddingBottom="6dp">
 
 				<FrameLayout
-                    android:id="@+id/download_album_art_background"
-                    android:clickable="true"
+					android:id="@+id/download_album_art_background"
 					android:layout_width="match_parent"
 					android:layout_height="0dp"
-					android:layout_weight="1">
+					android:layout_weight="1"
+					android:clickable="true">
 
-					<FrameLayout android:orientation="vertical"
+					<FrameLayout
 						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:padding="24dp"
-                        android:layout_gravity="center">
+						android:layout_height="wrap_content"
+						android:layout_gravity="center">
 
-						<com.proggerx.dcross2000.view.RecyclingImageView
+						<com.proggerx.dcross2000.view.SquareImageView
 							android:id="@+id/download_album_art_image"
 							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:scaleType="fitCenter"
-							android:layout_gravity="center"
+							android:layout_height="wrap_content"
 							android:elevation="10dp"
-							app:imageCornerRadius="28dp"/>
+							android:scaleType="centerCrop"
+							android:contentDescription="@null"
+							app:imageCornerRadius="28dp" />
 
 						<LinearLayout
 							android:id="@+id/download_overlay_buttons"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
-							android:layout_gravity="center_horizontal|bottom"
+							android:layout_gravity="bottom"
 							android:background="@drawable/overlay_scrim"
 							android:gravity="center"
 							android:orientation="horizontal"
+							android:paddingTop="10dp"
+							android:paddingBottom="10dp"
 							android:visibility="invisible"
 							tools:visibility="visible">
 
@@ -68,11 +87,10 @@
 								style="@style/DownloadActionImageButton"
 								android:src="@drawable/ic_ms_star_border_white" />
 
-                            <ImageButton
-                                android:id="@+id/download_add_to_playlist"
-                                style="@style/DownloadActionImageButton"
-                                android:src="@drawable/ic_ms_add_white"
-                                android:tint="@android:color/white" />
+							<ImageButton
+								android:id="@+id/download_add_to_playlist"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_ms_add_white" />
 
 							<ImageButton
 								android:id="@+id/download_playback_speed"
@@ -92,43 +110,40 @@
 							<ImageButton
 								android:id="@+id/download_rating_combined"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_action_rating_combined" />
+								android:src="@drawable/ic_ms_thumb_up_white"
+								android:visibility="gone" />
 						</LinearLayout>
 					</FrameLayout>
 				</FrameLayout>
 
 				<TextView
 					android:id="@+id/download_status"
-					android:layout_width="wrap_content"
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_gravity="center_horizontal"
-					android:layout_marginLeft="24dp"
-					android:layout_marginRight="24dp"
-					android:layout_marginTop="6dp"
+					android:layout_marginTop="16dp"
+					android:ellipsize="end"
 					android:gravity="center"
 					android:singleLine="true"
-					android:ellipsize="end"
 					android:textAppearance="?attr/textAppearanceBodyMedium"
-					android:textColor="?android:textColorSecondary"/>
+					android:textColor="?attr/colorOnSurfaceVariant" />
 
 				<TextView
 					android:id="@+id/download_song_title"
-					android:layout_width="wrap_content"
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_gravity="center_horizontal"
-					android:layout_marginLeft="24dp"
-					android:layout_marginRight="24dp"
-					android:singleLine="true"
+					android:layout_marginTop="2dp"
+					android:ellipsize="end"
 					android:gravity="center"
+					android:singleLine="true"
 					android:textAppearance="@style/TextAppearance.DCross2000.Brand.Display"
-					android:textColor="?android:textColorPrimary"/>
+					android:textColor="?android:textColorPrimary" />
 			</LinearLayout>
 
-			<include layout="@layout/download_playlist"/>
-
+			<include layout="@layout/download_playlist" />
 		</ViewFlipper>
 
 		<LinearLayout
+			android:id="@+id/player_controls"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="10dp"
@@ -138,12 +153,12 @@
 			android:orientation="vertical"
 			android:paddingStart="12dp"
 			android:paddingEnd="12dp"
-			android:paddingTop="6dp"
+			android:paddingTop="4dp"
 			android:paddingBottom="10dp">
 
-			<include layout="@layout/download_media_buttons"/>
+			<include layout="@layout/download_media_buttons" />
 
-			<include layout="@layout/download_slider"/>
+			<include layout="@layout/download_slider" />
 		</LinearLayout>
 	</LinearLayout>
 </FrameLayout>

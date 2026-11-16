@@ -112,6 +112,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private Toolbar nowPlayingToolbar;
     private FrameLayout slideUpSwipeTarget;
 	private View bottomBar;
+	private com.google.android.material.card.MaterialCardView miniPlayerCard;
 	private ImageView coverArtView;
 	private TextView trackView;
 	private TextView artistView;
@@ -273,6 +274,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
+		miniPlayerCard = findViewById(R.id.mini_player_card);
 		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
 		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
@@ -290,9 +292,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 int surface = MaterialColors.getColor(this,
                         com.google.android.material.R.attr.colorSurfaceContainerHigh, Color.GRAY);
                 int tint = ColorUtils.blendARGB(color, surface, 0.55f);
-                Drawable background = slideUpSwipeTarget.getBackground();
-                if (background != null) {
-                    background.mutate().setTint(tint);
+                if (miniPlayerCard != null) {
+                    miniPlayerCard.setCardBackgroundColor(tint);
                 }
             });
         }
@@ -305,8 +306,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             }
             int nowPlayingToolbarColor = prefs.getInt(Constants.PREFERENCES_KEY_ACTION_BAR_NOW_PLAYING_COLOR, -1);
             if (nowPlayingToolbarColor != -1) {
-                nowPlayingToolbar.setBackgroundColor(nowPlayingToolbarColor);
-                slideUpSwipeTarget.setBackgroundColor(nowPlayingToolbarColor);
+                nowPlayingToolbar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(nowPlayingToolbarColor));
+                if (miniPlayerCard != null) miniPlayerCard.setCardBackgroundColor(nowPlayingToolbarColor);
             }
         }
 		setSupportActionBar(mainToolbar);
@@ -688,6 +689,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		float toolbarAlpha = Math.max(0f, slideOffset * 2f - 1f);
 		bottomBar.setAlpha(barAlpha);
 		bottomBar.setVisibility(barAlpha > 0f ? View.VISIBLE : View.INVISIBLE);
+		if(miniPlayerCard != null) {
+			miniPlayerCard.setAlpha(barAlpha);
+			miniPlayerCard.setVisibility(barAlpha > 0f ? View.VISIBLE : View.INVISIBLE);
+		}
 		nowPlayingToolbar.setAlpha(toolbarAlpha);
 		nowPlayingToolbar.setVisibility(toolbarAlpha > 0f ? View.VISIBLE : View.INVISIBLE);
 		setNowPlayingExpansion(slideOffset);

@@ -32,125 +32,134 @@
 		android:id="@+id/slide_up_frame"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="?attr/colorSurface"
 		android:orientation="vertical">
 
 		<FrameLayout
 			android:id="@+id/slide_up_swipe_target"
 			android:layout_width="match_parent"
-			android:layout_height="88dp"
-			android:background="@drawable/bottom_bar_m3">
+			android:layout_height="wrap_content"
+			android:background="?attr/colorSurface">
 
 			<com.google.android.material.appbar.MaterialToolbar
 				android:id="@+id/now_playing_toolbar"
 				android:layout_height="?attr/actionBarSize"
 				android:layout_width="match_parent"
-				android:elevation="4dp"
+				android:layout_marginStart="12dp"
+				android:layout_marginEnd="12dp"
+				android:background="@drawable/bottom_bar_shape"
 				android:visibility="invisible"
 				android:theme="?attr/actionbarThemeStyle"
+				app:titleTextAppearance="@style/TextAppearance.DCross2000.BarBrand"
+				app:subtitleTextAppearance="@style/TextAppearance.DCross2000.BrandSubtitle"
 				app:popupTheme="?attr/actionbarPopupStyle"/>
 
-			<LinearLayout
-				android:id="@+id/bottom_bar"
-				android:layout_width="fill_parent"
-				android:layout_height="68dp"
-				android:layout_gravity="top"
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/mini_player_card"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="12dp"
+				android:layout_marginEnd="12dp"
 				android:layout_marginTop="8dp"
-				android:paddingStart="6dp"
-				android:paddingEnd="6dp"
-				style="@style/BasicButton"
-				android:orientation="horizontal">
-
-				<com.proggerx.dcross2000.view.RecyclingImageView
-					android:id="@+id/album_art"
-					android:layout_width="48dp"
-					android:layout_height="48dp"
-					android:layout_gravity="left|center"
-					android:layout_marginStart="8dp"
-					android:layout_marginEnd="4dp"
-					android:scaleType="centerCrop"
-					app:imageCornerRadius="12dp"/>
+				android:layout_marginBottom="60dp"
+				app:cardCornerRadius="24dp"
+				app:cardElevation="2dp"
+				app:strokeWidth="0dp"
+				app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
 
 				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center_vertical"
-					android:layout_weight="1"
-					android:orientation="vertical"
-					android:paddingLeft="8dip">
+					android:id="@+id/bottom_bar"
+					android:layout_width="fill_parent"
+					android:layout_height="68dp"
+					android:gravity="center_vertical"
+					android:paddingStart="6dp"
+					android:paddingEnd="6dp"
+					style="@style/BasicButton"
+					android:orientation="horizontal">
 
-					<TextView
-						android:id="@+id/track_name"
+					<com.proggerx.dcross2000.view.RecyclingImageView
+						android:id="@+id/album_art"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:layout_gravity="left|center"
+						android:layout_marginStart="8dp"
+						android:layout_marginEnd="4dp"
+						android:scaleType="centerCrop"
+						app:imageCornerRadius="12dp"/>
+
+					<LinearLayout
+						android:layout_width="0dp"
 						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:singleLine="true"
-						android:text="@string/main.title"
-						android:ellipsize="marquee"
-						android:marqueeRepeatLimit="marquee_forever"
-						android:scrollHorizontally="true"
-						android:focusable="true"
-						android:focusableInTouchMode="true"
-						style="?attr/actionbarTitleStyle">
+						android:layout_gravity="center_vertical"
+						android:layout_weight="1"
+						android:orientation="vertical"
+						android:paddingLeft="8dip">
 
-						<requestFocus android:focusable="true"
-							android:focusableInTouchMode="true"
-							android:duplicateParentState="true" />
-					</TextView>
+						<TextView
+							android:id="@+id/track_name"
+							android:layout_height="wrap_content"
+							android:layout_width="match_parent"
+							android:singleLine="true"
+							android:text="@string/main.title"
+							android:ellipsize="end"
+							style="?attr/actionbarTitleStyle"/>
 
-					<TextView
-						android:id="@+id/artist_name"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:singleLine="true"
-						android:text="@string/main.artist"
-						style="?attr/actionbarSubtitleStyle"/>
+						<TextView
+							android:id="@+id/artist_name"
+							android:layout_height="wrap_content"
+							android:layout_width="match_parent"
+							android:singleLine="true"
+							android:ellipsize="end"
+							android:text="@string/main.artist"
+							style="?attr/actionbarSubtitleStyle"/>
+					</LinearLayout>
+
+					<LinearLayout
+						android:layout_height="fill_parent"
+						android:layout_width="0dp"
+						android:layout_weight="1"
+						android:gravity="center">
+
+						<ImageButton
+							style="@style/PlaybackControl.BottomBar"
+							android:id="@+id/download_rewind"
+							android:src="?attr/actionbar_rewind"
+							android:padding="2dp"
+							android:visibility="gone"/>
+
+						<ImageButton
+							style="@style/PlaybackControl.BottomBar.Side"
+							android:id="@+id/download_previous"
+							android:src="?attr/actionbar_backward"
+							android:padding="2dp"/>
+
+						<ImageButton
+							style="@style/PlaybackControl.BottomBar.Circle"
+							android:id="@+id/download_start"
+							android:src="?attr/actionbar_start"/>
+
+						<ImageButton
+							style="@style/PlaybackControl.BottomBar.Side"
+							android:id="@+id/download_next"
+							android:src="?attr/actionbar_forward"
+							android:padding="2dp"/>
+
+						<ImageButton
+							style="@style/PlaybackControl.BottomBar"
+							android:id="@+id/download_fastforward"
+							android:src="?attr/actionbar_fastforward"
+							android:padding="2dp"
+							android:visibility="gone"/>
+					</LinearLayout>
 				</LinearLayout>
-
-
-				<LinearLayout
-					android:layout_height="fill_parent"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:gravity="center">
-
-					<ImageButton
-						style="@style/PlaybackControl.BottomBar"
-						android:id="@+id/download_rewind"
-						android:src="?attr/actionbar_rewind"
-						android:padding="2dp"
-						android:visibility="gone"/>
-
-					<ImageButton
-						style="@style/PlaybackControl.BottomBar.Side"
-						android:id="@+id/download_previous"
-						android:src="?attr/actionbar_backward"
-						android:padding="2dp"/>
-
-					<ImageButton
-						style="@style/PlaybackControl.BottomBar.Circle"
-						android:id="@+id/download_start"
-						android:src="?attr/actionbar_start"/>
-
-					<ImageButton
-						style="@style/PlaybackControl.BottomBar.Side"
-						android:id="@+id/download_next"
-						android:src="?attr/actionbar_forward"
-						android:padding="2dp"/>
-
-					<ImageButton
-						style="@style/PlaybackControl.BottomBar"
-						android:id="@+id/download_fastforward"
-						android:src="?attr/actionbar_fastforward"
-						android:padding="2dp"
-						android:visibility="gone"/>
-				</LinearLayout>
-			</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
 		</FrameLayout>
 
 		<FrameLayout
-					android:id="@+id/now_playing_fragment_container"
-					android:layout_width="match_parent"
-					android:layout_height="0dp"
-					android:layout_weight="1"
-					android:clickable="true"/>
+			android:id="@+id/now_playing_fragment_container"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:clickable="true"/>
 	</LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

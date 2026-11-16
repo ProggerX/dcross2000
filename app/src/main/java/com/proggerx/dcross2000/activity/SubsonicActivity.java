@@ -29,6 +29,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -585,9 +587,15 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		final Rect headerPadding = paddingOf(header);
 		final Rect drawerPadding = paddingOf(drawer);
 		final Rect rootPadding = paddingOf(rootView);
+		final float density = getResources().getDisplayMetrics().density;
+		final int swipeSideInset = Math.round(12 * density);
 
 		ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, windowInsets) -> {
 			Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+			// Gesture navigation can report a zero bottom inset while still drawing a
+			// translucent bar over the content. Keep a minimum strip so the floating
+			// player and the navigation bar never overlap or change colour.
+			int navigationBottom = Math.max(bars.bottom, Math.round(48 * density));
 
 			// The toolbars grow by the status bar inset so that their background paints it, while the
 			// padding keeps the title and the icons clear of the bars and of the display cutout.
@@ -613,27 +621,30 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 			if(swipeTarget != null) {
 				swipeTargetInsetUpdater = () -> {
-					// The collapsed bar sits above the navigation bar and stays coloured below the buttons,
-					// so its content is lifted by the bottom inset. The expanded toolbar sits at the top of
-					// the screen, where that room would only push the now playing content down. Give it up
-					// along the slide, so that the content follows the panel instead of jumping at the end.
-					int bottom = Math.round(bars.bottom * (1f - nowPlayingExpansion));
+					// Collapsed: the floating card ends above the navigation bar, with a surface strip
+					// behind the bar. Expanded: the card spans the status bar and the toolbar.
+					int bottom = Math.round(navigationBottom * (1f - nowPlayingExpansion));
 					swipeTarget.setPadding(swipeTargetPadding.left + bars.left, swipeTargetPadding.top, swipeTargetPadding.right + bars.right, swipeTargetPadding.bottom + bottom);
-					// The collapsed bar is swapped for the taller now playing toolbar, which also paints the
-					// status bar, once the panel is expanded. Keep room for it in both states so that the
-					// content below the bar does not have to be re-laid out at the end of the slide.
+					View miniCard = findViewById(R.id.mini_player_card);
+					if(miniCard != null) {
+						ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) miniCard.getLayoutParams();
+						params.bottomMargin = bottom + Math.round(12 * density);
+						miniCard.setLayoutParams(params);
+					}
+					// Keep room for the taller expanded toolbar in both states so the content below
+					// does not re-lay out at the end of the slide.
 					swipeTarget.setMinimumHeight(nowPlayingToolbarHeight + bars.top + bottom);
 				};
 				swipeTargetInsetUpdater.run();
 				if(panel instanceof SlidingUpPanelLayout) {
-					((SlidingUpPanelLayout) panel).setPanelHeight(panelHeight + bars.bottom);
+					((SlidingUpPanelLayout) panel).setPanelHeight(panelHeight + navigationBottom);
 				}
 			} else if(rootView != null) {
 				// Screens without a now playing bar keep all of their content clear of the navigation bar.
-				rootView.setPadding(rootPadding.left, rootPadding.top, rootPadding.right, rootPadding.bottom + bars.bottom);
+				rootView.setPadding(rootPadding.left, rootPadding.top, rootPadding.right, rootPadding.bottom + navigationBottom);
 			}
 			if(nowPlayingContainer != null) {
-				nowPlayingContainer.setPadding(nowPlayingContainerPadding.left + bars.left, nowPlayingContainerPadding.top, nowPlayingContainerPadding.right + bars.right, nowPlayingContainerPadding.bottom + bars.bottom);
+				nowPlayingContainer.setPadding(nowPlayingContainerPadding.left + bars.left, nowPlayingContainerPadding.top, nowPlayingContainerPadding.right + bars.right, nowPlayingContainerPadding.bottom + navigationBottom);
 			}
 			if(header != null) {
 				// The drawer header is painted behind the status bar, so it grows and its content moves below it.
@@ -643,7 +654,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				header.setLayoutParams(params);
 			}
 			if(drawer != null) {
-				drawer.setPadding(drawerPadding.left + bars.left, drawerPadding.top, drawerPadding.right + bars.right, drawerPadding.bottom + bars.bottom);
+				drawer.setPadding(drawerPadding.left + bars.left, drawerPadding.top, drawerPadding.right + bars.right, drawerPadding.bottom + navigationBottom);
 			}
 
 			return windowInsets;

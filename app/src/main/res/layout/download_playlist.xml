@@ -25,7 +25,7 @@
             android:layout_height="fill_parent"
             android:scrollbars="vertical"
             android:clipToPadding="false"
-            android:paddingBottom="100dp"
+            android:paddingBottom="180dp"
             android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
             android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"/>
 

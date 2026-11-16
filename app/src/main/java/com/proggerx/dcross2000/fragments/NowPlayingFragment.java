@@ -14,6 +14,9 @@
 */
 package com.proggerx.dcross2000.fragments;
 
+import android.os.Build;
+import android.widget.ImageView;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +32,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
@@ -110,10 +115,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private static final int ACTION_CLOSE = 4;
 
     private FrameLayout downloadLayout;
-    private int lastAlbumArtColor;
-    private int lastBackdropColor;
-    private GradientDrawable glowDrawable;
-    private GradientDrawable backdropDrawable;
+    private ImageView playerBackground;
 	private ViewFlipper playlistFlipper;
 	private TextView emptyTextView;
 	private TextView songTitleTextView;
@@ -170,17 +172,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		primaryFragment = false;
 	}
 
-	/** Tints the whole now playing screen with the artwork colour. */
-	private void updateBackdrop(int color) {
-		if (color == Color.TRANSPARENT || color == lastBackdropColor || backdropDrawable == null) return;
-		int surface = MaterialColors.getColor(context,
-				com.google.android.material.R.attr.colorSurface, Color.BLACK);
-		int top = ColorUtils.blendARGB(color, surface, 0.42f);
-		int middle = ColorUtils.blendARGB(color, surface, 0.78f);
-		backdropDrawable.setColors(new int[]{top, middle, surface});
-		lastBackdropColor = color;
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -205,50 +196,22 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             }
         });
         albumArtImageView = (RecyclingImageView)rootView.findViewById(R.id.download_album_art_image);
+        playerBackground = rootView.findViewById(R.id.player_background);
         if (albumArtImageView != null && downloadLayout != null) {
-            glowDrawable = new GradientDrawable();
-            downloadLayout.setBackground(glowDrawable);
-
-            int surface = MaterialColors.getColor(context,
-                    com.google.android.material.R.attr.colorSurface, Color.BLACK);
-            backdropDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                    new int[]{surface, surface, surface});
-            rootView.setBackground(backdropDrawable);
             albumArtImageView.setOnImageChangedListener(drawable -> {
-                if (drawable == null || drawable instanceof TransitionDrawable) {
+                if (drawable == null || drawable instanceof TransitionDrawable || playerBackground == null) {
                     return;
                 }
                 Bitmap bitmap = ImageUtil.getBitmapFromDrawable(drawable);
-                int albumArtColor = ImageUtil.getVibrantColorFromBitmap(bitmap, Color.TRANSPARENT);
-                if (albumArtColor == Color.TRANSPARENT) {
-                    return;
+                if (bitmap == null) return;
+                // A tiny, upscaled copy with a platform blur is a cheap and
+                // stable artwork backdrop; no palette maths, no hardcoded gradient.
+                Bitmap blurred = Bitmap.createScaledBitmap(bitmap, 32, 32, true);
+                playerBackground.setImageBitmap(blurred);
+                playerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    playerBackground.setRenderEffect(RenderEffect.createBlurEffect(60f, 60f, Shader.TileMode.CLAMP));
                 }
-                updateBackdrop(albumArtColor);
-                if (lastAlbumArtColor == albumArtColor) {
-                    return;
-                }
-
-                int gWidth = downloadLayout.getMeasuredWidth();
-                int gHeight = downloadLayout.getMeasuredHeight();
-                float gradientRadius = Math.max(gWidth, gHeight) * 0.52f;
-                glowDrawable.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-                glowDrawable.setGradientRadius(gradientRadius);
-                glowDrawable.setDither(true);
-
-                ValueAnimator animator = ValueAnimator.ofArgb(lastAlbumArtColor, albumArtColor);
-                animator.setDuration(900);
-                animator.addUpdateListener(animation -> {
-                    int color = (int) animation.getAnimatedValue();
-                    glowDrawable.setColors(new int[]{
-                            ColorUtils.setAlphaComponent(color, 100),
-                            ColorUtils.setAlphaComponent(color, 100),
-                            ColorUtils.setAlphaComponent(color, 100),
-                            ColorUtils.setAlphaComponent(color, 80),
-                            ColorUtils.setAlphaComponent(color, 0)
-                    });
-                });
-                animator.start();
-                lastAlbumArtColor = albumArtColor;
             });
             albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
