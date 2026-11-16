@@ -26,6 +26,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +50,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import androidx.core.graphics.ColorUtils;
+import com.google.android.material.color.MaterialColors;
+import com.proggerx.dcross2000.util.ImageUtil;
+import com.proggerx.dcross2000.view.RecyclingImageView;
 
 import java.io.File;
 import java.util.Date;
@@ -82,6 +90,7 @@ import com.proggerx.dcross2000.util.KeyStoreUtil;
 import com.proggerx.dcross2000.util.SilentBackgroundTask;
 import com.proggerx.dcross2000.util.UserUtil;
 import com.proggerx.dcross2000.util.Util;
+import com.proggerx.dcross2000.view.RecyclingImageView;
 import com.proggerx.dcross2000.view.ChangeLog;
 
 /**
@@ -270,6 +279,23 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
         slideUpSwipeTarget = (FrameLayout) findViewById(R.id.slide_up_swipe_target);
+        if (coverArtView instanceof RecyclingImageView) {
+            // Tint the floating mini player with the current artwork, like the
+            // now playing backdrop, blending towards the surface for contrast.
+            ((RecyclingImageView) coverArtView).setOnImageChangedListener(drawable -> {
+                if (drawable == null || drawable instanceof TransitionDrawable || slideUpSwipeTarget == null) return;
+                Bitmap bitmap = ImageUtil.getBitmapFromDrawable(drawable);
+                int color = ImageUtil.getVibrantColorFromBitmap(bitmap, Color.TRANSPARENT);
+                if (color == Color.TRANSPARENT) return;
+                int surface = MaterialColors.getColor(this,
+                        com.google.android.material.R.attr.colorSurfaceContainerHigh, Color.GRAY);
+                int tint = ColorUtils.blendARGB(color, surface, 0.55f);
+                Drawable background = slideUpSwipeTarget.getBackground();
+                if (background != null) {
+                    background.mutate().setTint(tint);
+                }
+            });
+        }
 
         SharedPreferences prefs = Util.getPreferences(this);
         if (prefs.getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {

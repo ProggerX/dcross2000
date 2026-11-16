@@ -58,9 +58,26 @@ public class MainAdapter extends SectionAdapter<Integer> {
 
 		if(viewType == VIEW_TYPE_ALBUM_LIST) {
 			updateView.setObject(context.getResources().getString(item));
+			((BasicListView) updateView).setIcon(iconFor(item));
 		} else {
 			updateView.setObject(item);
 		}
+	}
+
+	private int iconFor(int item) {
+		if(item == R.string.main_albums_newest) return R.drawable.ic_ms_auto_awesome;
+		if(item == R.string.main_albums_random || item == R.string.main_songs_random) return R.drawable.ic_ms_shuffle;
+		if(item == R.string.main_albums_alphabetical) return R.drawable.ic_ms_sort;
+		if(item == R.string.main_albums_highest) return R.drawable.ic_ms_star;
+		if(item == R.string.main_albums_starred || item == R.string.main_songs_starred) return R.drawable.ic_ms_favorite;
+		if(item == R.string.main_albums_genres) return R.drawable.ic_ms_category;
+		if(item == R.string.main_albums_year) return R.drawable.ic_ms_calendar;
+		if(item == R.string.main_albums_recent || item == R.string.main_songs_recent) return R.drawable.ic_ms_history;
+		if(item == R.string.main_albums_frequent || item == R.string.main_songs_frequent
+				|| item == R.string.main_songs_top_played) return R.drawable.ic_ms_trending;
+		if(item == R.string.main_songs_newest) return R.drawable.ic_ms_music_note;
+		if(item == R.string.main_videos) return R.drawable.ic_ms_movie;
+		return 0;
 	}
 
 	@Override

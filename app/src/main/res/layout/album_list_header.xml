@@ -2,27 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
 	android:orientation="horizontal"
 	android:paddingStart="20dp"
-	android:paddingEnd="12dp">
+	android:paddingEnd="12dp"
+	android:paddingTop="24dp"
+	android:paddingBottom="8dp">
 
-	<TextView
-		android:id="@+id/item_name"
+	<LinearLayout
 		android:layout_width="0dp"
-		android:layout_weight="1"
 		android:layout_height="wrap_content"
-		android:textAppearance="@style/TextAppearance.DCross2000.Category"
-		android:background="@android:color/transparent"
-		android:textColor="?attr/colorPrimary"
-		android:textStyle="bold"
-		android:paddingTop="20dp"
-		android:paddingBottom="8dp"/>
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/item_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@android:color/transparent"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textAppearance="@style/TextAppearance.DCross2000.Brand.Display"
+			android:textColor="?attr/colorPrimary" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="2dp"
+			android:text="@string/main.library_subtitle"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textColor="?attr/colorOnSurfaceVariant" />
+	</LinearLayout>
 
 	<com.google.android.material.materialswitch.MaterialSwitch
 		android:id="@+id/item_checkbox"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
 		android:text="@string/main.albums_per_folder"
-		android:layout_gravity="end|center_vertical"
-		android:textColor="?android:textColorPrimary"/>
+		android:textColor="?android:textColorPrimary" />
 </LinearLayout>

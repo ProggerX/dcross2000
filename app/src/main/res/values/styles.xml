@@ -140,8 +140,10 @@
     </style>
 	
 	<style name="PlaybackControl.Small" parent="@style/PlaybackControl">
-        <item name="android:layout_width">@dimen/Button.Small</item>
-        <item name="android:layout_height">@dimen/Button.Small</item>
+        <item name="android:layout_width">46dp</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:padding">11dp</item>
+        <item name="android:background">@drawable/playback_button_circle</item>
     </style>
 
 	<style name="PlaybackControl.Primary" parent="@style/PlaybackControl.Large">
@@ -167,6 +169,14 @@
 	<style name="PlaybackControl.BottomBar" parent="@style/PlaybackControl.Match">
 		<item name="android:layout_width">0dp</item>
 		<item name="android:layout_weight">1</item>
+	</style>
+
+	<style name="PlaybackControl.BottomBar.Circle" parent="@style/PlaybackControl.Match">
+		<item name="android:layout_width">46dp</item>
+		<item name="android:layout_height">46dp</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:padding">11dp</item>
+		<item name="android:background">@drawable/playback_button_circle</item>
 	</style>
 
 	<style name="DownloadActionButton" parent="@style/BasicButton">

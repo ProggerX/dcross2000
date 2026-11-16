@@ -120,7 +120,7 @@
 						android:padding="2dp"/>
 
 					<ImageButton
-						style="@style/PlaybackControl.BottomBar"
+						style="@style/PlaybackControl.BottomBar.Circle"
 						android:id="@+id/download_start"
 						android:src="?attr/actionbar_start"/>
 

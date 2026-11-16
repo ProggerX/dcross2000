@@ -19,17 +19,20 @@
 package com.proggerx.dcross2000.view;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.proggerx.dcross2000.R;
+import com.proggerx.dcross2000.activity.SubsonicActivity;
 import com.proggerx.dcross2000.domain.MusicDirectory;
 import com.proggerx.dcross2000.domain.PodcastEpisode;
 import com.proggerx.dcross2000.service.DownloadService;
 import com.proggerx.dcross2000.mix.MixStore;
 import com.proggerx.dcross2000.service.DownloadFile;
 import com.proggerx.dcross2000.util.DrawableTint;
+import com.proggerx.dcross2000.util.ImageLoader;
 import com.proggerx.dcross2000.util.SongDBHandler;
 import com.proggerx.dcross2000.util.ThemeUtil;
 import com.proggerx.dcross2000.util.Util;
@@ -55,6 +58,8 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private ImageView playedButton;
 	private View bottomRowView;
 	private TextView suffixTextView;
+	private RecyclingImageView songArtView;
+	private String loadedArtKey;
 	private TextView transitionTextView;
 
 	private DownloadService downloadService;
@@ -98,6 +103,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 		suffixTextView = (TextView) findViewById(R.id.song_suffix);
+		songArtView = (RecyclingImageView) findViewById(R.id.song_art);
 		transitionTextView = (TextView) findViewById(R.id.song_transition);
 	}
 
@@ -217,6 +223,34 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		updateTransitionBadge();
 	}
 
+	private void updateSongArt() {
+		if(songArtView == null || item == null) return;
+		String key = item.getCoverArt() != null ? item.getCoverArt() : item.getId();
+		if(key == null) {
+			loadedArtKey = null;
+			songArtView.setImageDrawable(null);
+			return;
+		}
+		if(key.equals(loadedArtKey)) return;
+		loadedArtKey = key;
+		ImageLoader loader = findImageLoader();
+		if(loader != null) {
+			loader.loadImage(songArtView, item, false, false);
+		}
+	}
+
+	/** Walks the context chain so wrapped activity contexts still find the loader. */
+	private ImageLoader findImageLoader() {
+		Context current = getContext();
+		while(current instanceof ContextWrapper) {
+			if(current instanceof SubsonicActivity) {
+				return ((SubsonicActivity) current).getImageLoader();
+			}
+			current = ((ContextWrapper) current).getBaseContext();
+		}
+		return null;
+	}
+
 	private void updateTransitionBadge() {
 		boolean show = transitionNext != null && item != null && item.getId() != null
 				&& transitionNext.getId() != null
@@ -273,6 +307,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	@Override
 	protected void update() {
 		updateTransitionBadge();
+		updateSongArt();
 		if(loaded) {
 			setObjectImpl(item, item2);
 		}

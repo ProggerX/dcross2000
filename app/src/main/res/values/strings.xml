@@ -66,7 +66,8 @@
     <string name="main.offline">Go Offline</string>
 	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
-    <string name="main.albums_title">Album Lists</string>
+    <string name="main.albums_title">Your Library</string>
+	<string name="main.library_subtitle">Your music, your way</string>
 	<string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>

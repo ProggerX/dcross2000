@@ -26,6 +26,7 @@ import com.proggerx.dcross2000.R;
 
 public class BasicListView extends UpdateView<String> {
 	private TextView titleView;
+	private ImageView iconView;
 
 	public BasicListView(Context context) {
 		this(context, R.layout.basic_list_item);
@@ -36,10 +37,21 @@ public class BasicListView extends UpdateView<String> {
 		LayoutInflater.from(context).inflate(layout, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
+		iconView = (ImageView) findViewById(R.id.item_icon);
 		starButton = (ImageButton) findViewById(R.id.item_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		moreButton.setVisibility(View.GONE);
+	}
+
+	public void setIcon(int resId) {
+		if(iconView == null) return;
+		if(resId == 0) {
+			iconView.setVisibility(View.GONE);
+		} else {
+			iconView.setImageResource(resId);
+			iconView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	protected void setObjectImpl(String string) {
