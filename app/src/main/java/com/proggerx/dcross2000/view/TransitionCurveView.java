@@ -2,6 +2,7 @@ package com.proggerx.dcross2000.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -13,8 +14,10 @@ import android.view.ViewParent;
 
 import java.util.Arrays;
 
+import com.google.android.material.color.MaterialColors;
 import com.proggerx.dcross2000.mix.Curve;
 import com.proggerx.dcross2000.mix.TransitionSpec;
+import com.proggerx.dcross2000.mix.WaveformCache;
 
 /**
  * Zoomed view of one transition. Both waveforms and all four envelopes live on
@@ -35,16 +38,14 @@ public final class TransitionCurveView extends View {
     public enum Side { OUTGOING, INCOMING }
     public enum Parameter { VOLUME, TEMPO }
 
-    private static final int GRID = 0x22000000;
-    private static final int SECTION_SHADE = 0x0D000000;
     private static final int MARKER_IN = 0xFFFFC107;
     private static final int MARKER_OUT = 0x66888888;
     private static final int OUTGOING = 0xFFFFA000;
     private static final int INCOMING = 0xFF5B8DEF;
-    private static final int OUTGOING_WAVE = 0x33FFA000;
-    private static final int INCOMING_WAVE = 0x335B8DEF;
-    private static final int CENTER = 0x22000000;
-    private static final int UNITY = 0x33000000;
+    private static final int OUTGOING_WAVE_LOW = 0x52FFA000;
+    private static final int INCOMING_WAVE_LOW = 0x525B8DEF;
+    private static final int OUTGOING_WAVE_HIGH = 0x5CFFCC80;
+    private static final int INCOMING_WAVE_HIGH = 0x5C82B1FF;
     private static final int PLAYHEAD = 0xFFFF1744;
 
     private final Paint gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -54,6 +55,8 @@ public final class TransitionCurveView extends View {
     private final Paint markerOutPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint outgoingWavePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint incomingWavePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint outgoingHighPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint incomingHighPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint curvePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint unityPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint playheadPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -61,8 +64,8 @@ public final class TransitionCurveView extends View {
     private final RectF rect = new RectF();
     private final float density;
 
-    private float[] outgoingPeaks;
-    private float[] incomingPeaks;
+    private WaveformCache.Waveform outgoingWaveform;
+    private WaveformCache.Waveform incomingWaveform;
     private final float[] outVolume = new float[Curve.POINTS];
     private final float[] inVolume = new float[Curve.POINTS];
     private final float[] outTempo = new float[Curve.POINTS];
@@ -87,23 +90,35 @@ public final class TransitionCurveView extends View {
         Arrays.fill(outTempo, TransitionSpec.NORMAL_TEMPO);
         Arrays.fill(inTempo, TransitionSpec.NORMAL_TEMPO);
 
-        gridPaint.setColor(GRID);
-        centerPaint.setColor(CENTER);
+        int onSurface = MaterialColors.getColor(this, com.google.android.material.R.attr.colorOnSurface, Color.WHITE);
+        gridPaint.setColor(alpha(onSurface, 0x14));
+        gridPaint.setStrokeWidth(Math.max(1f, density));
+        centerPaint.setColor(alpha(onSurface, 0x33));
         centerPaint.setStrokeWidth(Math.max(1f, density));
-        shadePaint.setColor(SECTION_SHADE);
+        shadePaint.setColor(alpha(onSurface, 0x12));
+        unityPaint.setColor(alpha(onSurface, 0x44));
         markerInPaint.setColor(MARKER_IN);
         markerInPaint.setStrokeWidth(2f * density);
         markerOutPaint.setColor(MARKER_OUT);
         markerOutPaint.setStrokeWidth(2f * density);
         outgoingWavePaint.setStyle(Paint.Style.STROKE);
-        outgoingWavePaint.setColor(OUTGOING_WAVE);
-        outgoingWavePaint.setStrokeWidth(Math.max(1f, density));
+        outgoingWavePaint.setStrokeCap(Paint.Cap.ROUND);
+        outgoingWavePaint.setColor(OUTGOING_WAVE_LOW);
+        outgoingWavePaint.setStrokeWidth(Math.max(1.2f, 1.2f * density));
         incomingWavePaint.setStyle(Paint.Style.STROKE);
-        incomingWavePaint.setColor(INCOMING_WAVE);
-        incomingWavePaint.setStrokeWidth(Math.max(1f, density));
+        incomingWavePaint.setStrokeCap(Paint.Cap.ROUND);
+        incomingWavePaint.setColor(INCOMING_WAVE_LOW);
+        incomingWavePaint.setStrokeWidth(Math.max(1.2f, 1.2f * density));
+        outgoingHighPaint.setStyle(Paint.Style.STROKE);
+        outgoingHighPaint.setStrokeCap(Paint.Cap.ROUND);
+        outgoingHighPaint.setColor(OUTGOING_WAVE_HIGH);
+        outgoingHighPaint.setStrokeWidth(Math.max(1.2f, 1.2f * density));
+        incomingHighPaint.setStyle(Paint.Style.STROKE);
+        incomingHighPaint.setStrokeCap(Paint.Cap.ROUND);
+        incomingHighPaint.setColor(INCOMING_WAVE_HIGH);
+        incomingHighPaint.setStrokeWidth(Math.max(1.2f, 1.2f * density));
         curvePaint.setStyle(Paint.Style.STROKE);
         curvePaint.setStrokeCap(Paint.Cap.ROUND);
-        unityPaint.setColor(UNITY);
         unityPaint.setStrokeWidth(Math.max(1f, density));
         unityPaint.setPathEffect(new DashPathEffect(new float[]{8f * density, 6f * density}, 0f));
         playheadPaint.setColor(PLAYHEAD);
@@ -131,9 +146,9 @@ public final class TransitionCurveView extends View {
         invalidate();
     }
 
-    public void setWaveforms(float[] outgoing, float[] incoming) {
-        outgoingPeaks = outgoing;
-        incomingPeaks = incoming;
+    public void setWaveforms(WaveformCache.Waveform outgoing, WaveformCache.Waveform incoming) {
+        outgoingWaveform = outgoing;
+        incomingWaveform = incoming;
         invalidate();
     }
 
@@ -192,8 +207,8 @@ public final class TransitionCurveView extends View {
             canvas.drawRect(outEnd * width, 0, width, height, shadePaint);
         }
 
-        drawWaveform(canvas, outgoingPeaks, outStart, outEnd, true, outgoingWavePaint);
-        drawWaveform(canvas, incomingPeaks, inStart, inEnd, false, incomingWavePaint);
+        drawWaveform(canvas, outgoingWaveform, outStart, outEnd, true, outgoingWavePaint, outgoingHighPaint);
+        drawWaveform(canvas, incomingWaveform, inStart, inEnd, false, incomingWavePaint, incomingHighPaint);
 
         boolean tempo = parameter == Parameter.TEMPO;
 
@@ -237,26 +252,60 @@ public final class TransitionCurveView extends View {
         }
     }
 
-    private void drawWaveform(Canvas canvas, float[] peaks, float from, float to, boolean up, Paint paint) {
-        if(peaks == null || peaks.length == 0) return;
+    private void drawWaveform(Canvas canvas, WaveformCache.Waveform waveform,
+                              float from, float to, boolean up,
+                              Paint lowPaint, Paint highPaint) {
+        if(waveform == null || waveform.isEmpty()) return;
         int width = getWidth();
         int height = getHeight();
         int start = Math.round(from * width);
         int end = Math.round(to * width);
-        int span = Math.max(1, end - start);
+        if(end - start <= 0) return;
+
         float center = height / 2f;
-        float amplitude = height * 0.42f;
-        int step = Math.max(1, span / peaks.length);
-        for(int x = start; x < end; x += step) {
-            int index = (int) ((long) (x - start) * peaks.length / span);
-            float peak = peaks[Math.min(peaks.length - 1, index)];
-            float half = Math.max(0.5f, peak * amplitude);
-            if(up) {
-                canvas.drawLine(x, center, x, center - half, paint);
-            } else {
-                canvas.drawLine(x, center, x, center + half, paint);
-            }
+        float lowAmplitude = height * 0.34f;
+        float highAmplitude = height * 0.10f;
+
+        // Low band grows out of the centre; the high band hangs from the outer
+        // edge so kick and hi-hat transients never cover each other.
+        if(up) {
+            drawBand(canvas, waveform.low, start, end, center, -1f, lowAmplitude, lowPaint);
+            drawBand(canvas, waveform.high, start, end, 0f, 1f, highAmplitude, highPaint);
+        } else {
+            drawBand(canvas, waveform.low, start, end, center, 1f, lowAmplitude, lowPaint);
+            drawBand(canvas, waveform.high, start, end, height, -1f, highAmplitude, highPaint);
         }
+    }
+
+    private void drawBand(Canvas canvas, float[] peaks, int start, int end,
+                          float baseline, float direction, float amplitude, Paint paint) {
+        if(peaks == null || peaks.length == 0) return;
+        int span = end - start;
+
+        float maximum = 0f;
+        for(float peak : peaks) {
+            if(peak > maximum) maximum = peak;
+        }
+        float gain = maximum < 0.02f ? 1f : Math.min(4f, 0.9f / maximum);
+
+        float[] lines = new float[Math.max(4, span * 4)];
+        int count = 0;
+        for(int x = start; x < end; x++) {
+            int index = (int) ((long) (x - start) * peaks.length / span);
+            int nextIndex = (int) ((long) (x - start + 1) * peaks.length / span);
+            if(nextIndex <= index) nextIndex = index + 1;
+            float peak = 0f;
+            for(int i = index; i < nextIndex && i < peaks.length; i++) {
+                if(peaks[i] > peak) peak = peaks[i];
+            }
+            float half = Math.max(0.7f, Math.min(1f, peak * gain) * amplitude);
+            lines[count++] = x;
+            lines[count++] = baseline;
+            lines[count++] = x;
+            lines[count++] = baseline + direction * half;
+        }
+
+        canvas.drawLines(lines, 0, count, paint);
     }
 
     private void drawCurve(Canvas canvas, float[] values, float from, float to, boolean tempo,

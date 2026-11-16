@@ -1,6 +1,8 @@
 package com.proggerx.dcross2000.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +61,16 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private MaterialButtonToggleGroup sideGroup;
     private MaterialButtonToggleGroup parameterGroup;
 
-    private float[] fromPeaks;
-    private float[] toPeaks;
+    private WaveformCache.Waveform fromWaveform;
+    private WaveformCache.Waveform toWaveform;
+    private boolean filesCached;
+    private final Handler waveHandler = new Handler(Looper.getMainLooper());
+    private Runnable pendingWaveLoad;
+    private int waveToken;
+    private int fromWaveStart = -1;
+    private int fromWaveEnd = -1;
+    private int toWaveStart = -1;
+    private int toWaveEnd = -1;
     private boolean binding;
     private TransitionPreviewPlayer preview;
 
@@ -161,21 +171,10 @@ public class TransitionEditorFragment extends SubsonicFragment {
         MixStore store = MixStore.get(context);
         TransitionSpec saved = store.get(fromEntry.getId(), toEntry.getId());
         deleteButton.setEnabled(saved != null);
+        filesCached = fromFile.isCompleteFileAvailable() && toFile.isCompleteFileAvailable();
+        previewButton.setEnabled(filesCached);
         bind(saved == null ? TransitionSpec.defaults(fromEntry.getId(), toEntry.getId()) : saved);
-
-        boolean cached = fromFile.isCompleteFileAvailable() && toFile.isCompleteFileAvailable();
-        warning.setVisibility(cached ? View.GONE : View.VISIBLE);
-        previewButton.setEnabled(cached);
-        if(cached) {
-            WaveformCache.load(context, fromFile, peaks -> {
-                fromPeaks = peaks;
-                updateLabels();
-            });
-            WaveformCache.load(context, toFile, peaks -> {
-                toPeaks = peaks;
-                updateLabels();
-            });
-        }
+        updateWaveformStatus();
 
         setTitle(R.string.mix_edit_title);
         setSubtitle(fromEntry.getTitle() + " → " + toEntry.getTitle());
@@ -192,6 +191,11 @@ public class TransitionEditorFragment extends SubsonicFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        waveToken++;
+        if(pendingWaveLoad != null) {
+            waveHandler.removeCallbacks(pendingWaveLoad);
+            pendingWaveLoad = null;
+        }
         if(preview != null) {
             preview.release();
             preview = null;
@@ -231,6 +235,33 @@ public class TransitionEditorFragment extends SubsonicFragment {
                 ? TransitionCurveView.Parameter.TEMPO : TransitionCurveView.Parameter.VOLUME;
     }
 
+    private void updateWaveformStatus() {
+        if(warning == null) return;
+        if(!filesCached) {
+            warning.setText(R.string.mix_requires_cache);
+            warning.setVisibility(View.VISIBLE);
+            return;
+        }
+        TransitionSpec spec = currentSpec();
+        boolean ready = waveformMatches(fromWaveform, fromWaveStart, fromWaveEnd,
+                windowFromStart(spec), windowFromEnd(spec))
+                && waveformMatches(toWaveform, toWaveStart, toWaveEnd,
+                windowToStart(spec), windowToEnd(spec));
+        if(ready) {
+            warning.setVisibility(View.GONE);
+        } else {
+            warning.setText(R.string.mix_analyzing);
+            warning.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private static boolean waveformMatches(WaveformCache.Waveform waveform,
+                                           int loadedStart, int loadedEnd,
+                                           int wantedStart, int wantedEnd) {
+        return waveform != null && !waveform.isEmpty()
+                && loadedStart == wantedStart && loadedEnd == wantedEnd;
+    }
+
     private void updateLabels() {
         TransitionSpec spec = currentSpec();
         leadLabel.setText(getString(R.string.mix_lead_label, seconds(spec.leadMs)));
@@ -244,22 +275,84 @@ public class TransitionEditorFragment extends SubsonicFragment {
         int total = Math.max(1, spec.windowMs());
         curveView.setSpans(0f, spec.outgoingWindowMs() / (float) total,
                 spec.leadMs / (float) total, 1f);
-        curveView.setWaveforms(outgoingPeaks(spec), incomingPeaks(spec));
+
+        // Dragging a slider changes the window constantly; only decode once the
+        // finger has settled.
+        if(pendingWaveLoad != null) {
+            waveHandler.removeCallbacks(pendingWaveLoad);
+        }
+        pendingWaveLoad = this::requestWaves;
+        waveHandler.postDelayed(pendingWaveLoad, 120);
     }
 
-    private float[] outgoingPeaks(TransitionSpec spec) {
-        if(fromPeaks == null || fromDurationMs <= 0) return null;
-        int window = Math.min(fromDurationMs, Math.max(1, spec.outgoingWindowMs()));
-        float from = (fromDurationMs - window) / (float) fromDurationMs;
-        return WaveformCache.slice(fromPeaks, from, 1f);
+    private void requestWaves() {
+        pendingWaveLoad = null;
+        if(!filesCached) return;
+
+        TransitionSpec spec = currentSpec();
+        final int requestToken = ++waveToken;
+        final int fromStart = windowFromStart(spec);
+        final int fromEnd = windowFromEnd(spec);
+        final int toStart = windowToStart(spec);
+        final int toEnd = windowToEnd(spec);
+
+        if(fromEnd > fromStart) {
+            WaveformCache.loadRange(context, fromFile, fromStart, fromEnd, waveform -> {
+                if(requestToken != waveToken) return;
+                fromWaveform = waveform;
+                fromWaveStart = fromStart;
+                fromWaveEnd = fromEnd;
+                applyWaves();
+                updateWaveformStatus();
+            });
+        } else {
+            fromWaveform = null;
+            fromWaveStart = fromWaveEnd = -1;
+        }
+
+        if(toEnd > toStart) {
+            WaveformCache.loadRange(context, toFile, toStart, toEnd, waveform -> {
+                if(requestToken != waveToken) return;
+                toWaveform = waveform;
+                toWaveStart = toStart;
+                toWaveEnd = toEnd;
+                applyWaves();
+                updateWaveformStatus();
+            });
+        } else {
+            toWaveform = null;
+            toWaveStart = toWaveEnd = -1;
+        }
     }
 
-    private float[] incomingPeaks(TransitionSpec spec) {
-        if(toPeaks == null || toDurationMs <= 0) return null;
-        int start = Math.min(toDurationMs, Math.max(0, spec.bStartMs));
-        int end = Math.min(toDurationMs, start + spec.incomingWindowMs());
-        if(end <= start) return null;
-        return WaveformCache.slice(toPeaks, start / (float) toDurationMs, end / (float) toDurationMs);
+    private void applyWaves() {
+        TransitionSpec spec = currentSpec();
+        curveView.setWaveforms(
+                waveformMatches(fromWaveform, fromWaveStart, fromWaveEnd,
+                        windowFromStart(spec), windowFromEnd(spec)) ? fromWaveform : null,
+                waveformMatches(toWaveform, toWaveStart, toWaveEnd,
+                        windowToStart(spec), windowToEnd(spec)) ? toWaveform : null);
+    }
+
+    private int windowFromStart(TransitionSpec spec) {
+        if(fromDurationMs <= 0) return 0;
+        return Math.max(0, fromDurationMs - Math.max(1, spec.outgoingWindowMs()));
+    }
+
+    private int windowFromEnd(TransitionSpec spec) {
+        return Math.max(0, fromDurationMs);
+    }
+
+    private int windowToStart(TransitionSpec spec) {
+        return Math.max(0, spec.bStartMs);
+    }
+
+    private int windowToEnd(TransitionSpec spec) {
+        int end = Math.max(0, spec.bStartMs) + spec.incomingWindowMs();
+        if(toDurationMs > 0) {
+            end = Math.min(toDurationMs, end);
+        }
+        return end;
     }
 
     private void togglePreview() {

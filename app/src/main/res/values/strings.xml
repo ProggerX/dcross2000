@@ -629,6 +629,7 @@
 	<string name="mix.saved">Transition saved</string>
 	<string name="mix.deleted">Transition removed</string>
 	<string name="mix.requires_cache">Cache both songs to see waveforms and preview the transition.</string>
+	<string name="mix_analyzing">Analyzing waveform…</string>
 	<string name="mix.unknown_duration">This song has no known duration, preview is unavailable.</string>
 	<string name="mix.invalid_pair">Unable to open this transition.</string>
 	<string name="mix.no_next">There is no next song to transition into.</string>
