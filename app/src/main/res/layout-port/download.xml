@@ -43,6 +43,7 @@
 							android:layout_height="wrap_content"
 							android:scaleType="fitCenter"
 							android:layout_gravity="center_horizontal|top"
+							android:elevation="10dp"
 							app:imageCornerRadius="28dp"/>
 
 						<LinearLayout
@@ -103,9 +104,10 @@
 					android:layout_marginLeft="16dip"
 					android:layout_marginRight="16dip"
 					android:layout_marginTop="6dp"
+					android:gravity="center"
 					android:singleLine="true"
 					android:ellipsize="end"
-					style="?attr/actionbarSubtitleStyle"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
 					android:textColor="?android:textColorSecondary"/>
 
 				<TextView
@@ -116,8 +118,8 @@
 					android:layout_marginLeft="16dip"
 					android:layout_marginRight="16dip"
 					android:singleLine="true"
-					android:textStyle="bold"
-					style="?attr/actionbarTitleStyle"
+					android:gravity="center"
+					android:textAppearance="@style/TextAppearance.DCross2000.Brand.Display"
 					android:textColor="?android:textColorPrimary"/>
 			</LinearLayout>
 

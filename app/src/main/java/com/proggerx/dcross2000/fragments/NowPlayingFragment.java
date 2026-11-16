@@ -59,6 +59,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.slider.Slider;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -109,7 +110,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
     private FrameLayout downloadLayout;
     private int lastAlbumArtColor;
+    private int lastBackdropColor;
     private GradientDrawable glowDrawable;
+    private GradientDrawable backdropDrawable;
 	private ViewFlipper playlistFlipper;
 	private TextView emptyTextView;
 	private TextView songTitleTextView;
@@ -166,6 +169,17 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		primaryFragment = false;
 	}
 
+	/** Tints the whole now playing screen with the artwork colour. */
+	private void updateBackdrop(int color) {
+		if (color == Color.TRANSPARENT || color == lastBackdropColor || backdropDrawable == null) return;
+		int surface = MaterialColors.getColor(context,
+				com.google.android.material.R.attr.colorSurface, Color.BLACK);
+		int top = ColorUtils.blendARGB(color, surface, 0.42f);
+		int middle = ColorUtils.blendARGB(color, surface, 0.78f);
+		backdropDrawable.setColors(new int[]{top, middle, surface});
+		lastBackdropColor = color;
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -193,13 +207,23 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         if (albumArtImageView != null && downloadLayout != null) {
             glowDrawable = new GradientDrawable();
             downloadLayout.setBackground(glowDrawable);
+
+            int surface = MaterialColors.getColor(context,
+                    com.google.android.material.R.attr.colorSurface, Color.BLACK);
+            backdropDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                    new int[]{surface, surface, surface});
+            rootView.setBackground(backdropDrawable);
             albumArtImageView.setOnImageChangedListener(drawable -> {
                 if (drawable == null || drawable instanceof TransitionDrawable) {
                     return;
                 }
                 Bitmap bitmap = ImageUtil.getBitmapFromDrawable(drawable);
                 int albumArtColor = ImageUtil.getVibrantColorFromBitmap(bitmap, Color.TRANSPARENT);
-                if (albumArtColor == Color.TRANSPARENT || lastAlbumArtColor == albumArtColor) {
+                if (albumArtColor == Color.TRANSPARENT) {
+                    return;
+                }
+                updateBackdrop(albumArtColor);
+                if (lastAlbumArtColor == albumArtColor) {
                     return;
                 }
 

@@ -15,6 +15,8 @@
 
         <com.proggerx.dcross2000.view.RecyclingImageView
             android:id="@+id/download_album_art_image"
+            android:elevation="8dp"
+            app:imageCornerRadius="24dp"
             android:src="@drawable/unknown_album_large"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -108,7 +110,7 @@
 			android:singleLine="true"
 			android:ellipsize="end"
 			android:gravity="center_horizontal"
-			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textAppearance="@style/TextAppearance.DCross2000.Brand"
 			android:textColor="?android:textColorPrimary"
 			android:layout_above="@+id/download_status"/>
 

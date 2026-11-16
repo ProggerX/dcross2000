@@ -28,8 +28,12 @@ public class BasicListView extends UpdateView<String> {
 	private TextView titleView;
 
 	public BasicListView(Context context) {
+		this(context, R.layout.basic_list_item);
+	}
+
+	public BasicListView(Context context, int layout) {
 		super(context, false);
-		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+		LayoutInflater.from(context).inflate(layout, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
 		starButton = (ImageButton) findViewById(R.id.item_star);

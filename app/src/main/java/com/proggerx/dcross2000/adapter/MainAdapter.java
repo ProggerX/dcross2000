@@ -44,7 +44,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
 		UpdateView updateView;
 		if(viewType == VIEW_TYPE_ALBUM_LIST) {
-			updateView = new BasicListView(context);
+			updateView = new BasicListView(context, R.layout.main_list_item);
 		} else  {
 			updateView = new AlbumListCountView(context);
 		}

@@ -21,7 +21,7 @@
 			android:background="?attr/actionbarBackgroundColor"
 			android:elevation="0dp"
 			android:theme="?attr/actionbarThemeStyle"
-			app:titleTextAppearance="@style/TextAppearance.DCross2000.Brand"
+			app:titleTextAppearance="@style/TextAppearance.DCross2000.BarBrand"
 			app:subtitleTextAppearance="@style/TextAppearance.DCross2000.BrandSubtitle"
 			app:popupTheme="?attr/actionbarPopupStyle"/>
 

@@ -20,6 +20,8 @@
 
             <com.proggerx.dcross2000.view.RecyclingImageView
                 android:id="@+id/download_album_art_image"
+                android:elevation="8dp"
+                app:imageCornerRadius="24dp"
                 android:src="@drawable/unknown_album_large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +109,7 @@
 				android:singleLine="true"
 				android:ellipsize="end"
 				android:gravity="center_horizontal"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="@style/TextAppearance.DCross2000.Brand"
 				android:textColor="?android:textColorPrimary"
 				android:layout_above="@+id/download_status"/>
 
@@ -121,7 +123,7 @@
 				android:layout_marginRight="12dip"
 				android:singleLine="true"
 				android:ellipsize="end"
-				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textAppearance="?attr/textAppearanceBodyMedium"
 				android:textColor="?android:textColorSecondary"
 				android:layout_above="@+id/download_media_buttons_wrapper"/>
 

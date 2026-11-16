@@ -103,6 +103,9 @@
 		<item name="android:alertDialogTheme">@style/ThemeOverlay.DCross2000.Dialog.Framework.Light</item>
 		<item name="android:preferenceCategoryStyle">@style/Preference.DCross2000.Category</item>
 		<item name="materialAlertDialogTheme">@style/ThemeOverlay.DCross2000.MaterialAlertDialog</item>
+		<!-- AppCompat AlertDialog.Builder (LoadingTask and friends) cannot inflate the
+		     Expressive MaterialAlertDialog layout; keep it on the compatible overlay. -->
+		<item name="alertDialogTheme">@style/ThemeOverlay.AppCompat.Dialog.Alert</item>
     </style>
 	<style name="Theme.DCross2000.Dark.Base" parent="Theme.Material3Expressive.Dark">
 		<item name="sliderStyle">@style/Widget.DCross2000.Slider</item>
