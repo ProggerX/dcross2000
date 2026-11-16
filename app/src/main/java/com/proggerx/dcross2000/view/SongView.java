@@ -382,16 +382,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
-		if(rowView != null) {
-			if(playing) {
-				rowView.setBackgroundResource(R.drawable.song_row_playing_bg);
-			} else {
-				android.util.TypedValue selectable = new android.util.TypedValue();
-				if(getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, selectable, true)) {
-					rowView.setBackgroundResource(selectable.resourceId);
-				}
-			}
-		}
+		// The highlight wraps the row and its transition strip so the mix reads
+		// as part of the same tile as the track.
+		setBackgroundResource(playing ? R.drawable.song_row_playing_bg : 0);
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
