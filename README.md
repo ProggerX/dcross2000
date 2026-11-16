@@ -18,6 +18,14 @@
 
 DCross2000 is an Android client for [Subsonic](https://www.subsonic.org/) servers with an added **per-song transition editor**: you draw the volume and tempo curves for a specific pair of tracks and the player applies them when those two songs play back to back.
 
+## Screenshots
+
+| Library | Now Playing |
+|:---:|:---:|
+| <img src="docs/screenshots/library.png" width="300"> | <img src="docs/screenshots/now-playing.png" width="300"> |
+| **Queue with a per-pair transition** | **Transition editor** |
+| <img src="docs/screenshots/queue.png" width="300"> | <img src="docs/screenshots/editor.png" width="300"> |
+
 ## The transition editor
 
 - Transitions are keyed by **song pair**, not by playlist position. Reordering a queue keeps them attached to the right two tracks.
