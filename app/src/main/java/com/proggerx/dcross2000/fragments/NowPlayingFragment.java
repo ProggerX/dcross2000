@@ -90,6 +90,7 @@ import com.proggerx.dcross2000.view.FastScroller;
 import com.proggerx.dcross2000.view.RecyclingImageView;
 import com.proggerx.dcross2000.view.UpdateView;
 import com.proggerx.dcross2000.util.Sliders;
+import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
 
 import static com.proggerx.dcross2000.domain.MusicDirectory.Entry;
@@ -263,6 +264,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		playlistFlipper = (ViewFlipper)rootView.findViewById(R.id.download_playlist_flipper);
 		emptyTextView = (TextView)rootView.findViewById(R.id.download_empty);
 		songTitleTextView = (TextView)rootView.findViewById(R.id.download_song_title);
+		Typefaces.apply(songTitleTextView);
 		positionTextView = (TextView)rootView.findViewById(R.id.download_position);
 		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
 		statusTextView = (TextView)rootView.findViewById(R.id.download_status);

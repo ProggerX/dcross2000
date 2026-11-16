@@ -63,4 +63,5 @@
 	<color name="m3_dark_outline">#8E9099</color>
 	<color name="m3_dark_outlineVariant">#44474F</color>
 
+    <color name="splash_background">#0F0F12</color>
 </resources>

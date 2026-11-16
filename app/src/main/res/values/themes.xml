@@ -104,6 +104,7 @@
 		<item name="android:alertDialogTheme">@style/ThemeOverlay.DCross2000.Dialog.Framework.Light</item>
 		<item name="android:preferenceCategoryStyle">@style/Preference.DCross2000.Category</item>
 		<item name="materialAlertDialogTheme">@style/ThemeOverlay.DCross2000.MaterialAlertDialog</item>
+		<item name="android:listDivider">@android:color/transparent</item>
 		<!-- AppCompat AlertDialog.Builder (LoadingTask and friends) cannot inflate the
 		     Expressive MaterialAlertDialog layout; keep it on the compatible overlay. -->
 		<item name="alertDialogTheme">@style/ThemeOverlay.AppCompat.Dialog.Alert</item>
@@ -210,6 +211,13 @@
 		<item name="android:alertDialogTheme">@style/ThemeOverlay.DCross2000.Dialog.Framework</item>
 		<item name="android:preferenceCategoryStyle">@style/Preference.DCross2000.Category</item>
     		<item name="materialAlertDialogTheme">@style/ThemeOverlay.DCross2000.MaterialAlertDialog</item>
+			<item name="android:listDivider">@android:color/transparent</item>
+	</style>
+	<style name="Theme.DCross2000.Splash" parent="Theme.DCross2000.Light.No_Actionbar">
+		<item name="android:windowBackground">@color/splash_background</item>
+		<item name="android:windowSplashScreenBackground">@color/splash_background</item>
+		<item name="android:windowSplashScreenAnimatedIcon">@drawable/launch</item>
+		<item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
 	</style>
 	<style name="Theme.DCross2000.Light" parent="Theme.DCross2000.Light.Base">
 	</style>

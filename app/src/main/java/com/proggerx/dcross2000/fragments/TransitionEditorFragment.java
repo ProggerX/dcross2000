@@ -21,6 +21,7 @@ import com.proggerx.dcross2000.mix.TransitionSpec;
 import com.proggerx.dcross2000.mix.WaveformCache;
 import com.proggerx.dcross2000.service.DownloadFile;
 import com.proggerx.dcross2000.service.DownloadService;
+import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
 import com.proggerx.dcross2000.view.TransitionCurveView;
 
@@ -103,8 +104,12 @@ public class TransitionEditorFragment extends SubsonicFragment {
         sideGroup = rootView.findViewById(R.id.transition_side);
         parameterGroup = rootView.findViewById(R.id.transition_parameter);
 
-        ((TextView) rootView.findViewById(R.id.transition_from_title)).setText(fromEntry.getTitle());
-        ((TextView) rootView.findViewById(R.id.transition_to_title)).setText(toEntry.getTitle());
+        TextView fromTitle = rootView.findViewById(R.id.transition_from_title);
+        TextView toTitle = rootView.findViewById(R.id.transition_to_title);
+        fromTitle.setText(fromEntry.getTitle());
+        toTitle.setText(toEntry.getTitle());
+        Typefaces.apply(fromTitle);
+        Typefaces.apply(toTitle);
 
         leadBar.setMax(MAX_BAR_MS / BAR_STEP_MS);
         overlapBar.setMax(MAX_BAR_MS / BAR_STEP_MS);

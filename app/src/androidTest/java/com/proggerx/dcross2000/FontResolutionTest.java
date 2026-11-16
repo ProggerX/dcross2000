@@ -5,6 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.util.Log;
+
+import java.io.File;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -26,8 +29,26 @@ public class FontResolutionTest {
                 render("NType82-Regular").sameAs(render("sans-serif")));
     }
 
+    @Test
+    public void reportWhichFaceNtypeResolvesTo() {
+        Bitmap ntype = render("NType82-Headline");
+        Bitmap file = renderFile("/system/fonts/NType82-Headline.otf");
+        Log.i("FontResolution", "ntype==sans " + ntype.sameAs(render("sans-serif")));
+        Log.i("FontResolution", "ntype==serif " + ntype.sameAs(render("serif")));
+        Log.i("FontResolution", "ntype==roboto " + ntype.sameAs(render("roboto")));
+        Log.i("FontResolution", "ntype==file " + ntype.sameAs(file));
+        Log.i("FontResolution", "serif==file " + render("serif").sameAs(file));
+    }
+
+    private Bitmap renderFile(String path) {
+        return render(Typeface.createFromFile(new File(path)));
+    }
+
     private Bitmap render(String family) {
-        Typeface typeface = Typeface.create(family, Typeface.BOLD);
+        return render(Typeface.create(family, Typeface.BOLD));
+    }
+
+    private Bitmap render(Typeface typeface) {
         Bitmap bitmap = Bitmap.createBitmap(420, 130, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.WHITE);

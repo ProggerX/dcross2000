@@ -62,6 +62,7 @@ import com.proggerx.dcross2000.util.SilentBackgroundTask;
 import com.proggerx.dcross2000.util.TabBackgroundTask;
 import com.proggerx.dcross2000.util.UpdateHelper;
 import com.proggerx.dcross2000.util.UserUtil;
+import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
 import com.proggerx.dcross2000.view.FastScroller;
 import com.proggerx.dcross2000.view.MyLeadingMarginSpan2;
@@ -1265,6 +1266,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 	private void setupTextDisplay(final View header) {
 		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
+		Typefaces.apply(titleView);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
 		} else if(podcastName != null) {

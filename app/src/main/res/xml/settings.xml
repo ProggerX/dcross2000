@@ -4,36 +4,50 @@
 
 	<PreferenceScreen
 		android:title="@string/settings.servers_title"
-		android:key="servers">
+		android:key="servers"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_server">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.appearance_title"
-		android:key="appearance">
+		android:key="appearance"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_palette">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.drawer_items_title"
-		android:key="drawer">
+		android:key="drawer"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_menu">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.cache_screen_title"
-		android:key="cache">
+		android:key="cache"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_download">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.sync_title"
-		android:key="sync">
+		android:key="sync"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_sync">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.playback_title"
-		android:key="playback">
+		android:key="playback"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_play">
 	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.casting"
-		android:key="cast">
+		android:key="cast"
+		android:layout="@layout/preference_screen_m3"
+		android:icon="@drawable/ic_ms_cast">
 	</PreferenceScreen>
 </PreferenceScreen>

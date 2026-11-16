@@ -97,6 +97,7 @@ import com.proggerx.dcross2000.util.DrawableTint;
 import com.proggerx.dcross2000.util.ImageLoader;
 import com.proggerx.dcross2000.util.SilentBackgroundTask;
 import com.proggerx.dcross2000.util.ThemeUtil;
+import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
 import com.proggerx.dcross2000.view.UpdateView;
 import com.proggerx.dcross2000.util.UserUtil;
@@ -479,6 +480,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		});
 
 		drawerHeaderToggle = (ImageView) drawerHeader.findViewById(R.id.header_select_image);
+		TextView brandView = (TextView) drawerHeader.findViewById(R.id.header_app_name);
+		Typefaces.apply(brandView);
 		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
 		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
@@ -771,11 +774,25 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public void setTitle(CharSequence title) {
 		if(title != null && getSupportActionBar() != null && !title.equals(getSupportActionBar().getTitle())) {
 			getSupportActionBar().setTitle(title);
+			applyBrandToToolbar(findViewById(R.id.main_toolbar));
 			recreateSpinner();
 		}
 	}
 	public void setSubtitle(CharSequence title) {
 		getSupportActionBar().setSubtitle(title);
+		applyBrandToToolbar(findViewById(R.id.main_toolbar));
+	}
+
+	private void applyBrandToToolbar(final androidx.appcompat.widget.Toolbar toolbar) {
+		if(toolbar == null) return;
+		Runnable apply = () -> {
+			for(int i = 0; i < toolbar.getChildCount(); i++) {
+				android.view.View child = toolbar.getChildAt(i);
+				if(child instanceof TextView) Typefaces.apply((TextView) child);
+			}
+		};
+		apply.run();
+		toolbar.post(apply);
 	}
 
 	@Override

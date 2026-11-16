@@ -18,6 +18,7 @@ package com.proggerx.dcross2000.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 
@@ -25,6 +26,7 @@ import java.util.List;
 
 import com.proggerx.dcross2000.R;
 import com.proggerx.dcross2000.domain.ServerInfo;
+import com.proggerx.dcross2000.util.Typefaces;
 import com.proggerx.dcross2000.util.Util;
 import com.proggerx.dcross2000.view.AlbumListCountView;
 import com.proggerx.dcross2000.view.BasicHeaderView;
@@ -127,6 +129,8 @@ public class MainAdapter extends SectionAdapter<Integer> {
 
 		if(view != null) {
 			view.setObject(display);
+			TextView title = (TextView) view.findViewById(R.id.item_name);
+			Typefaces.apply(title);
 		}
 	}
 }

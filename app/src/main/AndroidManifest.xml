@@ -46,7 +46,7 @@
     <application android:label="@string/common.appname"
     	android:backupAgent="com.proggerx.dcross2000.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
-    	android:theme="@style/Theme.DCross2000.Light"
+    	android:theme="@style/Theme.DCross2000.Splash"
 		android:largeHeap="true"
 		android:usesCleartextTraffic="true">
 
