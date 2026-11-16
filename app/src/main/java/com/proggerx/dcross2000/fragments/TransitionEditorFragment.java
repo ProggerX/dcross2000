@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import com.proggerx.dcross2000.R;
@@ -56,7 +57,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private TextView tailLabel;
     private TextView aEndLabel;
     private TextView warning;
-    private Button previewButton;
+    private MaterialButton previewButton;
     private Button deleteButton;
     private MaterialButtonToggleGroup sideGroup;
     private MaterialButtonToggleGroup parameterGroup;
@@ -110,7 +111,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
         tailLabel = rootView.findViewById(R.id.transition_tail_label);
         aEndLabel = rootView.findViewById(R.id.transition_aend_label);
         warning = rootView.findViewById(R.id.transition_warning);
-        previewButton = rootView.findViewById(R.id.transition_preview);
+        previewButton = (MaterialButton) rootView.findViewById(R.id.transition_preview);
         deleteButton = rootView.findViewById(R.id.transition_delete);
         sideGroup = rootView.findViewById(R.id.transition_side);
         parameterGroup = rootView.findViewById(R.id.transition_parameter);
@@ -155,9 +156,11 @@ public class TransitionEditorFragment extends SubsonicFragment {
             curveView.setMode(side(), parameter());
         });
 
-        previewButton.setOnClickListener(view -> startPreview());
+        previewButton.setOnClickListener(view -> onPreviewButton());
         previewButton.setOnLongClickListener(view -> {
+            // Long press stops the preview entirely.
             if(preview != null) preview.stop();
+            updatePreviewIcon();
             return true;
         });
         rootView.findViewById(R.id.transition_reset).setOnClickListener(view -> {
@@ -208,6 +211,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
         super.onStop();
         if(preview != null) preview.stop();
         if(curveView != null) curveView.setPlayhead(-1f);
+        updatePreviewIcon();
     }
 
     @Override
@@ -371,10 +375,29 @@ public class TransitionEditorFragment extends SubsonicFragment {
         return end;
     }
 
-    /**
-     * Always restarts from the current curve and wheel values. There is no
-     * separate stop step: a second press simply re-arms the preview.
-     */
+    private void onPreviewButton() {
+        if(preview != null && preview.isPlaying()) {
+            preview.pause();
+            updatePreviewIcon();
+            return;
+        }
+        if(preview != null && preview.isPaused()) {
+            preview.resume();
+            updatePreviewIcon();
+            return;
+        }
+        startPreview();
+        updatePreviewIcon();
+    }
+
+    private void updatePreviewIcon() {
+        if(previewButton == null) return;
+        boolean playing = preview != null && preview.isPlaying();
+        previewButton.setIconResource(playing ? R.drawable.ic_ms_pause : R.drawable.ic_ms_play);
+        previewButton.setContentDescription(getString(
+                playing ? R.string.mix_preview_pause : R.string.mix_preview_play));
+    }
+
     private void startPreview() {
         TransitionSpec spec = currentSpec();
         if(!fromFile.isCompleteFileAvailable() || !toFile.isCompleteFileAvailable()) {
@@ -389,7 +412,10 @@ public class TransitionEditorFragment extends SubsonicFragment {
         if(service != null) service.pause();
         if(preview == null) {
             preview = new TransitionPreviewPlayer(context);
-            preview.setListener(fraction -> curveView.setPlayhead(fraction));
+            preview.setListener(fraction -> {
+                curveView.setPlayhead(fraction);
+                updatePreviewIcon();
+            });
             preview.setSpecProvider(this::currentSpec);
         }
         preview.play(fromFile.getCompleteFile(), fromDurationMs, toFile.getCompleteFile(), spec);

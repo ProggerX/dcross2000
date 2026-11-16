@@ -60,6 +60,7 @@ public final class TransitionPreviewPlayer {
     private boolean incomingStarted;
     private boolean outgoingStopped;
     private boolean running;
+    private boolean paused;
 
     public TransitionPreviewPlayer(Context context) {
         this.context = context.getApplicationContext();
@@ -89,6 +90,14 @@ public final class TransitionPreviewPlayer {
         return running;
     }
 
+    public boolean isPlaying() {
+        return running && !paused;
+    }
+
+    public boolean isPaused() {
+        return running && paused;
+    }
+
     /**
      * @param outgoingDurationMs duration of the outgoing song; the preview can
      *                           only position itself when this is known.
@@ -107,14 +116,34 @@ public final class TransitionPreviewPlayer {
         outgoingStartPosition = Math.max(0, windowStartPosition - PREROLL_MS);
         incomingStarted = false;
         outgoingStopped = false;
+        paused = false;
         playhead.reset();
         running = true;
         arm();
         handler.post(ticker);
     }
 
+    public void pause() {
+        if(!running || paused) return;
+        paused = true;
+        handler.removeCallbacks(ticker);
+        outgoing.pause();
+        incoming.pause();
+    }
+
+    public void resume() {
+        if(!running || !paused) return;
+        paused = false;
+        // Do not project the paused interval onto the playhead.
+        playhead.reset();
+        outgoing.play();
+        if(incomingStarted) incoming.play();
+        handler.post(ticker);
+    }
+
     public void stop() {
         running = false;
+        paused = false;
         incomingStarted = false;
         outgoingStopped = false;
         if(listener != null) listener.onProgress(-1f);
@@ -157,7 +186,7 @@ public final class TransitionPreviewPlayer {
     private final Runnable ticker = new Runnable() {
         @Override
         public void run() {
-            if(!running) return;
+            if(!running || paused) return;
             long actualDuration = outgoing.getDuration();
             if(actualDuration != C.TIME_UNSET
                     && actualDuration > spec.outgoingWindowMs() + spec.aEndMs) {
