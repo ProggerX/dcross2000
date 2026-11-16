@@ -37,7 +37,11 @@ android {
 		buildConfig true
 	}
 	buildTypes {
+		debug {
+			signingConfig signingConfigs.shared
+		}
 		release {
+			signingConfig signingConfigs.shared
 			minifyEnabled true
 			shrinkResources true
 			proguardFiles 'proguard.cfg'

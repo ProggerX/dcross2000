@@ -24,8 +24,7 @@
 				android:id="@+id/select_album_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:textStyle="bold"
+				android:textAppearance="@style/TextAppearance.DCross2000.Brand.Display"
 				android:singleLine="true"
 				android:ellipsize="marquee"
 				android:marqueeRepeatLimit="marquee_forever"
@@ -117,9 +116,11 @@
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"
 			android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true"
-			android:layout_marginRight="10dip"
+			android:layout_alignParentStart="true"
+			android:layout_marginStart="16dp"
+			android:layout_marginEnd="16dp"
 			android:scaleType="fitCenter"
+			app:imageCornerRadius="20dp"
 			android:contentDescription="@null"/>
 	</RelativeLayout>
 

@@ -16,14 +16,21 @@
 package com.proggerx.dcross2000.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
+import com.proggerx.dcross2000.R;
+
 public class RecyclingImageView extends ImageView {
+	private float cornerRadius;
 	private boolean invalidated = false;
 	private OnInvalidated onInvalidated;
     private OnImageChangedListener listener;
@@ -37,6 +44,7 @@ public class RecyclingImageView extends ImageView {
 
 	public RecyclingImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		applyCornerRadius(context, attrs);
 	}
 
 	public RecyclingImageView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -45,6 +53,27 @@ public class RecyclingImageView extends ImageView {
 
 	public RecyclingImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
+	}
+
+	private void applyCornerRadius(Context context, AttributeSet attrs) {
+		TypedArray typed = context.obtainStyledAttributes(attrs, R.styleable.RecyclingImageView);
+		cornerRadius = typed.getDimension(R.styleable.RecyclingImageView_imageCornerRadius, 0f);
+		typed.recycle();
+		if(cornerRadius <= 0f) return;
+
+		setClipToOutline(true);
+		setOutlineProvider(new ViewOutlineProvider() {
+			@Override
+			public void getOutline(View view, Outline outline) {
+				outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), cornerRadius);
+			}
+		});
+	}
+
+	@Override
+	protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+		super.onSizeChanged(width, height, oldWidth, oldHeight);
+		if(cornerRadius > 0f) invalidateOutline();
 	}
 
 	@Override

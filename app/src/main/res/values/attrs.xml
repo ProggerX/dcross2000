@@ -68,6 +68,11 @@
 	<attr name="drawerSubtitleStyle" format="reference"/>
 	<attr name="drawerHeaderBackground" format="reference"/>
 
+	<attr name="imageCornerRadius" format="dimension"/>
+	<declare-styleable name="RecyclingImageView">
+		<attr name="imageCornerRadius"/>
+	</declare-styleable>
+
 	<declare-styleable name="SeekBarPreference">
 		<attr name="min" format="integer"/>
 		<attr name="max" format="integer"/>

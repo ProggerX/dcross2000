@@ -10,7 +10,7 @@
 			android:orientation="horizontal"
 			android:paddingTop="2dip"
 			android:paddingBottom="2dip"
-			android:paddingLeft="6dp"
+			android:paddingStart="12dp"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:minHeight="?android:attr/listPreferredItemHeight">
@@ -32,7 +32,7 @@
 					  android:layout_height="wrap_content"
 					  android:layout_marginLeft="10dip"
 					  android:layout_marginTop="6dip"
-					  android:textAppearance="?android:attr/textAppearanceLarge"
+					  android:textAppearance="@style/TextAppearance.DCross2000.Brand"
 					  android:textColor="?attr/colorPrimary"/>
 
 			<TextView android:id="@+id/select_artist_folder_2"

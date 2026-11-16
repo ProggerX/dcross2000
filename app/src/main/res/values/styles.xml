@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Widget.DCross2000.Slider" parent="Widget.Material3.Slider">
+	<style name="Widget.DCross2000.Slider" parent="Widget.Material3Expressive.Slider.Medium">
 		<item name="labelBehavior">gone</item>
 		<item name="tickVisible">false</item>
 	</style>
 
 	<!-- Tonal button without a minimum width or side padding, so several share one row on small screens. -->
-	<style name="Widget.DCross2000.Button.Compact" parent="Widget.Material3.Button.TonalButton">
+	<style name="Widget.DCross2000.Button.Compact" parent="Widget.Material3Expressive.Button.TonalButton">
 		<item name="android:minWidth">0dp</item>
 		<item name="android:paddingLeft">0dp</item>
 		<item name="android:paddingRight">0dp</item>
@@ -36,10 +36,10 @@
 	     framework overlays are full platform dialog themes (the default one is the dark
 	     Theme.Material.Dialog.Alert), and they keep the square platform window, which is
 	     replaced with the Material 3 shape and surface colour. -->
-	<style name="ThemeOverlay.DCross2000.Dialog.Framework" parent="ThemeOverlay.Material3.Dialog.Alert.Framework">
+	<style name="ThemeOverlay.DCross2000.Dialog.Framework" parent="ThemeOverlay.Material3Expressive.Dialog.Alert.Framework">
 		<item name="android:windowBackground">@drawable/dialog_background_m3</item>
 	</style>
-	<style name="ThemeOverlay.DCross2000.Dialog.Framework.Light" parent="ThemeOverlay.Material3.Light.Dialog.Alert.Framework">
+	<style name="ThemeOverlay.DCross2000.Dialog.Framework.Light" parent="ThemeOverlay.Material3Expressive.Light.Dialog.Alert.Framework">
 		<item name="android:windowBackground">@drawable/dialog_background_m3</item>
 	</style>
 
@@ -51,14 +51,49 @@
 		<item name="android:selectable">false</item>
 	</style>
 
-	<style name="TextAppearance.DCross2000.BarTitle" parent="TextAppearance.Material3.TitleLarge">
+	<!-- NType82 is registered by Nothing OS; on any other device the lookup falls
+	     back to the system sans, which is already the user's chosen font (Geist). -->
+	<style name="TextAppearance.DCross2000.Brand" parent="TextAppearance.Material3.TitleLarge">
+		<item name="android:fontFamily">NType82-Headline</item>
+	</style>
+	<style name="TextAppearance.DCross2000.Brand.Display" parent="TextAppearance.Material3.HeadlineLarge">
+		<item name="android:fontFamily">NType82-Headline</item>
+	</style>
+	<style name="TextAppearance.DCross2000.BrandSubtitle" parent="TextAppearance.Material3.BodyMedium">
+		<item name="android:fontFamily">NType82-Regular</item>
+	</style>
+	<style name="TextAppearance.DCross2000.Category" parent="TextAppearance.Material3.TitleSmall">
+		<item name="android:fontFamily">NType82-Regular</item>
+		<item name="android:letterSpacing">0.04</item>
+	</style>
+	<style name="TextAppearance.DCross2000.DialogTitle" parent="TextAppearance.Material3.HeadlineSmall">
+		<item name="android:fontFamily">NType82-Headline</item>
+	</style>
+	<style name="ThemeOverlay.DCross2000.MaterialAlertDialog" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
+		<item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.DCross2000.DialogTitle</item>
+	</style>
+
+	<style name="TextAppearance.DCross2000.BarTitle" parent="TextAppearance.DCross2000.Brand">
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="TextAppearance.DCross2000.BarTitle.OnContainer" parent="TextAppearance.DCross2000.Brand">
+		<item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+	</style>
+	<style name="TextAppearance.DCross2000.BarSubtitle" parent="TextAppearance.Material3.BodyMedium">
+		<item name="android:textColor">?android:attr/textColorSecondary</item>
+	</style>
+	<style name="TextAppearance.DCross2000.BarSubtitle.OnContainer" parent="TextAppearance.DCross2000.BrandSubtitle">
+		<item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+	</style>
+
+	<style name="Widget.DCross2000.Card" parent="Widget.Material3.CardView.Elevated">
+		<item name="cardCornerRadius">20dp</item>
+		<item name="cardElevation">1dp</item>
+		<item name="cardBackgroundColor">?attr/colorSurfaceContainerLow</item>
+		<item name="strokeWidth">0dp</item>
 	</style>
 	<style name="TextAppearance.DCross2000.BarTitle.Inverse">
 		<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
-	</style>
-	<style name="TextAppearance.DCross2000.BarSubtitle" parent="TextAppearance.Material3.BodyLarge">
-		<item name="android:textColor">?android:attr/textColorSecondary</item>
 	</style>
 	<style name="TextAppearance.DCross2000.BarSubtitle.Inverse">
 		<item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
@@ -92,6 +127,13 @@
         <item name="android:layout_width">@dimen/Button.Small</item>
         <item name="android:layout_height">@dimen/Button.Small</item>
     </style>
+
+	<style name="PlaybackControl.Primary" parent="@style/PlaybackControl.Large">
+		<item name="android:layout_width">76dp</item>
+		<item name="android:layout_height">76dp</item>
+		<item name="android:padding">20dp</item>
+		<item name="android:background">@drawable/playback_button_circle</item>
+	</style>
 
 	<style name="PlaybackControl.Large" parent="@style/PlaybackControl">
 		<item name="android:layout_width">@dimen/Button.Large</item>

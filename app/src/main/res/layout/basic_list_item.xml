@@ -4,8 +4,8 @@
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground"
 	android:orientation="horizontal"
-	android:paddingLeft="16dp"
-	android:paddingRight="16dp">
+	android:paddingStart="20dp"
+	android:paddingEnd="20dp">
 
     <TextView
         android:id="@+id/item_name"
@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:gravity="center_vertical|start"
-        android:minHeight="50dip"
+        android:minHeight="60dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:textColorPrimary" />
 

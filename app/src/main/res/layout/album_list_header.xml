@@ -3,19 +3,19 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="horizontal"
-	android:paddingLeft="16dp"
-	android:paddingRight="16dp">
+	android:paddingStart="20dp"
+	android:paddingEnd="12dp">
 
 	<TextView
 		android:id="@+id/item_name"
 		android:layout_width="0dp"
 		android:layout_weight="1"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textAppearance="@style/TextAppearance.DCross2000.Category"
 		android:background="@android:color/transparent"
 		android:textColor="?attr/colorPrimary"
 		android:textStyle="bold"
-		android:paddingTop="8dp"
+		android:paddingTop="20dp"
 		android:paddingBottom="8dp"/>
 
 	<com.google.android.material.materialswitch.MaterialSwitch

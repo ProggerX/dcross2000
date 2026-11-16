@@ -9,9 +9,11 @@
 		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
 		android:background="?attr/actionbarBackgroundColor"
-		android:elevation="4dp"
+		android:elevation="0dp"
 		android:theme="?attr/actionbarThemeStyle"
-		app:popupTheme="?attr/actionbarPopupStyle"/>
+		app:popupTheme="?attr/actionbarPopupStyle"
+		app:titleTextAppearance="@style/TextAppearance.DCross2000.Brand"
+		app:subtitleTextAppearance="@style/TextAppearance.DCross2000.BrandSubtitle"/>
 
 	<FrameLayout
 		android:id="@+id/fragment_container"

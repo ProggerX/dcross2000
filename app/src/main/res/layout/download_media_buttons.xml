@@ -30,7 +30,7 @@
 		android:visibility="invisible"/>
 
     <ImageButton
-            style="@style/PlaybackControl.Large"
+            style="@style/PlaybackControl.Primary"
             android:id="@+id/download_pause"
             android:src="?attr/media_button_pause"
             android:layout_centerInParent="true"
@@ -38,7 +38,7 @@
             />
 
     <ImageButton
-            style="@style/PlaybackControl.Large"
+            style="@style/PlaybackControl.Primary"
             android:id="@+id/download_stop"
             android:src="?attr/media_button_stop"
             android:layout_centerInParent="true"
@@ -46,7 +46,7 @@
             />
 
     <ImageButton
-            style="@style/PlaybackControl.Large"
+            style="@style/PlaybackControl.Primary"
             android:id="@+id/download_start"
             android:src="?attr/media_button_start"
             android:layout_centerInParent="true"

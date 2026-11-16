@@ -36,6 +36,7 @@ import android.os.Environment;
 import android.os.Handler;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.SystemBarStyle;
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.app.ActivityCompat;
@@ -1188,6 +1189,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		ThemeUtil.applyTheme(this, theme);
+		// Material You wallpaper colours on Android 12+. The material and holo
+		// variations are deliberate fixed palettes, so they keep their colours.
+		if(!ThemeUtil.THEME_BLACK.equals(theme) && !ThemeUtil.THEME_HOLO.equals(theme)) {
+			DynamicColors.applyToActivityIfAvailable(this);
+		}
         SharedPreferences prefs = Util.getPreferences(this);
 		actionbarColored = prefs.getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true);
         actionbarCustomColor = prefs.getInt(Constants.PREFERENCES_KEY_ACTION_BAR_COLOR, -1);

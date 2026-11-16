@@ -28,8 +28,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"/>
+                    android:textAppearance="@style/TextAppearance.DCross2000.Brand"/>
 
                 <TextView
                     android:id="@+id/transition_to_title"
@@ -39,8 +38,7 @@
                     android:ellipsize="end"
                     android:gravity="end"
                     android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"/>
+                    android:textAppearance="@style/TextAppearance.DCross2000.Brand"/>
             </LinearLayout>
 
             <com.proggerx.dcross2000.view.TransitionCurveView
@@ -162,28 +160,28 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/transition_preview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/mix.preview"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/transition_reset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/mix.reset"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/transition_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/mix.delete"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/transition_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
