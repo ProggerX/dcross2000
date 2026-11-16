@@ -205,6 +205,16 @@ public final class TransitionSpec implements Serializable {
                 // v1/v2 volume curves were absolute 0..1; rescale to the new 0..2 gain range.
                 migratedOut = scale(json.has("out") ? out : Curve.constant(1f), NORMAL_GAIN);
                 migratedIn = scale(json.has("in") ? in : Curve.constant(1f), NORMAL_GAIN);
+            } else if(version == 3) {
+                // The reset button used to write the raw 0..1 equal power curves,
+                // which play back as a 2x boost at the ends. Those exact shapes
+                // are safe to rescale; hand drawn curves are left alone.
+                if(out.encode().equals(Curve.equalPowerOut().encode())) {
+                    migratedOut = defaultOutVolume();
+                }
+                if(in.encode().equals(Curve.equalPowerIn().encode())) {
+                    migratedIn = defaultInVolume();
+                }
             }
             return new TransitionSpec(from, to, lead, fade, json.optInt("tail", 0),
                     json.optInt("bstart", 0), migratedOut, migratedIn, outTempo, inTempo);

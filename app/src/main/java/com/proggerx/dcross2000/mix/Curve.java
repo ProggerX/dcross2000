@@ -5,8 +5,10 @@ import java.util.Arrays;
 
 /**
  * A normalized gain envelope sampled at {@link #POINTS} evenly spaced positions.
- * Values are between 0 (silent) and 1 (full volume). The playback engine and the
- * editor share this representation, so a hand drawn line is played back as drawn.
+ * Values are between 0 and 1 and are mapped onto the gain range by
+ * {@link TransitionSpec#gainAt}: 0.5 is unchanged volume, 1 doubles it. The
+ * playback engine and the editor share this representation, so a hand drawn
+ * line is played back as drawn.
  */
 public final class Curve implements Serializable {
     public static final int POINTS = 64;
@@ -55,14 +57,6 @@ public final class Curve implements Serializable {
 
     public static Curve equalPowerIn() {
         return curve(t -> (float) Math.sin(t * Math.PI / 2));
-    }
-
-    public static Curve defaultOut() {
-        return equalPowerOut();
-    }
-
-    public static Curve defaultIn() {
-        return equalPowerIn();
     }
 
     private static Curve ramp(final float from, final float to) {

@@ -149,7 +149,8 @@ public class TransitionEditorFragment extends SubsonicFragment {
 
         previewButton.setOnClickListener(view -> togglePreview());
         rootView.findViewById(R.id.transition_reset).setOnClickListener(view -> {
-            curveView.setCurves(Curve.defaultOut().copyValues(), Curve.defaultIn().copyValues(),
+            curveView.setCurves(TransitionSpec.defaultOutVolume().copyValues(),
+                    TransitionSpec.defaultInVolume().copyValues(),
                     TransitionSpec.defaultTempoCurve().copyValues(),
                     TransitionSpec.defaultTempoCurve().copyValues());
             updateLabels();
