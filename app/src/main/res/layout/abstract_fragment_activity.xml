@@ -6,7 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:gravity="bottom"
-	sothree:umanoPanelHeight="?attr/actionBarSize"
+	sothree:umanoPanelHeight="88dp"
 	sothree:umanoShadowHeight="0dp"
 	sothree:umanoDragView="@+id/slide_up_swipe_target">
 
@@ -37,7 +37,7 @@
 		<FrameLayout
 			android:id="@+id/slide_up_swipe_target"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="88dp"
 			android:background="@drawable/bottom_bar_m3">
 
 			<com.google.android.material.appbar.MaterialToolbar
@@ -52,17 +52,22 @@
 			<LinearLayout
 				android:id="@+id/bottom_bar"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
+				android:layout_height="68dp"
+				android:layout_gravity="top"
+				android:layout_marginTop="8dp"
+				android:paddingStart="6dp"
+				android:paddingEnd="6dp"
 				style="@style/BasicButton"
-				android:orientation="horizontal"
-				android:elevation="4dp">
+				android:orientation="horizontal">
 
 				<com.proggerx.dcross2000.view.RecyclingImageView
 					android:id="@+id/album_art"
-					android:layout_width="?attr/actionBarSize"
-					android:layout_height="?attr/actionBarSize"
+					android:layout_width="48dp"
+					android:layout_height="48dp"
 					android:layout_gravity="left|center"
-					android:scaleType="fitCenter"
+					android:layout_marginStart="8dp"
+					android:layout_marginEnd="4dp"
+					android:scaleType="centerCrop"
 					app:imageCornerRadius="12dp"/>
 
 				<LinearLayout
@@ -104,7 +109,8 @@
 				<LinearLayout
 					android:layout_height="fill_parent"
 					android:layout_width="0dp"
-					android:layout_weight="1">
+					android:layout_weight="1"
+					android:gravity="center">
 
 					<ImageButton
 						style="@style/PlaybackControl.BottomBar"
@@ -114,7 +120,7 @@
 						android:visibility="gone"/>
 
 					<ImageButton
-						style="@style/PlaybackControl.BottomBar"
+						style="@style/PlaybackControl.BottomBar.Side"
 						android:id="@+id/download_previous"
 						android:src="?attr/actionbar_backward"
 						android:padding="2dp"/>
@@ -125,7 +131,7 @@
 						android:src="?attr/actionbar_start"/>
 
 					<ImageButton
-						style="@style/PlaybackControl.BottomBar"
+						style="@style/PlaybackControl.BottomBar.Side"
 						android:id="@+id/download_next"
 						android:src="?attr/actionbar_forward"
 						android:padding="2dp"/>

@@ -6,7 +6,7 @@
               android:layout_height="wrap_content">
 
     <ImageButton
-            style="@style/PlaybackControl"
+            style="@style/PlaybackControl.Secondary"
             android:id="@+id/download_repeat"
             android:src="?attr/media_button_repeat_off"
             android:layout_alignParentLeft="true"
@@ -69,7 +69,7 @@
             />
 
     <ImageButton
-            style="@style/PlaybackControl"
+            style="@style/PlaybackControl.Secondary"
 			android:id="@+id/download_toggle_list"
 			android:src="?attr/toggle_list"
             android:layout_alignParentRight="true"
