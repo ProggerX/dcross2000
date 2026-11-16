@@ -27,6 +27,63 @@
 		android:layout_height="match_parent"
 		android:orientation="vertical">
 
+			<LinearLayout
+				android:id="@+id/download_overlay_buttons"
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:layout_marginStart="20dp"
+				android:layout_marginEnd="20dp"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="2dp"
+				android:background="@drawable/action_panel_bg"
+				android:divider="@drawable/action_divider"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingStart="6dp"
+				android:paddingEnd="6dp"
+				android:showDividers="middle">
+
+				<ImageButton
+					android:id="@+id/download_shuffle"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="?attr/shuffle" />
+
+				<ImageButton
+					android:id="@+id/download_rating_bad"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_thumb_down" />
+
+				<ImageButton
+					android:id="@+id/download_star"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_star_border" />
+
+				<ImageButton
+					android:id="@+id/download_add_to_playlist"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_add" />
+
+				<ImageButton
+					android:id="@+id/download_playback_speed"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_speed" />
+
+				<ImageButton
+					android:id="@+id/download_bookmark"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_bookmark_border" />
+
+				<ImageButton
+					android:id="@+id/download_rating_good"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_thumb_up" />
+
+				<ImageButton
+					android:id="@+id/download_rating_combined"
+					style="@style/Widget.DCross2000.ActionSegment"
+					android:src="@drawable/ic_ms_thumb_up"
+					android:visibility="gone" />
+			</LinearLayout>
 		<ViewFlipper
 			android:id="@+id/download_playlist_flipper"
 			android:layout_width="match_parent"
@@ -105,59 +162,9 @@
 			android:orientation="vertical"
 			android:paddingStart="10dp"
 			android:paddingEnd="10dp"
-			android:paddingTop="6dp"
+			android:paddingTop="10dp"
 			android:paddingBottom="10dp">
 
-			<LinearLayout
-				android:id="@+id/download_overlay_buttons"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:orientation="horizontal"
-				android:paddingTop="2dp"
-				android:paddingBottom="2dp">
-
-				<ImageButton
-					android:id="@+id/download_toggle_list"
-					style="@style/DownloadActionImageButton"
-					android:src="?attr/toggle_list" />
-
-				<ImageButton
-					android:id="@+id/download_rating_bad"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_thumb_down" />
-
-				<ImageButton
-					android:id="@+id/download_star"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_star_border" />
-
-				<ImageButton
-					android:id="@+id/download_add_to_playlist"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_add" />
-
-				<ImageButton
-					android:id="@+id/download_playback_speed"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_speed" />
-
-				<ImageButton
-					android:id="@+id/download_bookmark"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_bookmark_border" />
-
-				<ImageButton
-					android:id="@+id/download_rating_good"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_thumb_up" />
-
-				<ImageButton
-					android:id="@+id/download_rating_combined"
-					style="@style/DownloadActionImageButton"
-					android:src="@drawable/ic_ms_thumb_up"
-					android:visibility="gone" />
-			</LinearLayout>
 
 			<include layout="@layout/download_slider" android:layout_marginTop="10dp" />
 

@@ -159,6 +159,13 @@
 		<item name="android:background">@drawable/playback_button_circle</item>
 	</style>
 
+	<style name="PlaybackControl.Queue" parent="@style/PlaybackControl">
+		<item name="android:layout_width">56dp</item>
+		<item name="android:layout_height">56dp</item>
+		<item name="android:padding">14dp</item>
+		<item name="android:background">@drawable/queue_button_bg</item>
+	</style>
+
 	<style name="PlaybackControl.Primary" parent="@style/PlaybackControl.Large">
 		<item name="android:layout_width">88dp</item>
 		<item name="android:layout_height">88dp</item>
@@ -209,6 +216,25 @@
 		<item name="android:paddingBottom">4dip</item>
 		<item name="android:paddingRight">4dip</item>
 		<item name="android:paddingLeft">4dip</item>
+	</style>
+
+	<style name="Widget.DCross2000.ActionSegment" parent="@style/BasicButton">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_height">44dp</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:padding">11dp</item>
+		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+		<item name="android:scaleType">fitCenter</item>
+	</style>
+
+	<style name="Widget.DCross2000.ActionChip" parent="@style/BasicButton">
+		<item name="android:layout_width">44dp</item>
+		<item name="android:layout_height">40dp</item>
+		<item name="android:padding">9dp</item>
+		<item name="android:layout_marginStart">3dp</item>
+		<item name="android:layout_marginEnd">3dp</item>
+		<item name="android:background">@drawable/action_chip_bg</item>
+		<item name="android:scaleType">fitCenter</item>
 	</style>
 
 	<style name="DownloadActionImageButton" parent="@style/BasicButton">

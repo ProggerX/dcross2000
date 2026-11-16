@@ -12,10 +12,10 @@
 		android:layout_height="96dp"
 		android:layout_weight="1">
 		<ImageButton
-			style="@style/PlaybackControl.Secondary"
-			android:id="@+id/download_shuffle"
+			style="@style/PlaybackControl.Queue"
+			android:id="@+id/download_toggle_list"
 			android:layout_gravity="center"
-			android:src="?attr/shuffle" />
+			android:src="?attr/toggle_list" />
 	</FrameLayout>
 
 	<FrameLayout
