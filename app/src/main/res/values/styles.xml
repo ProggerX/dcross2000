@@ -61,7 +61,7 @@
 		<item name="android:textSize">24sp</item>
 	</style>
 	<style name="TextAppearance.DCross2000.RowTitle" parent="TextAppearance.Material3.TitleMedium">
-		<item name="android:fontFamily">NType82-Regular</item>
+		<item name="android:fontFamily">NType82-Headline</item>
 		<item name="android:textSize">18sp</item>
 	</style>
 	<style name="TextAppearance.DCross2000.DrawerBrand" parent="TextAppearance.Material3.HeadlineMedium">
@@ -74,8 +74,8 @@
 		<item name="android:fontFamily">NType82-Regular</item>
 	</style>
 	<style name="TextAppearance.DCross2000.Category" parent="TextAppearance.Material3.TitleSmall">
-		<item name="android:fontFamily">NType82-Regular</item>
-		<item name="android:letterSpacing">0.04</item>
+		<item name="android:fontFamily">NType82-Headline</item>
+		<item name="android:letterSpacing">0.02</item>
 	</style>
 	<style name="TextAppearance.DCross2000.DialogTitle" parent="TextAppearance.Material3.HeadlineSmall">
 		<item name="android:fontFamily">NType82-Headline</item>
@@ -100,6 +100,12 @@
 	</style>
 	<style name="TextAppearance.DCross2000.BarSubtitle.OnContainer" parent="TextAppearance.DCross2000.BrandSubtitle">
 		<item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+	</style>
+
+	<style name="Widget.DCross2000.OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+		<item name="android:src">@drawable/ic_ms_more_vert</item>
+		<item name="android:tint">?attr/element_color</item>
+		<item name="android:scaleType">fitCenter</item>
 	</style>
 
 	<style name="Widget.DCross2000.Card" parent="Widget.Material3.CardView.Elevated">

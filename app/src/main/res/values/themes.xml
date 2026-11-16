@@ -9,6 +9,7 @@
 		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.DCross2000.Medium</item>
 		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.DCross2000.Large</item>
 		<item name="element_color">@color/lightElement</item>
+		<item name="actionOverflowButtonStyle">@style/Widget.DCross2000.OverflowButton</item>
 		<item name="actionbar_element_color">?attr/colorOnSurface</item>
 		<item name="actionBarSize">64dp</item>
 		<item name="materialCardViewStyle">@style/Widget.DCross2000.Card</item>
@@ -40,7 +41,7 @@
 		<item name="remove">@drawable/ic_ms_remove</item>
 		<item name="save">@drawable/ic_ms_playlist_add</item>
 		<item name="volume">@drawable/ic_ms_volume</item>
-		<item name="toggle_list">@drawable/action_toggle_list</item>
+		<item name="toggle_list">@drawable/ic_ms_queue_music</item>
 		<item name="select_server">@drawable/main_select_server</item>
 		<item name="select_tabs">@drawable/main_select_tabs</item>
 		<item name="playing">@drawable/playing</item>
@@ -91,7 +92,7 @@
 		<item name="actionbarNowPlayingBackgroundColor">?attr/colorSurfaceContainer</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.DCross2000.BarTitle</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.DCross2000.BarSubtitle</item>
-		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Light</item>
+		<item name="actionbarPopupStyle">@style/ThemeOverlay.Material3</item>
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Light</item>
 		<item name="android:spinnerItemStyle">@style/LightSpinnerItem</item>
 		<item name="drawerTitleStyle">@style/TextAppearance.DCross2000.BarTitle</item>
@@ -116,6 +117,7 @@
 		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.DCross2000.Medium</item>
 		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.DCross2000.Large</item>
 		<item name="element_color">@color/darkElement</item>
+		<item name="actionOverflowButtonStyle">@style/Widget.DCross2000.OverflowButton</item>
 		<item name="actionbar_element_color">?attr/colorOnSurface</item>
 		<item name="actionBarSize">64dp</item>
 		<item name="materialCardViewStyle">@style/Widget.DCross2000.Card</item>
@@ -147,7 +149,7 @@
 		<item name="remove">@drawable/ic_ms_remove</item>
 		<item name="save">@drawable/ic_ms_playlist_add</item>
 		<item name="volume">@drawable/ic_ms_volume</item>
-		<item name="toggle_list">@drawable/action_toggle_list</item>
+		<item name="toggle_list">@drawable/ic_ms_queue_music</item>
 		<item name="select_server">@drawable/main_select_server</item>
 		<item name="select_tabs">@drawable/main_select_tabs</item>
 		<item name="playing">@drawable/playing</item>
@@ -198,7 +200,7 @@
 		<item name="actionbarNowPlayingBackgroundColor">?attr/colorSurfaceContainer</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.DCross2000.BarTitle</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.DCross2000.BarSubtitle</item>
-		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
+		<item name="actionbarPopupStyle">@style/ThemeOverlay.Material3.Dark</item>
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 		<item name="drawerTitleStyle">@style/TextAppearance.DCross2000.BarTitle</item>
 		<item name="drawerSubtitleStyle">@style/TextAppearance.DCross2000.BarSubtitle</item>

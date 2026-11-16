@@ -67,7 +67,7 @@
                     <ImageButton
                         android:id="@+id/download_add_to_playlist"
                         style="@style/DownloadActionImageButton"
-                        android:src="@drawable/ic_action_add"
+                        android:src="@drawable/ic_ms_add_white"
                         android:tint="?attr/element_color" />
 
 					<ImageButton

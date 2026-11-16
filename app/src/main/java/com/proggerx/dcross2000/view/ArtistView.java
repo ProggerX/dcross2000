@@ -19,14 +19,19 @@
 package com.proggerx.dcross2000.view;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.proggerx.dcross2000.R;
+import com.proggerx.dcross2000.activity.SubsonicActivity;
 import com.proggerx.dcross2000.domain.Artist;
+import com.proggerx.dcross2000.domain.MusicDirectory;
 import com.proggerx.dcross2000.util.FileUtil;
+import com.proggerx.dcross2000.util.ImageLoader;
 import com.proggerx.dcross2000.util.TouchDelegateUtil;
 
 import java.io.File;
@@ -41,12 +46,15 @@ public class ArtistView extends UpdateView<Artist> {
 
 	private File file;
     private TextView titleView;
+    private RecyclingImageView artView;
+    private String loadedArtId;
 
     public ArtistView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+        LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.item_name);
+        artView = (RecyclingImageView) findViewById(R.id.item_art);
 		starButton = (ImageButton) findViewById(R.id.item_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.item_more);
@@ -61,6 +69,30 @@ public class ArtistView extends UpdateView<Artist> {
     protected void setObjectImpl(Artist artist) {
     	titleView.setText(artist.getName());
 		file = FileUtil.getArtistDirectory(context, artist);
+		updateArtistArt(artist);
+    }
+
+    private void updateArtistArt(Artist artist) {
+        if (artView == null || artist == null || artist.getId() == null) return;
+        if (artist.getId().equals(loadedArtId)) return;
+        loadedArtId = artist.getId();
+
+        MusicDirectory.Entry entry = new MusicDirectory.Entry(artist.getId());
+        entry.setDirectory(true);
+        entry.setTitle(artist.getName());
+        entry.setArtist(artist.getName());
+
+        ImageLoader loader = findImageLoader();
+        if (loader != null) loader.loadImage(artView, entry, false, false);
+    }
+
+    private ImageLoader findImageLoader() {
+        Context current = getContext();
+        while (current instanceof ContextWrapper) {
+            if (current instanceof SubsonicActivity) return ((SubsonicActivity) current).getImageLoader();
+            current = ((ContextWrapper) current).getBaseContext();
+        }
+        return null;
     }
     
     @Override

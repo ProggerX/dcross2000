@@ -35,7 +35,7 @@
 					<FrameLayout android:orientation="vertical"
 						android:layout_width="match_parent"
 						android:layout_height="match_parent"
-						android:padding="20dp"
+						android:padding="24dp"
                         android:layout_gravity="center">
 
 						<com.proggerx.dcross2000.view.RecyclingImageView
@@ -52,7 +52,7 @@
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:layout_gravity="center_horizontal|bottom"
-							android:background="@color/overlayColor"
+							android:background="@drawable/overlay_scrim"
 							android:gravity="center"
 							android:orientation="horizontal"
 							android:visibility="invisible"
@@ -61,33 +61,33 @@
 							<ImageButton
 								android:id="@+id/download_rating_bad"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_action_rating_bad" />
+								android:src="@drawable/ic_ms_thumb_down_white" />
 
 							<ImageButton
 								android:id="@+id/download_star"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_toggle_star" />
+								android:src="@drawable/ic_ms_star_border_white" />
 
                             <ImageButton
                                 android:id="@+id/download_add_to_playlist"
                                 style="@style/DownloadActionImageButton"
-                                android:src="@drawable/ic_action_add"
+                                android:src="@drawable/ic_ms_add_white"
                                 android:tint="@android:color/white" />
 
 							<ImageButton
 								android:id="@+id/download_playback_speed"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_action_playback_speed" />
+								android:src="@drawable/ic_ms_speed_white" />
 
 							<ImageButton
 								android:id="@+id/download_bookmark"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_menu_bookmark" />
+								android:src="@drawable/ic_ms_bookmark_border_white" />
 
 							<ImageButton
 								android:id="@+id/download_rating_good"
 								style="@style/DownloadActionImageButton"
-								android:src="@drawable/ic_action_rating_good" />
+								android:src="@drawable/ic_ms_thumb_up_white" />
 
 							<ImageButton
 								android:id="@+id/download_rating_combined"
@@ -102,8 +102,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_horizontal"
-					android:layout_marginLeft="16dip"
-					android:layout_marginRight="16dip"
+					android:layout_marginLeft="24dp"
+					android:layout_marginRight="24dp"
 					android:layout_marginTop="6dp"
 					android:gravity="center"
 					android:singleLine="true"
@@ -116,8 +116,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_horizontal"
-					android:layout_marginLeft="16dip"
-					android:layout_marginRight="16dip"
+					android:layout_marginLeft="24dp"
+					android:layout_marginRight="24dp"
 					android:singleLine="true"
 					android:gravity="center"
 					android:textAppearance="@style/TextAppearance.DCross2000.Brand.Display"
@@ -128,8 +128,22 @@
 
 		</ViewFlipper>
 
-		<include layout="@layout/download_media_buttons"/>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"
+			android:layout_marginEnd="10dp"
+			android:layout_marginBottom="14dp"
+			android:background="@drawable/player_controls_card"
+			android:orientation="vertical"
+			android:paddingStart="12dp"
+			android:paddingEnd="12dp"
+			android:paddingTop="6dp"
+			android:paddingBottom="10dp">
 
-		<include layout="@layout/download_slider"/>
+			<include layout="@layout/download_media_buttons"/>
+
+			<include layout="@layout/download_slider"/>
+		</LinearLayout>
 	</LinearLayout>
 </FrameLayout>
