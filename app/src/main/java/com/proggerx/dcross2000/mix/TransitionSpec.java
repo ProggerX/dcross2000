@@ -147,6 +147,16 @@ public final class TransitionSpec implements Serializable {
         return scale(Curve.equalPowerIn(), NORMAL_GAIN);
     }
 
+    private static boolean matches(Curve curve, Curve expected) {
+        for(int i = 0; i < Curve.POINTS; i++) {
+            float t = i / (float) (Curve.POINTS - 1);
+            if(Math.abs(curve.valueAt(t) - expected.valueAt(t)) > 0.01f) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static Curve scale(Curve curve, float factor) {
         float[] values = curve.copyValues();
         for(int i = 0; i < values.length; i++) {
@@ -209,10 +219,10 @@ public final class TransitionSpec implements Serializable {
                 // The reset button used to write the raw 0..1 equal power curves,
                 // which play back as a 2x boost at the ends. Those exact shapes
                 // are safe to rescale; hand drawn curves are left alone.
-                if(out.encode().equals(Curve.equalPowerOut().encode())) {
+                if(matches(out, Curve.equalPowerOut())) {
                     migratedOut = defaultOutVolume();
                 }
-                if(in.encode().equals(Curve.equalPowerIn().encode())) {
+                if(matches(in, Curve.equalPowerIn())) {
                     migratedIn = defaultInVolume();
                 }
             }

@@ -11,7 +11,8 @@ import java.util.Arrays;
  * line is played back as drawn.
  */
 public final class Curve implements Serializable {
-    public static final int POINTS = 64;
+    public static final int POINTS = 256;
+    private static final int LEGACY_POINTS = 64;
 
     private final float[] values;
 
@@ -128,19 +129,36 @@ public final class Curve implements Serializable {
     }
 
     public static Curve decode(String encoded) {
-        if(encoded == null || encoded.length() != POINTS * 2) {
+        if(encoded == null || encoded.length() % 2 != 0) {
             return null;
         }
-        float[] values = new float[POINTS];
+        int count = encoded.length() / 2;
+        if(count != POINTS && count != LEGACY_POINTS) {
+            return null;
+        }
+        float[] samples = new float[count];
         try {
-            for(int i = 0; i < POINTS; i++) {
+            for(int i = 0; i < count; i++) {
                 int high = Character.digit(encoded.charAt(i * 2), 16);
                 int low = Character.digit(encoded.charAt(i * 2 + 1), 16);
                 if(high < 0 || low < 0) return null;
-                values[i] = ((high << 4) | low) / 255f;
+                samples[i] = ((high << 4) | low) / 255f;
             }
         } catch(IndexOutOfBoundsException e) {
             return null;
+        }
+        if(count == POINTS) {
+            return new Curve(samples);
+        }
+
+        // Legacy curves were stored at 64 points; resample them smoothly.
+        float[] values = new float[POINTS];
+        for(int i = 0; i < POINTS; i++) {
+            float scaled = i * (count - 1) / (float) (POINTS - 1);
+            int lower = (int) scaled;
+            int upper = Math.min(count - 1, lower + 1);
+            float fraction = scaled - lower;
+            values[i] = samples[lower] + (samples[upper] - samples[lower]) * fraction;
         }
         return new Curve(values);
     }

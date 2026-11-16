@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 
 import androidx.annotation.OptIn;
 import androidx.media3.common.C;
@@ -27,7 +26,7 @@ import com.proggerx.dcross2000.audiofx.GainRenderersFactory;
  */
 @OptIn(markerClass = UnstableApi.class)
 public final class TransitionPreviewPlayer {
-    private static final int TICK_MS = 30;
+    private static final int TICK_MS = 20;
     private static final int PREROLL_MS = 2000;
     private static final int LOOP_DELAY_MS = 700;
 
@@ -51,8 +50,6 @@ public final class TransitionPreviewPlayer {
     private int outgoingDurationMs;
     private int windowStartPosition;
     private int outgoingStartPosition;
-    private int elapsedMs;
-    private long lastTick;
     private boolean incomingStarted;
     private boolean outgoingStopped;
     private boolean running;
@@ -98,8 +95,6 @@ public final class TransitionPreviewPlayer {
         outgoingStartPosition = Math.max(0, windowStartPosition - PREROLL_MS);
         incomingStarted = false;
         outgoingStopped = false;
-        elapsedMs = 0;
-        lastTick = 0;
         running = true;
         arm();
         handler.post(ticker);
@@ -150,20 +145,21 @@ public final class TransitionPreviewPlayer {
         @Override
         public void run() {
             if(!running) return;
-            long now = SystemClock.elapsedRealtime();
+            long actualDuration = outgoing.getDuration();
+            if(actualDuration != C.TIME_UNSET && actualDuration > spec.outgoingWindowMs()) {
+                windowStartPosition = (int) (actualDuration - spec.outgoingWindowMs());
+            }
             long position = outgoing.getCurrentPosition();
             if(position < windowStartPosition) {
                 // The pre-roll is not part of the drawn transition.
                 outgoingGain.setGain(1f);
                 outgoing.setPlaybackSpeed(1f);
-                lastTick = now;
                 if(listener != null) listener.onProgress(-1f);
                 handler.postDelayed(this, TICK_MS);
                 return;
             }
-            if(lastTick == 0) lastTick = now;
-            elapsedMs += (int) Math.max(0, now - lastTick);
-            lastTick = now;
+            int elapsedMs = (int) Math.max(0L, Math.min(Integer.MAX_VALUE,
+                    position - windowStartPosition));
 
             float progress = Math.max(0f, Math.min(1f, elapsedMs / (float) spec.windowMs()));
             float outProgress = Math.max(0f, Math.min(1f,

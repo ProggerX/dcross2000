@@ -37,15 +37,20 @@ public final class MixWheelView extends View {
 	private final RectF rect = new RectF();
 	private final float density;
 	private final float scaledDensity;
-	private final float stepPx;
+	/** 100 ms of travel per this many dp when dragging horizontally. */
+	private final float coarseStepPx;
+	/** 10 ms of travel per this many dp when dragging vertically. */
+	private final float fineStepPx;
 	private int onSurfaceColor;
+	private long lastHapticAt;
 
 	private int minValue;
 	private int maxValue = 60000;
 	private int step = 100;
 	private int value;
 	private float lastX;
-	private float dragRemainder;
+	private float lastY;
+	private float dragRemainderMs;
 	private VelocityTracker velocityTracker;
 	private ValueAnimator animator;
 	private OnValueChangedListener listener;
@@ -58,7 +63,8 @@ public final class MixWheelView extends View {
 		super(context, attrs);
 		density = getResources().getDisplayMetrics().density;
 		scaledDensity = getResources().getDisplayMetrics().scaledDensity;
-		stepPx = 34f * density;
+		coarseStepPx = 34f * density;
+		fineStepPx = 24f * density;
 
 		int onSurface = MaterialColors.getColor(this, R.attr.colorOnSurface, Color.WHITE);
 		onSurfaceColor = onSurface;
@@ -76,6 +82,7 @@ public final class MixWheelView extends View {
 		valuePaint.setColor(onSurface);
 		valuePaint.setTextAlign(Paint.Align.CENTER);
 		setFocusable(true);
+		setClickable(true);
 		setContentDescription("Wheel");
 	}
 
@@ -124,7 +131,11 @@ public final class MixWheelView extends View {
 		if(next == value) return;
 		value = next;
 		if(haptic) {
-			performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
+			long now = android.os.SystemClock.uptimeMillis();
+			if(now - lastHapticAt > 30L) {
+				lastHapticAt = now;
+				performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
+			}
 		}
 		invalidate();
 		if(listener != null) {
@@ -151,7 +162,7 @@ public final class MixWheelView extends View {
 		canvas.drawRoundRect(rect, 14f * density, 14f * density, focusPaint);
 
 		for(int i = -VISIBLE_STEPS - 1; i <= VISIBLE_STEPS + 1; i++) {
-			float x = centerX + i * stepPx;
+			float x = centerX + i * coarseStepPx;
 			if(x < 0 || x > width) continue;
 
 			if(i == 0) continue;
@@ -183,7 +194,18 @@ public final class MixWheelView extends View {
 	}
 
 	private static String seconds(int millis) {
-		return String.format(Locale.US, "%.1f", millis / 1000f);
+		return String.format(Locale.US, "%.2f", millis / 1000f);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		int action = event.getActionMasked();
+		if(action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+			// Fine vertical scrubbing must not turn into a page scroll.
+			ViewParent parent = getParent();
+			if(parent != null) parent.requestDisallowInterceptTouchEvent(true);
+		}
+		return super.dispatchTouchEvent(event);
 	}
 
 	@Override
@@ -196,7 +218,8 @@ public final class MixWheelView extends View {
 					animator = null;
 				}
 				lastX = event.getX();
-				dragRemainder = 0f;
+				lastY = event.getY();
+				dragRemainderMs = 0f;
 				if(velocityTracker == null) velocityTracker = VelocityTracker.obtain();
 				velocityTracker.clear();
 				velocityTracker.addMovement(event);
@@ -205,11 +228,17 @@ public final class MixWheelView extends View {
 				return true;
 			case MotionEvent.ACTION_MOVE:
 				float x = event.getX();
-				dragRemainder += lastX - x;
+				float y = event.getY();
+				// Horizontal drags travel quickly (100 ms per coarse step);
+				// vertical drags are the fine control (10 ms per step).
+				float horizontalMs = (lastX - x) / coarseStepPx * 100f;
+				float verticalMs = (lastY - y) / fineStepPx * step;
+				dragRemainderMs += horizontalMs + verticalMs;
 				lastX = x;
-				int steps = (int) (dragRemainder / stepPx);
+				lastY = y;
+				int steps = (int) (dragRemainderMs / step);
 				if(steps != 0) {
-					dragRemainder -= steps * stepPx;
+					dragRemainderMs -= steps * step;
 					changeBy(steps, true);
 				}
 				if(velocityTracker != null) velocityTracker.addMovement(event);
@@ -237,8 +266,9 @@ public final class MixWheelView extends View {
 		velocityTracker.addMovement(event);
 		velocityTracker.computeCurrentVelocity(1000);
 		float velocity = velocityTracker.getXVelocity();
-		int projected = Math.round(-velocity / stepPx * 0.11f);
-		projected = Math.max(-30, Math.min(30, projected));
+		float projectedMs = -velocity * 0.11f * (100f / coarseStepPx);
+		int projected = Math.round(projectedMs / step);
+		projected = Math.max(-300, Math.min(300, projected));
 		if(Math.abs(projected) < 2) return;
 
 		int target = snap(value + projected * step);

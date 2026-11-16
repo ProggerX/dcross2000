@@ -34,7 +34,7 @@ public class TransitionEditorFragment extends SubsonicFragment {
     private static final String ARG_FROM = "mix.from";
     private static final String ARG_TO = "mix.to";
 
-    private static final int WHEEL_STEP_MS = 100;
+    private static final int WHEEL_STEP_MS = 10;
     private static final int WHEEL_MAX_MS = 60000;
 
     private MusicDirectory.Entry fromEntry;
@@ -170,6 +170,21 @@ public class TransitionEditorFragment extends SubsonicFragment {
         previewButton.setEnabled(filesCached);
         bind(saved == null ? TransitionSpec.defaults(fromEntry.getId(), toEntry.getId()) : saved);
         updateWaveformStatus();
+
+        // Metadata durations are rounded to whole seconds; read the real file
+        // duration so the fade ends exactly where the audio ends.
+        WaveformCache.loadDuration(fromFile, duration -> {
+            if(duration > 0 && duration != fromDurationMs && curveView != null) {
+                fromDurationMs = duration;
+                requestWaves();
+            }
+        });
+        WaveformCache.loadDuration(toFile, duration -> {
+            if(duration > 0 && duration != toDurationMs && curveView != null) {
+                toDurationMs = duration;
+                requestWaves();
+            }
+        });
 
         setTitle(R.string.mix_edit_title);
         setSubtitle(fromEntry.getTitle() + " → " + toEntry.getTitle());

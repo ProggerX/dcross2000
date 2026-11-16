@@ -62,6 +62,10 @@ public final class WaveformCache {
         void onWaveform(Waveform waveform);
     }
 
+    public interface DurationCallback {
+        void onDuration(int durationMs);
+    }
+
     /**
      * A decoded envelope split into a low band (kick, bass) and a high band
      * (snare, hats, transients), plus the time resolution it was captured at.
@@ -85,6 +89,50 @@ public final class WaveformCache {
     }
 
     private WaveformCache() {
+    }
+
+    /** Reads the real duration from the file rather than the rounded metadata. */
+    public static void loadDuration(final DownloadFile file, final DurationCallback callback) {
+        if(file == null || !file.isCompleteFileAvailable()) {
+            callback.onDuration(0);
+            return;
+        }
+        final File source = file.getCompleteFile();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int duration = 0;
+                try {
+                    duration = probeDuration(source);
+                } catch(Throwable error) {
+                    Log.w(TAG, "Unable to read duration of " + source.getName(), error);
+                }
+                final int result = duration;
+                main.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onDuration(result);
+                    }
+                });
+            }
+        });
+    }
+
+    static int probeDuration(File source) throws Exception {
+        MediaExtractor extractor = new MediaExtractor();
+        try {
+            extractor.setDataSource(source.getAbsolutePath());
+            for(int i = 0; i < extractor.getTrackCount(); i++) {
+                MediaFormat format = extractor.getTrackFormat(i);
+                String mime = format.getString(MediaFormat.KEY_MIME);
+                if(mime != null && mime.startsWith("audio/") && format.containsKey(MediaFormat.KEY_DURATION)) {
+                    return (int) (format.getLong(MediaFormat.KEY_DURATION) / 1000L);
+                }
+            }
+        } finally {
+            extractor.release();
+        }
+        return 0;
     }
 
     /**

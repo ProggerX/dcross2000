@@ -47,7 +47,7 @@ final class LocalPlayback {
     }
 
     private static final int SLOT_COUNT = 2;
-    private static final int TICK_MS = 40;
+    private static final int TICK_MS = 20;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Context context;
@@ -387,11 +387,11 @@ final class LocalPlayback {
         ExoPlayer incoming = players[nextSlot];
         if (incoming == null || incoming.getPlaybackState() != Player.STATE_READY) return;
 
-        int late = (int) Math.max(0, window - remaining);
-        startFade(late);
+        int windowStart = (int) Math.max(0L, duration - nextSpec.outgoingWindowMs());
+        startFade(windowStart);
     }
 
-    private void startFade(int lateMs) {
+    private void startFade(int windowStartMs) {
         Source outgoingSource = sources[active];
         Source incomingSource = sources[nextSlot];
         TransitionSpec spec = nextSpec;
@@ -401,7 +401,8 @@ final class LocalPlayback {
         int incomingSlot = nextSlot;
         if (players[incomingSlot] == null) return;
 
-        fade = new Fade(spec, outgoingSlot, incomingSlot, lateMs);
+        fade = new Fade(spec, outgoingSlot, incomingSlot, windowStartMs);
+        fade.elapsedMs = fadeProgressMs(fade);
         fading = outgoingSlot;
         nextSlot = -1;
         nextSource = null;
@@ -434,6 +435,11 @@ final class LocalPlayback {
         ExoPlayer outgoing = players[current.outgoing];
         boolean outgoingEnded = outgoing != null && outgoing.getPlaybackState() == Player.STATE_ENDED;
         if (!current.outgoingStopped && (current.outgoingDue() || outgoingEnded)) {
+            // Remember the audio clock where the outgoing side stops so the
+            // tail continues from the incoming playhead without jumping.
+            ExoPlayer tail = players[current.incoming];
+            current.tailElapsedBase = current.elapsedMs;
+            current.tailPositionBase = tail != null ? tail.getCurrentPosition() : 0L;
             clearSlot(current.outgoing);
             current.outgoingStopped = true;
         }
@@ -486,7 +492,7 @@ final class LocalPlayback {
     private void setTempo(ExoPlayer player, Fade current, boolean outgoing, float tempo) {
         if (player == null) return;
         float previous = outgoing ? current.lastOutTempo : current.lastInTempo;
-        if (Math.abs(previous - tempo) < 0.01f) return;
+        if (Math.abs(previous - tempo) < 0.005f) return;
         if (outgoing) current.lastOutTempo = tempo;
         else current.lastInTempo = tempo;
         player.setPlaybackSpeed(Math.max(TransitionSpec.MIN_TEMPO, Math.min(TransitionSpec.MAX_TEMPO, tempo)));
@@ -524,13 +530,7 @@ final class LocalPlayback {
             if (released) return;
             Fade current = fade;
             if (current != null) {
-                ExoPlayer reference = players[current.incomingStarted ? current.incoming : current.outgoing];
-                boolean playing = reference != null && reference.isPlaying();
-                long now = SystemClock.elapsedRealtime();
-                if (playing && current.lastTick != 0) {
-                    current.elapsedMs += (int) Math.max(0, now - current.lastTick);
-                }
-                current.lastTick = now;
+                current.elapsedMs = fadeProgressMs(current);
                 advanceFade();
             } else if (nextSpec != null) {
                 maybeStartFade();
@@ -659,47 +659,63 @@ final class LocalPlayback {
         }
     }
 
+    /** Progress measured from the outgoing, then incoming, audio playhead. */
+    private int fadeProgressMs(Fade current) {
+        ExoPlayer outgoing = players[current.outgoing];
+        if (outgoing != null && !current.outgoingStopped) {
+            long position = outgoing.getCurrentPosition();
+            return (int) Math.max(0L, Math.min(Integer.MAX_VALUE, position - current.windowStartMs));
+        }
+        ExoPlayer incoming = players[current.incoming];
+        if (incoming != null && current.incomingStarted && current.tailElapsedBase >= 0) {
+            long position = incoming.getCurrentPosition();
+            long value = current.tailElapsedBase + (position - current.tailPositionBase);
+            return (int) Math.max(0L, Math.min(Integer.MAX_VALUE, value));
+        }
+        return current.elapsedMs;
+    }
+
     private static final class Fade {
         final TransitionSpec spec;
         final int outgoing;
         final int incoming;
-        final int lateMs;
+        final long windowStartMs;
         int elapsedMs;
-        long lastTick;
+        int tailElapsedBase = -1;
+        long tailPositionBase;
         boolean incomingStarted;
         boolean outgoingStopped;
         float lastOutTempo = -1f;
         float lastInTempo = -1f;
 
-        Fade(TransitionSpec spec, int outgoing, int incoming, int lateMs) {
+        Fade(TransitionSpec spec, int outgoing, int incoming, long windowStartMs) {
             this.spec = spec;
             this.outgoing = outgoing;
             this.incoming = incoming;
-            this.lateMs = lateMs;
-            this.lastTick = SystemClock.elapsedRealtime();
+            this.windowStartMs = windowStartMs;
         }
 
         float progress() {
             return Math.max(0f, Math.min(1f,
-                    (lateMs + elapsedMs) / (float) Math.max(1, spec.windowMs())));
+                    elapsedMs / (float) Math.max(1, spec.windowMs())));
         }
 
         float outProgress() {
             return Math.max(0f, Math.min(1f,
-                    (lateMs + elapsedMs) / (float) Math.max(1, spec.outgoingWindowMs())));
+                    elapsedMs / (float) Math.max(1, spec.outgoingWindowMs())));
         }
 
         float inProgress() {
             return Math.max(0f, Math.min(1f,
-                    (lateMs + elapsedMs - spec.leadMs) / (float) Math.max(1, spec.incomingWindowMs())));
+                    (elapsedMs - spec.leadMs) / (float) Math.max(1, spec.incomingWindowMs())));
         }
 
         boolean incomingDue() {
-            return lateMs + elapsedMs >= spec.leadMs;
+            return elapsedMs >= spec.leadMs;
         }
 
         boolean outgoingDue() {
-            return lateMs + elapsedMs >= spec.outgoingWindowMs();
+            return elapsedMs >= spec.outgoingWindowMs();
         }
     }
 

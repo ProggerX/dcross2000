@@ -20,14 +20,16 @@ import java.nio.ShortBuffer;
  */
 @OptIn(markerClass = UnstableApi.class)
 public final class GainAudioProcessor extends BaseAudioProcessor {
-    private volatile float gain = 1f;
+    private volatile float targetGain = 1f;
+    /** Only touched on the audio thread. */
+    private float currentGain = 1f;
 
     public void setGain(float gain) {
-        this.gain = Math.max(0f, Math.min(4f, gain));
+        this.targetGain = Math.max(0f, Math.min(4f, gain));
     }
 
     public float getGain() {
-        return gain;
+        return targetGain;
     }
 
     @Override
@@ -45,28 +47,54 @@ public final class GainAudioProcessor extends BaseAudioProcessor {
         int size = inputBuffer.remaining();
         if(size == 0) return;
 
-        float current = gain;
+        float target = targetGain;
+        // Small changes are automation and get ramped; large jumps are state
+        // changes (muting a preloaded decoder) and take effect immediately.
+        float start = Math.abs(target - currentGain) > 0.5f ? target : currentGain;
         ByteBuffer output = replaceOutputBuffer(size);
         output.order(ByteOrder.nativeOrder());
 
-        if(Math.abs(current - 1f) < 0.0001f) {
-            output.put(inputBuffer);
-        } else if(inputAudioFormat.encoding == C.ENCODING_PCM_FLOAT) {
+        if(inputAudioFormat.encoding == C.ENCODING_PCM_FLOAT) {
             FloatBuffer in = inputBuffer.order(ByteOrder.nativeOrder()).asFloatBuffer();
             FloatBuffer out = output.asFloatBuffer();
-            while(in.hasRemaining()) {
-                out.put(in.get() * current);
+            int samples = in.remaining();
+            if(samples <= 0) {
+                inputBuffer.position(inputBuffer.limit());
+            } else if(Math.abs(start - 1f) < 0.0001f && Math.abs(target - 1f) < 0.0001f) {
+                out.put(in);
+                inputBuffer.position(inputBuffer.limit());
+            } else {
+                // Ramp across the buffer instead of stepping at its edges, so
+                // automation has no zipper noise and no tick-alignment bias.
+                float step = (target - start) / samples;
+                float gain = start;
+                while(in.hasRemaining()) {
+                    out.put(in.get() * gain);
+                    gain += step;
+                }
+                inputBuffer.position(inputBuffer.limit());
             }
-            inputBuffer.position(inputBuffer.limit());
         } else {
             ShortBuffer in = inputBuffer.order(ByteOrder.nativeOrder()).asShortBuffer();
             ShortBuffer out = output.asShortBuffer();
-            while(in.hasRemaining()) {
-                int value = Math.round(in.get() * current);
-                out.put((short) Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, value)));
+            int samples = in.remaining();
+            if(samples <= 0) {
+                inputBuffer.position(inputBuffer.limit());
+            } else if(Math.abs(start - 1f) < 0.0001f && Math.abs(target - 1f) < 0.0001f) {
+                out.put(in);
+                inputBuffer.position(inputBuffer.limit());
+            } else {
+                float step = (target - start) / samples;
+                float gain = start;
+                while(in.hasRemaining()) {
+                    int value = Math.round(in.get() * gain);
+                    out.put((short) Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, value)));
+                    gain += step;
+                }
+                inputBuffer.position(inputBuffer.limit());
             }
-            inputBuffer.position(inputBuffer.limit());
         }
+        currentGain = target;
 
         output.position(size);
         output.flip();
