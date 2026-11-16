@@ -19,8 +19,8 @@ android {
 		applicationId "com.proggerx.dcross2000"
 		minSdkVersion 24
 		targetSdkVersion 36
-		versionCode 1
-		versionName '0.1.0-dcross'
+		versionCode 2
+		versionName '0.2.0-dcross'
 		setProperty("archivesBaseName", "DCross2000_$versionName")
         resourceConfigurations += ['de', 'es', 'fr', 'hu', 'nl', 'pt-rPT', 'ru', 'sv', 'zh']
 		resValue 'string', 'account_type.subsonic', applicationId + ".subsonic"
