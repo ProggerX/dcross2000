@@ -42,6 +42,19 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 
 	private List<MusicFolder> musicFolders;
 	private OnMusicFolderChanged onMusicFolderChanged;
+	private androidx.recyclerview.widget.RecyclerView artistList;
+
+	@Override
+	public void onAttachedToRecyclerView(androidx.recyclerview.widget.RecyclerView recyclerView) {
+		super.onAttachedToRecyclerView(recyclerView);
+		artistList = recyclerView;
+	}
+
+	@Override
+	public void onDetachedFromRecyclerView(androidx.recyclerview.widget.RecyclerView recyclerView) {
+		super.onDetachedFromRecyclerView(recyclerView);
+		artistList = null;
+	}
 
 	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
 		this(context, artists, null, listener, null);
@@ -128,6 +141,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
 		UpdateView view = holder.getUpdateView();
 		if(viewType == VIEW_TYPE_ARTIST) {
+			((ArtistView) view).setScrollHost(artistList);
 			view.setObject(item);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
